@@ -26,7 +26,7 @@ default: &default
 
 development:
   <<: *default
-  database: team-endgame_development
+  database: team_endgame_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -83,4 +83,4 @@ test:
 #
 production:
   <<: *default
-  database: team-endgame_production
+  database: team_endgame_production
