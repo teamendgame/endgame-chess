@@ -5,5 +5,7 @@ rvm:
 # before_install:
 #   - sudo apt-get update
 #   - sudo apt-get install imagemagick
+before_script:
+  - psql -c 'create database team-endgame_test;' -U postgres
 services:
   - postgresql # travic-ci default version at time of setup is 9.1
