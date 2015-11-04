@@ -1,0 +1,9 @@
+language: ruby
+rvm:
+  - 2.2.3 # ruby-lang.org current stable version
+  - 2.2.0 # Rails recommends 2.2 or newer.
+# before_install:
+#   - sudo apt-get update
+#   - sudo apt-get install imagemagick
+services:
+  - postgresql # travic-ci default version at time of setup is 9.1
