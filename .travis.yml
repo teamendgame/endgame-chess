@@ -1,4 +1,5 @@
 language: ruby
+cache: bundler
 rvm:
   - 2.2.3 # ruby-lang.org current stable version
   - 2.2.0 # Rails recommends 2.2 or newer.
@@ -7,5 +8,7 @@ rvm:
 #   - sudo apt-get install imagemagick
 before_script:
   - psql -c 'create database team_endgame_test;' -U postgres
+script: 
+  - bundle exec rake rubocop
 services:
   - postgresql # travic-ci default version at time of setup is 9.1
