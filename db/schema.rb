@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106205956) do
+ActiveRecord::Schema.define(version: 20151108175251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 20151106205956) do
     t.integer  "turn_number"
   end
 
+  add_index "games", ["white_player_id", "black_player_id"], name: "index_games_on_white_player_id_and_black_player_id", using: :btree
+
   create_table "pieces", force: :cascade do |t|
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
@@ -36,6 +38,8 @@ ActiveRecord::Schema.define(version: 20151106205956) do
     t.integer  "user_id"
     t.boolean  "captured"
   end
+
+  add_index "pieces", ["game_id", "user_id"], name: "index_pieces_on_game_id_and_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
