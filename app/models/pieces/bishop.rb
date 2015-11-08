@@ -1,3 +1,2 @@
 class Bishop < Piece
-
 end

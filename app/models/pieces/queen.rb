@@ -1,3 +1,2 @@
 class Queen < Piece
-
 end
