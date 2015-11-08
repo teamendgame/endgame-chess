@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :authenticate_user!, :except => [:index, :show]
+  before_action :authenticate_user!, except: [:index, :show]
 
   def index
     @games = Game.all
@@ -10,16 +10,16 @@ class GamesController < ApplicationController
   end
 
   def create
-  Game.create(game_params)
-  redirect_to root_path
+    Game.create(game_params)
+    redirect_to root_path
   end
 
   def show
-  @game = Game.find(params[:id])
+    @game = Game.find(params[:id])
   end
 
   def edit
-  @game = Game.find(params[:id])
+    @game = Game.find(params[:id])
   end
 
   def update
