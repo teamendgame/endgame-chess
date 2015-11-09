@@ -44,6 +44,9 @@ group :development, :test do
 
   # Use RuboCop for Style Guides
   gem 'rubocop', require: false
+
+  # Use FactoryGirl
+  gem 'factory_girl_rails'
 end
 
 group :development do

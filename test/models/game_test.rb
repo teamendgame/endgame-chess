@@ -2,12 +2,26 @@ require 'test_helper'
 
 class GameTest < ActiveSupport::TestCase
   def setup
-    @g = Game.create(name: "New Game", white_player_id: 1, black_player_id: 1)
+    @user1 = FactoryGirl.create(:user)
+    @user2 = FactoryGirl.create(:user)
+    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
   end
 
-  test "board populated with pieces" do
+  test "count board is populated with 32 pieces" do
     expected = 32
     actual = @g.pieces.count
+    assert_equal expected, actual
+  end
+
+  test "count black player has 16 pieces" do
+    expected = 16
+    actual = @g.pieces.where(user_id: @user2.id).count
+    assert_equal expected, actual
+  end
+
+  test "count white player has 16 pieces" do
+    expected = 16
+    actual = @g.pieces.where(user_id: @user1.id).count
     assert_equal expected, actual
   end
 
