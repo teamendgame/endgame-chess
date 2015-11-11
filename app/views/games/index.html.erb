@@ -1,0 +1,11 @@
+<div class="booyah-box col-xs-10 col-xs-offset-1">
+<h1 class="text-center">List of Games</h1>
+  <% @games.each do |game| %>
+  <h2 class="text-center">
+	<%= game.name %>
+  </h2>
+  <br />
+  <%= link_to 'Join', '#', :class => 'btn btn-success btn-large' %>
+    <% end %>
+  
+</div>
