@@ -29,8 +29,14 @@ gem 'bootstrap-sass', '~> 3.3.5'
 # Use Devise for Authentication
 gem 'devise'
 
+# Use OmniAuth-Facebook
+gem 'omniauth-facebook'
+
 # Use Simple_form
 gem 'simple_form'
+
+# Use Figaro
+gem 'figaro'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
