@@ -1,3 +1,5 @@
 require 'rubocop/rake_task'
 
-RuboCop::RakeTask.new
+unless Rails.env.test?
+  RuboCop::RakeTask.new
+end
