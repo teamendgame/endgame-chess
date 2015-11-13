@@ -9,6 +9,7 @@ rvm:
 before_script:
   - psql -c 'create database team_endgame_test;' -U postgres
 script: 
+  - bundle exec rake 
   - bundle exec rake rubocop
 services:
   - postgresql # travic-ci default version at time of setup is 9.1
