@@ -84,3 +84,4 @@ test:
 production:
   <<: *default
   database: team_endgame_production
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>
