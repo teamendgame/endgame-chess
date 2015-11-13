@@ -32,6 +32,9 @@ gem 'devise'
 # Use Simple_form
 gem 'simple_form'
 
+# Use Puma for Application server
+gem 'puma'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
