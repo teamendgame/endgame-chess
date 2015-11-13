@@ -1,0 +1,10 @@
+<h1 class="text-center"><%= @game.name %></h1>
+<br/>
+<table class="board">
+  <% 8.times do %>
+    <%= '<tr>'.html_safe %>
+    <% 8.times do %>
+      <%= '<td></td>'.html_safe %>
+    <% end %> 
+  <% end %>
+</table>
