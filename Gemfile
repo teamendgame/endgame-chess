@@ -38,6 +38,9 @@ gem 'simple_form'
 # Use Figaro
 gem 'figaro'
 
+# Use Puma for Application server
+gem 'puma'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
