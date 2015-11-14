@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151108175251) do
+ActiveRecord::Schema.define(version: 20151111133048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "enrollments", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "game_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "enrollments", ["game_id"], name: "index_enrollments_on_game_id", using: :btree
+  add_index "enrollments", ["user_id", "game_id"], name: "index_enrollments_on_user_id_and_game_id", using: :btree
 
   create_table "games", force: :cascade do |t|
     t.datetime "created_at",        null: false
@@ -27,6 +37,16 @@ ActiveRecord::Schema.define(version: 20151108175251) do
   end
 
   add_index "games", ["white_player_id", "black_player_id"], name: "index_games_on_white_player_id_and_black_player_id", using: :btree
+
+  create_table "joingames", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "game_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "joingames", ["game_id"], name: "index_joingames_on_game_id", using: :btree
+  add_index "joingames", ["user_id", "game_id"], name: "index_joingames_on_user_id_and_game_id", using: :btree
 
   create_table "pieces", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -55,9 +75,13 @@ ActiveRecord::Schema.define(version: 20151108175251) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "name"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["provider"], name: "index_users_on_provider", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
 end

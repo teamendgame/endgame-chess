@@ -2,7 +2,8 @@
 <h1 class="text-center">Create Game</h1>
 <%= simple_form_for @game do |f| %>
 	<%= f.input :name %>
+	<%= f.input :white_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
 	<br />
-	<%= f.submit "Create", :class => 'btn btn-primary' %>
+	<%= f.submit "Create", :class => 'btn btn-success' %>
 <% end %>	
 </div>
