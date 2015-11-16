@@ -11,8 +11,8 @@ class PieceTest < ActiveSupport::TestCase
 
   test "capture logic" do
   	@piece1.move_to!(5,1)
-  	expected = nil
-    actual = @piece2.row_position
+  	expected = true
+    actual = @piece2.reload.captured
   	assert_equal expected, actual
   	assert  @piece1.row_position == 5 && @piece1.col_position == 1
   end

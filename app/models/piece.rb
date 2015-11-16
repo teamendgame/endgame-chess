@@ -6,11 +6,11 @@ class Piece < ActiveRecord::Base
   	@piece = Piece.find_by(row_position: new_row, col_position: new_col)
   	if @piece
 	    if @piece.user_id != self.user_id
-				@piece.update_attributes(row_position: nil, col_position: nil, captured: true)
-				self.update_attributes(row_position: new_row, col_position: new_col)
+				@piece.update(row_position: nil, col_position: nil, captured: true)
+				self.update(row_position: new_row, col_position: new_col)
       end
 	  else
-  	  self.update_attributes(row_position: new_row, col_position: new_col)
+  	  self.update(row_position: new_row, col_position: new_col)
   	end
   end
 
