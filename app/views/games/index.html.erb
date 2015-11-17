@@ -3,10 +3,8 @@
 <% if @my_games.present? %>
   <h3>My games</h3>
   <% @my_games.each do |game|%>
-  <%= link_to game.name, '#' %>
+    <%= link_to game.name, game_path(game) %>
   <% end %>
- 
-
 <% end %>
 <% if @games.present? %>
 	<h1 class="text-center">Available Games</h1>
