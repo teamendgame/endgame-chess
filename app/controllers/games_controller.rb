@@ -8,9 +8,8 @@ class GamesController < ApplicationController
   end
 
   def my_games
-    if user_signed_in?
-      @my_games = Game.where('white_player_id = ? or black_player_id = ?', current_user.id, current_user.id).order('updated_at')
-    end
+    return unless user_signed_in?
+    @my_games = Game.where('white_player_id = ? or black_player_id = ?', current_user.id, current_user.id)
   end
 
   def new
