@@ -2,7 +2,15 @@ class GamesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
 
   def index
-    @games = Game.all
+    return unless user_signed_in?
+    @games = Game.where(black_player_id: nil).where.not(white_player_id: current_user.id)
+    @my_games = my_games
+  end
+
+  def my_games
+    if user_signed_in?
+      @my_games = Game.where('white_player_id = ? or black_player_id = ?', current_user.id, current_user.id).order('updated_at')
+    end
   end
 
   def new

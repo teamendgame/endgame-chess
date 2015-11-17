@@ -1,11 +1,30 @@
 <div class="booyah-box col-xs-10 col-xs-offset-1">
-<h1 class="text-center">List of Games</h1>
+<h3 class="text-center"><%= current_user.email %></h3>
+<% if @my_games.present? %>
+  <h3>My games</h3>
+  <% @my_games.each do |game|%>
+  <%= link_to game.name, '#' %>
+  <% end %>
+ 
+
+<% end %>
+<% if @games.present? %>
+	<h1 class="text-center">Available Games</h1>
+<% end %>
+<hr />
+<ul>
   <% @games.each do |game| %>
   <h2 class="text-center">
 	<%= game.name %>
   </h2>
   <br />
-  <%= link_to 'Join', '#', :class => 'btn btn-success btn-large' %>
+  <ul class="text-center">
+  <%= simple_form_for game, :method => :put do |f| %>
+    <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
+    <%= f.submit 'Join Game', :class => 'btn btn-success' %>
+  <% end %>
+</ul>
+ 
     <% end %>
-  
+</ul>  
 </div>
