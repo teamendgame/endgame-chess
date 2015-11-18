@@ -2,10 +2,13 @@
 <h3 class="text-center"><%= current_user.email %></h3>
 <% if @my_games.present? %>
   <h3>My games</h3>
+  <ul>
   <% @my_games.each do |game|%>
-    <%= link_to game.name, game_path(game) %>
+    <li><%= link_to game.name, game_path(game) %></li>
   <% end %>
+  </ul>
 <% end %>
+
 <% if @games.present? %>
 	<h1 class="text-center">Available Games</h1>
 <% end %>
@@ -22,7 +25,6 @@
     <%= f.submit 'Join Game', :class => 'btn btn-success' %>
   <% end %>
 </ul>
- 
-    <% end %>
+  <% end %>
 </ul>  
 </div>
