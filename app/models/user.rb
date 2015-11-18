@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/LineLength
+  # rubocop:disable Metrics/LineLength
   def self.new_with_session(data, session)
     super.tap do |user|
       if data == session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
