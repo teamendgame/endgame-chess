@@ -13,7 +13,7 @@
 	<h1 class="text-center">Available Games</h1>
 <% else %>
   <h1 class="text-center">No Available Games</h1>
-  <button class="text-center"><%=link_to 'create game', new_game_path %></button>
+  <%=link_to 'Create game?', new_game_path, :class => 'btn btn-success' %>
 <% end %>
 <hr />
 <ul>
