@@ -9,8 +9,7 @@ class GamesController < ApplicationController
 
   def my_games
     return unless user_signed_in?
-    @my_games = Game.where('white_player_id = ? or black_player_id = ?',
-    current_user.id, current_user.id)
+    @my_games = Game.where('white_player_id = ? or black_player_id = ?', current_user.id, current_user.id)
   end
 
   def new
