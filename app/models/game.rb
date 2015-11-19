@@ -45,6 +45,7 @@ class Game < ActiveRecord::Base
   def init_queen
     pieces.create(type: "Queen", col_position: 3, row_position: 0, user_id: white_player_id)
     pieces.create(type: "Queen", col_position: 3, row_position: 7, user_id: black_player_id)
+    pieces.create(type: "Queen", col_position: 2, row_position: 4, user_id: black_player_id)
   end
 
   def init_king
