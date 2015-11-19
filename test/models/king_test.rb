@@ -1,5 +1,5 @@
 require 'test_helper'
-
+# rubocop:disable Metrics/LineLength
 class KingTest < ActiveSupport::TestCase
   def create_game
     @user1 = FactoryGirl.create(:user)

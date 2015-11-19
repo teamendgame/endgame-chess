@@ -1,4 +1,5 @@
 class King < Piece
+  # rubocop:disable Metrics/LineLength
   def valid_move?(row_dest, col_dest)
     row_pos = row_position
     col_pos = col_position
