@@ -1,5 +1,4 @@
 require 'test_helper'
-# rubocop:disable Metrics/LineLength
 class KingTest < ActiveSupport::TestCase
   def create_game
     @user1 = FactoryGirl.create(:user)
@@ -28,6 +27,7 @@ class KingTest < ActiveSupport::TestCase
   test "inside destination, not blockated" do
     create_game
     # creating an extra white king in a location where it can move
+    # rubocop:disable Metrics/LineLength
     @king1 = Piece.create(type: "King", row_position: 5, col_position: 4, user_id: @user1.id, game_id: @g.id)
     expected = true
     actual = @king1.valid_move?(6, 4)
