@@ -4,6 +4,7 @@ class PieceTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
+    # rubocop:disable Metrics/LineLength
     @piece1 = Piece.create(type: "Pawn", row_position: 4, col_position: 2, user_id: @user1.id, captured: false)
     @piece2 = Piece.create(type: "Pawn", row_position: 5, col_position: 1, user_id: @user2.id, captured: false)
     @piece3 = Piece.create(type: "Pawn", row_position: 5, col_position: 2, user_id: @user1.id, captured: false)
