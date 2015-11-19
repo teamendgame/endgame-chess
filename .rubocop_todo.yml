@@ -15,7 +15,7 @@ Lint/HandleExceptions:
 # Offense count: 3
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
-  Max: 97
+  Max: 120
 
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
