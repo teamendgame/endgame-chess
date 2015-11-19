@@ -15,7 +15,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
   # rubocop:disable Metrics/AbcSize
   def self.new_with_session(params, session)
     super.tap do |user|
