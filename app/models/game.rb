@@ -12,6 +12,11 @@ class Game < ActiveRecord::Base
     init_king
   end
 
+  def whos_turn?
+    return white_player_id if turn_number.even?
+    return black_player_id if turn_number.odd?
+  end
+
   private
 
   def init_pawn
