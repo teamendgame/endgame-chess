@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  has_many :pieces
+  has_many :pieces, dependent: :destroy
   belongs_to :user
   after_create :populate_board!
 
