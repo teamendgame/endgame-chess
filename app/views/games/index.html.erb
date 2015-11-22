@@ -3,7 +3,7 @@
     <h3>My games</h3>
     <ul>
     <% @my_games.each do |game|%>
-      <li><%= link_to game.name, game_path(game) %></li>
+      <li><%= both_players_present?(game) %></li>
     <% end %>
     </ul>
   <% end %>

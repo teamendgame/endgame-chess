@@ -19,7 +19,7 @@ class GamesController < ApplicationController
 
   def create
     Game.create(game_params)
-    redirect_to root_path
+    redirect_to games_path
   end
 
   def show
@@ -34,7 +34,8 @@ class GamesController < ApplicationController
   def update
     @game = Game.find(params[:id])
     if @game.update(game_params)
-      redirect_to root_path
+      @game.populate_board!
+      redirect_to games_path
     else
       render 'edit'
     end
