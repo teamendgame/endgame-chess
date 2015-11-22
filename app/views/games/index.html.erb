@@ -1,34 +1,31 @@
 <div class="booyah-box col-xs-10 col-xs-offset-1">
-<h3 class="text-center"><%= current_user.email %></h3>
-<% if @my_games.present? %>
-  <h3>My games</h3>
-  <ul>
-  <% @my_games.each do |game|%>
-    <li><%= link_to game.name, game_path(game) %></li>
+  <% if @my_games.present? %>
+    <h3>My games</h3>
+    <ul>
+    <% @my_games.each do |game|%>
+      <li><%= both_players_present?(game) %></li>
+    <% end %>
+    </ul>
   <% end %>
-  </ul>
-<% end %>
 
-<% if @games.present? %>
-	<h1 class="text-center">Available Games</h1>
-<% else %>
-  <h1 class="text-center">No Available Games</h1>
-  <br />
-  <%=link_to 'Create game?', new_game_path, :class => 'btn btn-success' %>
-<% end %>
-<hr />
-<ul>
+  <% if @games.present? %>
+  	<h1 class="text-center">Available Games</h1>
+  <% else %>
+    <h1 class="text-center">No Available Games</h1>
+    <br />
+    <%=link_to 'Create game?', new_game_path, :class => 'btn btn-success center-block' %>
+  <% end %>
+  <hr />
   <% @games.each do |game| %>
-  <h2 class="text-center">
-	<%= game.name %>
-  </h2>
+    <h2 class="text-center">
+  	<%= game.name %>
+    </h2>
+    <br />
+    <%= simple_form_for game, :method => :put do |f| %>
+      <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
+      <%= f.submit 'Join Game', :class => 'btn btn-success center-block' %>
+    <% end %>
+  <% end %>
   <br />
-  <ul class="text-center">
-  <%= simple_form_for game, :method => :put do |f| %>
-    <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-    <%= f.submit 'Join Game', :class => 'btn btn-success' %>
-  <% end %>
-</ul>
-  <% end %>
-</ul>  
+  <br />
 </div>
