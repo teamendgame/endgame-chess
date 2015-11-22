@@ -10,7 +10,7 @@ class PieceTest < ActiveSupport::TestCase
     @piece3 = Piece.create(type: "Pawn", row_position: 5, col_position: 2, user_id: @user1.id, captured: false)
   end
 
-  test "capture logic" do
+  test "capture pawn with other pawn" do
     @piece1.move_to!(5, 1)
     expected = true
     actual = @piece2.reload.captured
@@ -18,7 +18,7 @@ class PieceTest < ActiveSupport::TestCase
     assert @piece1.row_position == 5 && @piece1.col_position == 1
   end
 
-  test "blank cell" do
+  test "move to blank cell" do
     @piece1.move_to!(6, 2)
     assert @piece1.row_position == 6 && @piece1.col_position == 2
   end
