@@ -35,6 +35,21 @@ module GamesHelper
     end
   end
 
+  def black_player
+    return "Black Player: You" if current_user.id == @game.black_player_id
+    "Black Player: Your Opponent"
+  end
+
+  def white_player
+    return "White Player: You" if current_user.id == @game.white_player_id
+    "White Player: Your Opponent"
+  end
+
+  def turn
+    return "White Player's Turn" if @game.whos_turn? == @game.white_player_id
+    return "White Player's Turn" if @game.whos_turn? == @game.black_player_id
+  end
+
   private
 
   def white_pawn(piece, game)

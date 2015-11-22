@@ -1,5 +1,8 @@
 <h1 class="text-center"><%= @game.name %></h1>
 <br/>
+<h2 class="text-center"><%= turn %></h2>
+<br/>
+<h3 class="text-center"><%= white_player %></h3>
 <table class="board">
   <% 8.times do |row| %>
     <%= '<tr>'.html_safe %>
@@ -7,4 +10,5 @@
       <%= '<td>'.html_safe + content_tag(:span, piece_present?(@pieces, @game, row, col), class: ["piece"]) + '</td>'.html_safe %>
     <% end %> 
   <% end %>
-</table> 
+</table>
+<h3 class="text-center"><%= black_player %></h3>
