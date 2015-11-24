@@ -34,3 +34,7 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
   text-shadow:0 1px #fff;
   width:80px;
 }
+
+.piece {
+  @extend a;
+}

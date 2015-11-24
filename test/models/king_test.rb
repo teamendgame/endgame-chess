@@ -4,6 +4,7 @@ class KingTest < ActiveSupport::TestCase
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
     @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
+    @g.populate_board!
   end
 
   test "outside destination" do

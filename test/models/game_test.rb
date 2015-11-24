@@ -1,10 +1,11 @@
 require 'test_helper'
-
+# rubocop:disable Metrics/LineLength
 class GameTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
-    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
+    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 1)
+    @g.populate_board!
   end
 
   test "count board is populated with 32 pieces" do
@@ -43,5 +44,12 @@ class GameTest < ActiveSupport::TestCase
     expected_type = "Pawn"
     actual_type = @g.pieces.first.type
     assert_equal expected_type, actual_type
+  end
+
+  test "should be black player's turn" do
+    expected = @user2.id
+    actual = @g.whos_turn?
+
+    assert_equal expected, actual
   end
 end

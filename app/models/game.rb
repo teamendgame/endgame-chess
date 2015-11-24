@@ -1,7 +1,6 @@
 class Game < ActiveRecord::Base
-  has_many :pieces
+  has_many :pieces, dependent: :destroy
   belongs_to :user
-  after_create :populate_board!
 
   def populate_board!
     init_pawn
@@ -10,6 +9,11 @@ class Game < ActiveRecord::Base
     init_bishop
     init_queen
     init_king
+  end
+
+  def whos_turn?
+    return white_player_id if turn_number.even?
+    return black_player_id if turn_number.odd?
   end
 
   private

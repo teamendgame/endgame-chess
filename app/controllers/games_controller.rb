@@ -19,11 +19,12 @@ class GamesController < ApplicationController
 
   def create
     Game.create(game_params)
-    redirect_to root_path
+    redirect_to games_path
   end
 
   def show
     @game = Game.find(params[:id])
+    @pieces = @game.pieces.all
   end
 
   def edit
@@ -33,7 +34,8 @@ class GamesController < ApplicationController
   def update
     @game = Game.find(params[:id])
     if @game.update(game_params)
-      redirect_to root_path
+      @game.populate_board!
+      redirect_to games_path
     else
       render 'edit'
     end
@@ -49,6 +51,6 @@ class GamesController < ApplicationController
   private
 
   def game_params
-    params.require(:game).permit(:name, :white_player_id, :black_player_id)
+    params.require(:game).permit(:name, :white_player_id, :black_player_id, :turn_number)
   end
 end
