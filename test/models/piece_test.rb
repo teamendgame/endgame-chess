@@ -8,17 +8,19 @@ class PieceTest < ActiveSupport::TestCase
 	end
 
 	test "is_obstructed?" do
-		# create_game
+		create_game
 
-		# # the last Rook that gets created on the board is a black rook in row 7 col 7.
-		# @rook1 = Rook.last
-		# @piece = Piece.where(row_position: 6, col_position: 3).first
-		# @queen = Queen.last
+		# the last Rook that gets created on the board is a black rook in row 7 col 7.
+		@rook1 = Rook.last
+		@piece = Piece.where(row_position: 6, col_position: 3).first
+		@queen = Queen.last
 
-		# expected = "OBSTRUCTION for ROOK no moves possible"
-		# # actual = @piece.is_obstructed?(0, 4)
-	 #  actual = @queen.is_obstructed?(1, 5)
-	 #  assert_equal expected, actual
+
+
+		expected = "OBSTRUCTION for ROOK no moves possible"
+		# actual = @piece.is_obstructed?(0, 4)
+	  actual = @queen.is_obstructed?(1, 5)
+	  assert_equal expected, actual
 
 	end
 

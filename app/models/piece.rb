@@ -35,9 +35,7 @@ class Piece < ActiveRecord::Base
         return !self.game.pieces.where(row_position: row_pos, col_position: [col_dest..col_pos]).first.nil?
       end
   	elsif (col_pos - col_dest).abs == (row_pos - row_dest).abs # is checking diagonal obstruction
-
-      # check each row/col combo 1 by 1
-      
+      # check each row/col combo 1 by 1     
       # row and col both increase
       if row_pos < row_dest && col_pos < col_dest
         row_pos += 1
