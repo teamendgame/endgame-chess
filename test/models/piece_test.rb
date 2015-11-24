@@ -34,13 +34,8 @@ class PieceTest < ActiveSupport::TestCase
 
     # test for obstruction where move is diagonal
     @bishop_white = Piece.where(row_position: 0, col_position: 2).first
-    @pawn_white = Piece.where(row_position: 1, col_position: 3).first
-    # @pawn_white.update(captured: true)
 
     expected = true
-    # actual = Piece.find_by(row_position: 1, col_position: 2).nil?
-    # actual = Piece.where(row_position: 0, col_position: 2).nil?
-    # actual = @pawn_white
     actual = @bishop_white.obstructed?(2, 4)
     assert_equal expected, actual
   end
