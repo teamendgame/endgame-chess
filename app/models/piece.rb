@@ -9,19 +9,24 @@ class Piece < ActiveRecord::Base
   	# if is check obstruction
     # this method is not checking destinations outside of the board
     # because the players should not be able to select a destination outside of the board
+    # if knight return an error
 
   	row_pos = self.row_position
   	col_pos = self.col_position
   	current_user = self.user_id
 
+    if self.type == "Knight"
+      return "Invalid input! Knight can't be obstructed."
+    end
+
   	if col_pos == col_dest # this is checking vertical obstruction
       if row_pos < row_dest
         # find out which is higher to create a range and return pieces within that range
         row_pos += 1
-        return !self.game.pieces.where(row_position: [row_pos...row_dest], col_position: col_pos).first.nil?
+        return !self.game.pieces.where(captured: false, row_position: [row_pos...row_dest], col_position: col_pos).first.nil?
       else
         row_dest += 1
-        return !self.game.pieces.where(row_position: [row_dest...row_pos], col_position: col_pos).first.nil?
+        return !self.game.pieces.where(captured: false, row_position: [row_dest...row_pos], col_position: col_pos).first.nil?
       end
   		return "vertical move"
   	elsif row_pos == row_dest # this is checking horizontal obstruction

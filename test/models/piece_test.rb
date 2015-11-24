@@ -10,18 +10,29 @@ class PieceTest < ActiveSupport::TestCase
 	test "is_obstructed?" do
 		create_game
 
-		# the last Rook that gets created on the board is a black rook in row 7 col 7.
-		@rook1 = Rook.last
-		@piece = Piece.where(row_position: 6, col_position: 3).first
-		@queen = Queen.last
+		# test moving to a destination where there is a piece
+		# get the black pawn, set it to captured, test rook can move to white pawn in same column
+		@pawn_black = Piece.where(row_position: 6, col_position: 0).first
+		@pawn_black.update(captured: true)
+		@rook_black = Piece.where(row_position: 7, col_position: 0).first
 
-
-
-		expected = "OBSTRUCTION for ROOK no moves possible"
-		# actual = @piece.is_obstructed?(0, 4)
-	  actual = @queen.is_obstructed?(1, 5)
+		expected = false
+	  actual = @rook_black.is_obstructed?(1, 0)
 	  assert_equal expected, actual
 
+	  # test is_obstructed? for a knight
+	  @knight_white = Piece.where(row_position: 0, col_position: 1).first
+
+	  expected = "Invalid input! Knight can't be obstructed."
+	  actual = @knight_white.is_obstructed?(2, 2)
+	  assert_equal expected, actual
+
+	  # test for obstruction where move is diagonal
+	  @bishop_white = Piece.where(row_position: 0, col_position: 2).first
+
+	  expected = true
+	  actual = @bishop_white.is_obstructed?(2, 4)
+	  assert_equal expected, actual
 	end
 
 end
