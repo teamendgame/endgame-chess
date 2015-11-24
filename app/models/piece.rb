@@ -2,6 +2,7 @@ class Piece < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
 
+  # rubocop:disable Metrics/LineLength
   def obstructed?(row_dest, col_dest)
     # pass in row and col destination
     # get the current piece position
