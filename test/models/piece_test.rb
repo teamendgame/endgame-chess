@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class PieceTest < ActiveSupport::TestCase
-
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
@@ -10,7 +9,7 @@ class PieceTest < ActiveSupport::TestCase
     @piece2 = Piece.create(type: "Pawn", row_position: 5, col_position: 1, user_id: @user2.id, captured: false)
     @piece3 = Piece.create(type: "Pawn", row_position: 5, col_position: 2, user_id: @user1.id, captured: false)
     @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
-    @g.populate_board
+    @g.populate_board!
   end
 
   test "capture pawn with other pawn" do
@@ -32,8 +31,6 @@ class PieceTest < ActiveSupport::TestCase
   end
 
   test "obstructed?" do
-    create_game
-
     # test moving to a destination where there is a piece but no obstruction
     # get the black pawn, set it to captured, test rook can move to white pawn in same column
     @pawn_black = Piece.where(row_position: 6, col_position: 0).first

@@ -11,9 +11,10 @@ class Piece < ActiveRecord::Base
       end
     else
       update(row_position: new_row, col_position: new_col)
+    end
   end
 
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Metrics/LineLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def obstructed?(row_dest, col_dest)
     # pass in row and col destination
     # get the current piece position
@@ -26,9 +27,7 @@ class Piece < ActiveRecord::Base
     row_pos = row_position
     col_pos = col_position
 
-    if type == "Knight"
-      return "Invalid input! Knight can't be obstructed."
-    end
+    return "Invalid input! Knight can't be obstructed." if type == "Knight"
 
     if col_pos == col_dest # this is checking vertical obstruction
       if row_pos < row_dest
@@ -82,7 +81,6 @@ class Piece < ActiveRecord::Base
       end
     else
       return "ERROR! in is_obstructed? method line:83"
->>>>>>> ad6822f284fd58d0cb0d864ada4db4ee8f34c610
     end
   end
 end
