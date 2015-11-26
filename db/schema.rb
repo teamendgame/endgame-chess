@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124015533) do
+ActiveRecord::Schema.define(version: 20151126212020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20151124015533) do
     t.integer  "game_id"
     t.integer  "user_id"
     t.boolean  "captured",     default: false
+    t.boolean  "moved",        default: false
   end
 
   add_index "pieces", ["game_id", "user_id"], name: "index_pieces_on_game_id_and_user_id", using: :btree

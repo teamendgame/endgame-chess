@@ -7,10 +7,10 @@ class Piece < ActiveRecord::Base
     if @piece
       if @piece.user_id != user_id
         @piece.update(row_position: nil, col_position: nil, captured: true)
-        update(row_position: new_row, col_position: new_col)
+        update(row_position: new_row, col_position: new_col, moved: true)
       end
     else
-      update(row_position: new_row, col_position: new_col)
+      update(row_position: new_row, col_position: new_col, moved: true)
     end
   end
 
