@@ -1,6 +1,6 @@
 require 'test_helper'
 class KingTest < ActiveSupport::TestCase
-  def create_game
+  def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
     @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
@@ -8,7 +8,6 @@ class KingTest < ActiveSupport::TestCase
   end
 
   test "outside destination" do
-    create_game
     # the last King that gets created on the board is a black king at position (7,4)
     @king1 = King.last
     expected = false
@@ -16,8 +15,7 @@ class KingTest < ActiveSupport::TestCase
     assert_equal expected, actual
   end
 
-  test "inside destination but blockated" do
-    create_game
+  test "inside destination but blocked" do
     # the last King that gets created on the board is a black king at position (7,4)
     @king1 = King.last
     expected = false
@@ -25,8 +23,7 @@ class KingTest < ActiveSupport::TestCase
     assert_equal expected, actual
   end
 
-  test "inside destination, not blockated" do
-    create_game
+  test "inside destination, not blocked" do
     # creating an extra white king in a location where it can move
     # rubocop:disable Metrics/LineLength
     @king1 = Piece.create(type: "King", row_position: 5, col_position: 4, user_id: @user1.id, game_id: @g.id)
@@ -35,8 +32,7 @@ class KingTest < ActiveSupport::TestCase
     assert_equal expected, actual
   end
 
-  test "inside destination, not blockated2" do
-    create_game
+  test "inside destination, not blocked 2" do
     # creating an extra black king in a location where it can move
     @king1 = Piece.create(type: "King", row_position: 5, col_position: 4, user_id: @user2.id, game_id: @g.id)
     expected = true
