@@ -7,8 +7,7 @@ class King < Piece
       return false
     else
       # king is inside destination. checking if a piece from the same color is there.
-      # rubocop:disable Metrics/LineLength
-      return game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id).nil?
+      self.own_piece?(row_dest, col_dest)
     end
   end
 end
