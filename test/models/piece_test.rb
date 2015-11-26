@@ -60,4 +60,50 @@ class PieceTest < ActiveSupport::TestCase
     actual = @bishop_white.obstructed?(2, 4)
     assert_equal expected, actual
   end
+
+  test "horizontal move" do
+    @rook_black = Piece.where(row_position: 7, col_position: 0).first
+    expected = true
+    actual = @rook_black.horizontal_move?(7, 3)
+    assert_equal expected, actual
+
+    expected = false
+    actual = @rook_black.horizontal_move?(5, 3)
+    assert_equal expected, actual
+  end
+
+  test "vertical move" do
+    @rook_black = Piece.where(row_position: 7, col_position: 0).first
+    expected = true
+    actual = @rook_black.vertical_move?(5, 0)
+    assert_equal expected, actual
+
+    expected = false
+    actual = @rook_black.vertical_move?(7, 3)
+    assert_equal expected, actual
+  end
+
+  test "diagonal move" do
+    @bishop_black = Piece.where(row_position: 7, col_position: 5).first
+    expected = true
+    actual = @bishop_black.diagonal_move?(5, 3)
+    assert_equal expected, actual
+
+    # testing a horizontal move
+    expected = false
+    actual = @bishop_black.diagonal_move?(7, 3)
+    assert_equal expected, actual
+
+    # testing a vertical move
+    expected = false
+    actual = @bishop_black.diagonal_move?(5, 5)
+    assert_equal expected, actual
+  end
+
+  test "own piece?" do
+    @bishop_black = Piece.where(row_position: 7, col_position: 5).first
+    expected = true
+    actual = @bishop_black.diagonal_move?(5, 3)
+    assert_equal expected, actual
+  end
 end
