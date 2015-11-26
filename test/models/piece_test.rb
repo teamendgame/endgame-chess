@@ -103,7 +103,7 @@ class PieceTest < ActiveSupport::TestCase
   test "own piece?" do
     @bishop_black = Piece.where(row_position: 7, col_position: 5).first
     expected = true
-    actual = @bishop_black.diagonal_move?(5, 3)
+    actual = @bishop_black.own_piece?(7, 4)
     assert_equal expected, actual
   end
 end
