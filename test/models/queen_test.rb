@@ -59,6 +59,15 @@ class QueenTest < ActiveSupport::TestCase
     assert_equal expected, actual
   end 
 
+  test "queen ob" do
+    # creating an extra black queen in a location where it can move
+    setup
+    @queen1 = Piece.create(type: "Queen", row_position: 5, col_position: 5, user_id: @user2.id, game_id: @g.id)
+    expected = false
+    actual = @queen1.obstructed?(3, 7)
+    assert_equal expected, actual
+  end 
+
   test "wrong direction move" do
     # creating an extra black quuen in a location where it can move
     #setup
