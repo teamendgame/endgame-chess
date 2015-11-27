@@ -9,12 +9,3 @@
   <% end %>
 </table>
 <br>
-<% if @piece.type == "King" %>
-	<div class = "row">
-		<div class = "col-xs-10 col-xs-offset-1 text-center">
-			<%= link_to 'Castle Kingside', piece_castle_kingside_path(@piece), :class => 'btn btn-info' %>
-			<%= link_to 'Castle Queenside', piece_castle_queenside_path(@piece), :class => 'btn btn-info' %>
-		</div>
-	</div>
-<% end %> 
-<br>

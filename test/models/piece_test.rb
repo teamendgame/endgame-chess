@@ -13,10 +13,6 @@ class PieceTest < ActiveSupport::TestCase
     @king = King.last
   end
 
-  # test "obstructed castling" do
-  #   assert_equal false, @king.move_to!(7, 7)
-  # end
-
   test "unobstructed castling" do
     Piece.find_by(row_position: 7, col_position: 6).destroy
     Piece.find_by(row_position: 7, col_position: 5).destroy
