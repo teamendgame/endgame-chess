@@ -10,6 +10,25 @@ class PieceTest < ActiveSupport::TestCase
     @piece3 = Piece.create(type: "Pawn", row_position: 5, col_position: 2, user_id: @user1.id, captured: false)
     @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
     @g.populate_board!
+    @king = King.last
+  end
+
+  # test "obstructed castling" do
+  #   assert_equal false, @king.move_to!(7, 7)
+  # end
+
+  test "unobstructed castling" do
+    Piece.find_by(row_position: 7, col_position: 6).destroy
+    Piece.find_by(row_position: 7, col_position: 5).destroy
+    @king.move_to!(7, 7)
+    expected = 6
+    actual = @king.reload.col_position
+    assert_equal expected, actual
+  end
+
+  test "obstructed castling" do
+    @king.move_to!(7, 7)
+    assert_equal 4, @king.reload.col_position
   end
 
   test "capture pawn with other pawn" do

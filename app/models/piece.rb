@@ -4,14 +4,19 @@ class Piece < ActiveRecord::Base
 
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
-    if @piece
-      if @piece.user_id != user_id
-        @piece.update(row_position: nil, col_position: nil, captured: true)
-        update(row_position: new_row, col_position: new_col, moved: true)
-      end
-    else
+    update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
+    if @piece.user_id != user_id
+      @piece.update(row_position: nil, col_position: nil, captured: true)
       update(row_position: new_row, col_position: new_col, moved: true)
+    else
+      check_if_castling(new_row, new_col)
     end
+  end
+
+  def check_if_castling(row, col)
+    @piece = Piece.find_by(row_position: row, col_position: col)
+    return unless @piece && type == "King" && !moved && @piece.type == "Rook" && !@piece.moved
+    can_castle?(row, col)
   end
 
   def horizontal_move?(row_dest, _col_dest)

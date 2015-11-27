@@ -15,26 +15,26 @@ class PiecesController < ApplicationController
   def castle_kingside
     @piece = Piece.find(params[:piece_id])
     @game = Game.find(@piece.game_id)
-      if @game.black_player_id == current_user.id
-        king = King.find_by(user_id: current_user.id)
-        flash[:alert] = "You cannot castle" unless king.can_castle?(7, 7)
-      elsif @game.white_player_id == current_user.id
-        king = King.find_by(user_id: current_user.id)
-        flash[:alert] = "You cannot castle" unless king.can_castle?(0, 7)
-      end
+    if @game.black_player_id == current_user.id
+      king = King.find_by(user_id: current_user.id)
+      flash[:alert] = "You cannot castle" unless king.can_castle?(7, 7)
+    elsif @game.white_player_id == current_user.id
+      king = King.find_by(user_id: current_user.id)
+      flash[:alert] = "You cannot castle" unless king.can_castle?(0, 7)
+    end
     redirect_to game_path(@piece.game_id)
   end
 
   def castle_queenside
     @piece = Piece.find(params[:piece_id])
     @game = Game.find(@piece.game_id)
-      if @game.black_player_id == current_user.id
-        king = King.find_by(user_id: current_user.id)
-        flash[:alert] = "You cannot castle" unless king.can_castle?(7, 0)
-      elsif @game.white_player_id == current_user.id
-        king = King.find_by(user_id: current_user.id)
-        flash[:alert] = "You cannot castle" unless king.can_castle?(0, 0)
-      end
-      redirect_to game_path(@piece.game_id)
+    if @game.black_player_id == current_user.id
+      king = King.find_by(user_id: current_user.id)
+      flash[:alert] = "You cannot castle" unless king.can_castle?(7, 0)
+    elsif @game.white_player_id == current_user.id
+      king = King.find_by(user_id: current_user.id)
+      flash[:alert] = "You cannot castle" unless king.can_castle?(0, 0)
+    end
+    redirect_to game_path(@piece.game_id)
   end
 end

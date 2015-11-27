@@ -1,5 +1,4 @@
 class King < Piece
-
   def can_castle?(rook_row, rook_col)
     rook = Rook.find_by(row_position: rook_row, col_position: rook_col)
     return false if moved || rook.moved || obstructed?(rook_row, rook_col)
