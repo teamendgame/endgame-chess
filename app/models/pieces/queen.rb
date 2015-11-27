@@ -7,9 +7,11 @@ class Queen < Piece
       return false
     # checking for obstruction  
     elsif obstructed?(row_dest, col_dest)
+      puts "ff"
       return false
     # checking if a piece from the same color is there
     else
+      puts "kk"
       return !self.own_piece?(row_dest, col_dest)
     end  
   end
