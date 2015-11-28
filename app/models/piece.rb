@@ -95,7 +95,7 @@ class Piece < ActiveRecord::Base
         row_dest += 1
         (row_dest...row_pos).each do |row_num|
           col_dest -= 1
-          return !game.pieces.where(captured: false, row_position: row_num, col_position: col_dest).nil?
+          return !game.pieces.find_by(captured: false, row_position: row_num, col_position: col_dest).nil?
         end
       end
     else
