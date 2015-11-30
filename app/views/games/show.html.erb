@@ -3,6 +3,16 @@
 <h2 class="text-center"><%= turn %></h2>
 <br/>
 <h3 class="text-center"><%= white_player %></h3>
+<script>
+	$(function() {
+    $('.piece').draggable();
+    $('.piece').droppable({
+      drop: function( event, ui ) {
+        $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+      }
+    });
+  });
+</script>
 <table class="board">
   <% 8.times do |row| %>
     <%= '<tr>'.html_safe %>
@@ -12,3 +22,5 @@
   <% end %>
 </table>
 <h3 class="text-center"><%= black_player %></h3>
+
+

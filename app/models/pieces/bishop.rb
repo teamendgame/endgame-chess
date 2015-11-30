@@ -6,3 +6,4 @@ class Bishop < Piece
     true
   end
 end
+ 
