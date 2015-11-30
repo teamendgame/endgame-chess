@@ -13,7 +13,7 @@ class Piece < ActiveRecord::Base
       update(row_position: new_row, col_position: new_col)
     end
   end
-
+ 
   def horizontal_move?(row_dest, _col_dest)
     row_position == row_dest
   end
