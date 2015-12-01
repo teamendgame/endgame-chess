@@ -8,8 +8,9 @@ class PiecesController < ApplicationController
   def update
     @piece = Piece.find(params[:id])
     @game = Game.find(@piece.game_id)
-    # rubocop:disable Metrics/LineLength
-    redirect_to game_path(@piece.game_id) if @piece.update_attributes(row_position: params[:row_position], col_position: params[:col_position]) && @game.update_attributes(turn_number: @game.turn_number + 1)
+    @piece.update_attributes(piece_params)
+    @game.update_attributes(turn_number: @game.turn_number + 1)
+    render :text => 'updated!'
   end
 
   def castle_kingside
@@ -34,5 +35,10 @@ class PiecesController < ApplicationController
       flash[:alert] = "You cannot castle" unless king.can_castle?(0, 0)
     end
     redirect_to game_path(@game)
+  end
+
+  private
+  def piece_params
+    params.require(:piece).permit(:type, :row_position, :col_position)
   end
 end
