@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { omniauth_callbacks: "users/omniauth_callbacks", registrations: 'registrations' }
   root 'homepage#index'
-  resources :games
+  resources :games do
+    get :castle_kingside, to: 'pieces#castle_kingside'
+    get :castle_queenside, to: 'pieces#castle_queenside'
+  end
   resources :pieces
 
   # The priority is based upon order of creation: first created -> highest priority.

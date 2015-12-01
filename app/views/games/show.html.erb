@@ -3,6 +3,15 @@
 <h2 class="text-center"><%= turn %></h2>
 <br/>
 <h3 class="text-center"><%= white_player %></h3>
+<% if @game.white_player_id == current_user.id %>
+	<div class = "row">
+		<div class = "col-xs-10 col-xs-offset-1 text-center">
+			<%= link_to 'Castle Kingside', game_castle_kingside_path(@game), :class => 'btn btn-info' %>
+			<%= link_to 'Castle Queenside', game_castle_queenside_path(@game), :class => 'btn btn-info' %>
+		</div>
+	</div>
+<% end %>
+<br>
 <table class="board">
   <% 8.times do |row| %>
     <%= '<tr>'.html_safe %>
@@ -12,3 +21,12 @@
   <% end %>
 </table>
 <h3 class="text-center"><%= black_player %></h3>
+<% if @game.black_player_id == current_user.id %>
+	<div class = "row">
+		<div class = "col-xs-10 col-xs-offset-1 text-center">
+			<%= link_to 'Castle Kingside', game_castle_kingside_path(@game), :class => 'btn btn-info' %>
+			<%= link_to 'Castle Queenside', game_castle_queenside_path(@game), :class => 'btn btn-info' %>
+		</div>
+	</div>
+<% end %>
+<br>
