@@ -10,7 +10,7 @@ class PiecesController < ApplicationController
     @game = Game.find(@piece.game_id)
     @piece.update_attributes(piece_params)
     @game.update_attributes(turn_number: @game.turn_number + 1)
-    render :text => 'updated!'
+    render text: 'updated!'
   end
 
   def castle_kingside
@@ -38,6 +38,7 @@ class PiecesController < ApplicationController
   end
 
   private
+
   def piece_params
     params.require(:piece).permit(:type, :row_position, :col_position)
   end
