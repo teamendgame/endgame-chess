@@ -1,31 +1,66 @@
 <script>
-  $(function() {
-    $('.piece .move_mode').draggable({ containment: '.board'});
-    $( '.piece' ).droppable({
-        drop: function( event, ui ) {
-          $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
-          var draggableId = ui.draggable.attr("id");
-          var droppableId = $(this).attr("pos");
-          var updateUrl = "/pieces/" + draggableId
-          var rowS = droppableId[0];
-          var colS = droppableId[1];
-          var row = parseInt(rowS);
-          var col = parseInt(colS);
+  // $(function() {
+  //   $('.piece .move_mode').draggable({ containment: '.board'});
+  //   $( '.piece' ).droppable({
+  //       drop: function( event, ui ) {
+  //         $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+  //         var draggableId = ui.draggable.attr("id");
+  //         var droppableId = $(this).attr("pos");
+  //         var updateUrl = "/pieces/" + draggableId
+  //         var rowS = droppableId[0];
+  //         var colS = droppableId[1];
+  //         var row = parseInt(rowS);
+  //         var col = parseInt(colS);
 
-          alert("The piece with id: " + draggableId + " moved to row: " + row + " col: " + col);
+  //         alert("The piece with id: " + draggableId + " moved to row: " + row + " col: " + col);
         
-          $.ajax({
-            type: 'PUT',
-            url: updateUrl,
-            dataType: 'json',
-            data: { piece: { 
+  //         $.ajax({
+  //           type: 'PUT',
+  //           url: updateUrl,
+  //           dataType: 'json',
+  //           data: { piece: { 
+  //                 row_position: row, 
+  //                 col_position: col 
+  //           }}
+  //         });
+  //       }     
+  //   });  
+  // });
+
+
+
+$(function() {
+  $('.piece .move_mode').draggable({ containment: '.board'});
+     $( '.piece' ).droppable({
+      drop: function( event, ui ) {
+      $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+      var draggableId = ui.draggable.attr("id");
+      var droppableId = $(this).attr("pos");
+      var updateUrl = "/pieces/" + draggableId
+      var rowS = droppableId[0];
+      var colS = droppableId[1];
+      var row = parseInt(rowS);
+      var col = parseInt(colS);
+
+
+        alert("The piece with id: " + draggableId + " moved to row: " + row + " col: " + col);
+        
+        $.ajax({
+          type: 'PUT',
+          url: updateUrl,
+          dataType: 'json',
+          data: { piece: { 
                   row_position: row, 
                   col_position: col 
-            }}
-          });
-        }     
-    });  
-  });
+          }}
+
+        });
+
+
+     }     
+  } );  
+
+});
 </script>
 
 <h1 class="text-center"><%= @game.name %></h1>
