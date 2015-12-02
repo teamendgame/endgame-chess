@@ -1,0 +1,76 @@
+require 'test_helper'
+class PawnTest < ActiveSupport::TestCase
+  def setup
+    @user1 = FactoryGirl.create(:user)
+    @user2 = FactoryGirl.create(:user)
+    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
+    @g.populate_board!
+  end
+
+  test "pawn valid move" do
+  	#First pawn - is white pawn whit position (1,7)
+    @pawn1 = Pawn.first
+    expected = true
+    actual = @pawn1.valid_move?(2, 7)
+    assert_equal expected, actual
+    #Last pawn - is black pawn whit position (6,0)
+    @pawn2 = Pawn.last
+    expected = true
+    actual = @pawn2.valid_move?(4, 0)
+    assert_equal expected, actual
+
+  end
+
+  test "pawn invalid move" do
+    #First pawn - is white pawn whit position (1,7)
+    @pawn = Pawn.first
+    expected = false
+    actual = @pawn.valid_move?(4, 7)
+    assert_equal expected, actual
+  end
+
+   test "valid diagonal move" do
+     @pawn1 = Pawn.create(type: "Pawn", row_position: 4, col_position: 2, user_id: @user1.id, game_id: @g.id)
+     @pawn2 = Pawn.create(type: "Pawn", row_position: 5, col_position: 3, user_id: @user2.id, game_id: @g.id)
+     expected = true
+     actual = @pawn1.valid_move?(5, 3)
+     assert_equal expected, actual
+   end
+
+  # test "invalid diagonal move" do
+  #   @pawn1 = Pawn.create(type: "Pawn", row_position: 4, col_position: 5, user_id: @user1.id, game_id: @g.id)
+  #   @pawn2 = Pawn.create(type: "Pawn", row_position: 3, col_position: 6, user_id: @user2.id, game_id: @g.id)
+  #   expected = false
+  #   actual = @pawn1.valid_move?(3, 6)
+  #   assert_equal expected, actual
+  # end
+
+  # test "invalid diagonal move" do
+  #   @pawn1 = Pawn.create(type: "Pawn", row_position: 4, col_position: 5, user_id: @user1.id, game_id: @g.id)
+  #   expected = false
+  #   actual = @pawn1.valid_move?(5, 4)
+  #   assert_equal expected, actual
+  # end
+
+  test "horizontal move to pawn" do
+    @pawn = Pawn.create(type: "Pawn", row_position: 5, col_position: 0, user_id: @user2.id, game_id: @g.id)
+    expected = false
+    actual = @pawn.valid_move?(5, 1)
+    assert_equal expected, actual
+  end
+
+  test "backward move to black pawn" do
+    @pawn = Pawn.create(type: "Pawn", row_position: 4, col_position: 0, user_id: @user2.id, game_id: @g.id)
+    expected = false
+    actual = @pawn.backward_move?(5, 0)
+    assert_equal expected, actual
+  end
+
+  test " white pawn backward move" do
+    @pawn1 = Pawn.create(type: "Pawn", row_position: 4, col_position: 0, user_id: @user1.id, game_id: @g.id)
+    expected = false
+    actual = @pawn1.backward_move?(3, 0)
+    assert_equal expected, actual
+  end
+
+end
