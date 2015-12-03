@@ -4,12 +4,29 @@ class Piece < ActiveRecord::Base
 
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
+    capture_en_passant(new_row, new_col) if type == "Pawn" unless @piece
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
     if @piece.user_id != user_id
       @piece.update(row_position: nil, col_position: nil, captured: true)
       update(row_position: new_row, col_position: new_col, moved: true)
     else
       check_if_castling(new_row, new_col)
+    end
+  end
+
+  def capture_en_passant(row_dest, col_dest)
+    @last_updated = Piece.where(game_id: game_id).order("updated_at desc").first
+    return if @last_updated.nil?
+    if Game.find(game_id).black_player_id == user_id 
+       puts "Hi"
+      if row_dest == (@last_updated.row_position - 1) && col_dest == @last_updated.col_position
+
+        @last_updated.update(row_position: nil, col_position: nil, captured: true)
+        update(row_position: row_dest, col_position: col_dest, moved: true)
+      end
+    elsif Game.find(game_id).black_player_id != user_id && row_dest == (@last_updated.row_position + 1) && col_dest == @last_updated.col_position
+      @last_updated.update(row_position: nil, col_position: nil, captured: true)
+      update(row_position: row_dest, col_position: col_dest, moved: true)
     end
   end
 
