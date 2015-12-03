@@ -7,4 +7,5 @@
       <%= '<td>'.html_safe + content_tag(:span, selected_piece_present?(@game_pieces, row, col), class: ["piece", ("selected" if selected?(@piece, @game_pieces, row, col))]) + '</td>'.html_safe %>
     <% end %> 
   <% end %>
-</table> 
+</table>
+<br>
