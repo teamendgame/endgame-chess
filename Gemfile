@@ -59,6 +59,11 @@ group :development, :test do
 
   # Use FactoryGirl
   gem 'factory_girl_rails'
+
+  # Use Rails Performance Test
+  gem 'rails-perftest'
+
+  gem 'ruby-prof'
 end
 
 group :development do
