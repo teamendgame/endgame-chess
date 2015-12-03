@@ -20,12 +20,23 @@ module GamesHelper
     }
 
     @piece = pieces.find_by(row_position: row_pos, col_position: col_pos)
+    # if @piece && @piece.user_id == game.white_player_id
+    #   return content_tag(:span, white_pieces[@piece.type].html_safe, class: %w(piece move_mode), id: "#{@piece.id}") if current_user.id == game.white_player_id && game.whos_turn? == game.white_player_id
+    #   return content_tag(:span, white_pieces[@piece.type].html_safe, class: ["piece"], id: "#{@piece.id}")
+    # elsif @piece && @piece.user_id == @game.black_player_id
+    #   return content_tag(:span, black_pieces[@piece.type].html_safe, class: %w(piece move_mode), id: "#{@piece.id}") if current_user.id == game.black_player_id && game.whos_turn? == game.black_player_id
+    #   return content_tag(:span, black_pieces[@piece.type].html_safe, class: ["piece"], id: "#{@piece.id}")
+    # end
+
+    @piece = pieces.find_by(row_position: row_pos, col_position: col_pos)
     if @piece && @piece.user_id == game.white_player_id
-      return content_tag(:span, white_pieces[@piece.type].html_safe, class: %w(piece move_mode), id: "#{@piece.id}") if current_user.id == game.white_player_id && game.whos_turn? == game.white_player_id
-      return content_tag(:span, white_pieces[@piece.type].html_safe, class: ["piece"], id: "#{@piece.id}")
+      return content_tag(:span, white_pieces[@piece.type].html_safe, class: %w(piece move_mode), pos: "#{row_pos}#{col_pos}", id: "#{@piece.id}") if current_user.id == game.white_player_id && game.whos_turn? == game.white_player_id
+      return content_tag(:span, white_pieces[@piece.type].html_safe, class: ["piece"], pos: "#{row_pos}#{col_pos}", id: "#{@piece.id}")
     elsif @piece && @piece.user_id == @game.black_player_id
-      return content_tag(:span, black_pieces[@piece.type].html_safe, class: %w(piece move_mode), id: "#{@piece.id}") if current_user.id == game.black_player_id && game.whos_turn? == game.black_player_id
-      return content_tag(:span, black_pieces[@piece.type].html_safe, class: ["piece"], id: "#{@piece.id}")
+      return content_tag(:span, black_pieces[@piece.type].html_safe, class: %w(piece move_mode), pos: "#{row_pos}#{col_pos}", id: "#{@piece.id}") if current_user.id == game.black_player_id && game.whos_turn? == game.black_player_id
+      return content_tag(:span, black_pieces[@piece.type].html_safe, class: ["piece"], pos: "#{row_pos}#{col_pos}", id: "#{@piece.id}")
+    else
+      return tag(:span, class: ["piece"], pos: "#{row_pos}#{col_pos}")
     end
   end
 
