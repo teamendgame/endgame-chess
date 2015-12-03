@@ -9,8 +9,6 @@ $(function() {
       var updateUrl = "/pieces/" + draggableId
       var row = droppableId[0];
       var col = droppableId[1];
-
-      alert("The piece with id: " + draggableId + " moved to row: " + row + " col: " + col);
         
       $.ajax({
         type: 'PUT',
@@ -45,9 +43,6 @@ $(function() {
     <%= '<tr>'.html_safe %>
     <% 8.times do |col| %>
       <%= '<td>'.html_safe + piece_present?(@pieces, @game, row, col) + '</td>'.html_safe %>
-
-      <!-- <%= '<td>'.html_safe + content_tag(:span, piece_present?(@pieces, @game, row, col), pos: "#{row}#{col}",class: ["piece"]) + '</td>'.html_safe %> -->
-
     <% end %> 
   <% end %>
 </table>
