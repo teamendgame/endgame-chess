@@ -1,5 +1,6 @@
 require 'test_helper'
 class PawnTest < ActiveSupport::TestCase
+  # rubocop:disable Metrics/LineLength
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
@@ -8,12 +9,10 @@ class PawnTest < ActiveSupport::TestCase
   end
 
   test "pawn valid move" do
-  	#First pawn - is white pawn whit position (1,7)
     @pawn1 = Pawn.first
     expected = true
     actual = @pawn1.valid_move?(2, 7)
     assert_equal expected, actual
-    #Last pawn - is black pawn whit position (6,0)
     @pawn2 = Pawn.last
     expected = true
     actual = @pawn2.valid_move?(4, 0)
@@ -21,20 +20,19 @@ class PawnTest < ActiveSupport::TestCase
   end
 
   test "pawn invalid move" do
-    #First pawn - is white pawn whit position (1,7)
     @pawn = Pawn.first
     expected = false
     actual = @pawn.valid_move?(4, 7)
     assert_equal expected, actual
   end
 
-   test "valid diagonal killing move" do
-     @pawn1 = Pawn.create(type: "Pawn", row_position: 4, col_position: 2, user_id: @user1.id, game_id: @g.id)
-     @pawn2 = Pawn.create(type: "Pawn", row_position: 5, col_position: 3, user_id: @user2.id, game_id: @g.id)
-     expected = true
-     actual = @pawn1.valid_move?(5, 3)
-     assert_equal expected, actual
-   end
+  test "valid diagonal killing move" do
+    @pawn1 = Pawn.create(type: "Pawn", row_position: 4, col_position: 2, user_id: @user1.id, game_id: @g.id)
+    @pawn2 = Pawn.create(type: "Pawn", row_position: 5, col_position: 3, user_id: @user2.id, game_id: @g.id)
+    expected = true
+    actual = @pawn1.valid_move?(5, 3)
+    assert_equal expected, actual
+  end
 
   test "invalid diagonal killing move" do
     @pawn1 = Pawn.create(type: "Pawn", row_position: 4, col_position: 5, user_id: @user1.id, game_id: @g.id)
@@ -71,5 +69,4 @@ class PawnTest < ActiveSupport::TestCase
     actual = @pawn1.valid_move?(3, 0)
     assert_equal expected, actual
   end
-
 end
