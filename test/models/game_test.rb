@@ -53,7 +53,7 @@ class GameTest < ActiveSupport::TestCase
     assert_equal expected, actual
   end
 
-  test "game should be in check (bishop capture king)" do 
+  test "game should be in check (bishop capture king)" do
     @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
     @white_bishop = @game.pieces.create(type: "Bishop", col_position: 4, row_position: 5, user_id: @user1.id)
     @white_king = @game.pieces.create(type: "King", col_position: 4, row_position: 0, user_id: @user1.id)
@@ -62,11 +62,11 @@ class GameTest < ActiveSupport::TestCase
     @white_bishop.move_to!(3, 6)
 
     expected = true
-    actual = @game.determine_check
+    actual = @game.determine_check_2
     assert_equal expected, actual
   end
 
-  test "game should be in check (queen capture king)" do 
+  test "game should be in check (queen capture king)" do
     @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
     @white_queen = @game.pieces.create(type: "Queen", col_position: 3, row_position: 7, user_id: @user1.id)
     @white_king = @game.pieces.create(type: "King", col_position: 4, row_position: 0, user_id: @user1.id)
@@ -75,9 +75,9 @@ class GameTest < ActiveSupport::TestCase
     @white_queen.move_to!(5, 3)
 
     expected = true
-    actual = @game.determine_check
+    actual = @game.determine_check_2
     assert_equal expected, actual
-  end 
+  end
 
   test "game should not be in check (pawn blocking queen)" do
     @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
@@ -88,7 +88,7 @@ class GameTest < ActiveSupport::TestCase
     @white_queen.move_to!(5, 3)
 
     expected = false
-    actual = @game.determine_check
+    actual = @game.determine_check_2
     assert_equal expected, actual
   end
 
@@ -101,7 +101,7 @@ class GameTest < ActiveSupport::TestCase
     @white_bishop.move_to!(3, 6)
 
     expected = false
-    actual = @game.determine_check
+    actual = @game.determine_check_2
     assert_equal expected, actual
-  end 
+  end
 end
