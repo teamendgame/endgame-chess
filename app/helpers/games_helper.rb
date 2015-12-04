@@ -50,4 +50,9 @@ module GamesHelper
     return link_to game.name, game_path(game) unless game.black_player_id.nil?
     game.name + " - Waiting for second player"
   end
+
+  def in_check
+    return "White: Check" if @game.determine_check && @game.whos_turn? == @game.white_player_id
+    return "Black: Check" if @game.determine_check && @game.whos_turn? == @game.black_player_id
+  end
 end
