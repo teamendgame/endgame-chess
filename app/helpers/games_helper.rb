@@ -6,8 +6,8 @@ module GamesHelper
       'Rook'   => '&#9814;',
       'Knight' => '&#9816;',
       'Bishop' => '&#9815;',
-      'Queen'  => '&#9812;',
-      'King' => '&#9813;'
+      'Queen'  => '&#9813;',
+      'King' => '&#9812;'
     }
 
     black_pieces = {
@@ -15,8 +15,8 @@ module GamesHelper
       'Rook'   => '&#9820;',
       'Knight' => '&#9822;',
       'Bishop' => '&#9821;',
-      'Queen'  => '&#9818;',
-      'King' => '&#9819;'
+      'Queen'  => '&#9819;',
+      'King' => '&#9818;'
     }
 
     @piece = pieces.find_by(row_position: row_pos, col_position: col_pos)
