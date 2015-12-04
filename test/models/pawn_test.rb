@@ -8,6 +8,26 @@ class PawnTest < ActiveSupport::TestCase
     @g.populate_board!
   end
 
+  test "Invalid En Passant" do
+    @black_pawn = @g.pieces.where(type: "Pawn").last
+    @white_pawn = Pawn.find_by(col_position: 6, game_id: @g.id)
+    @black_pawn.move_to!(3, 7)
+    @white_pawn.move_to!(2, 6)
+    @white_pawn.move_to!(3, 6)
+    @black_pawn.move_to!(2, 6) if @black_pawn.valid_move?(2, 6)
+    assert_equal 3, @black_pawn.reload.row_position
+  end
+
+  test "Valid En Passant" do
+    @black_pawn = @g.pieces.where(type: "Pawn").last
+    @white_pawn = Pawn.find_by(row_position: 1, col_position: 6, game_id: @g.id)
+    @black_pawn.move_to!(3, 7)
+    @white_pawn.move_to!(3, 6)
+    @black_pawn.move_to!(2, 6) if @black_pawn.valid_move?(2, 6)
+    assert_equal 2, @black_pawn.reload.row_position
+    assert_equal true, @white_pawn.reload.captured
+  end
+
   test "pawn valid move" do
     @pawn1 = Pawn.first
     expected = true

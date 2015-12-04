@@ -3,7 +3,14 @@ class Pawn < Piece
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength
   def valid_move?(row_dest, col_dest)
-    check_en_passant(row_dest, col_dest)
+    @adjacent_piece_r = Piece.find_by(row_position: row_position, col_position: col_position + 1)
+    @adjacent_piece_l = Piece.find_by(row_position: row_position, col_position: col_position - 1)
+    @last_updated = Piece.where(game_id: game_id).order("updated_at desc").first
+    if @adjacent_piece_r && @adjacent_piece_r.type == "Pawn"
+      return true if check_en_passant(row_dest, col_dest, @adjacent_piece_r, @last_updated)
+    elsif @adjacent_piece_l && @adjacent_piece_l.type = "Pawn"
+      return true if check_en_passant(row_dest, col_dest, @adjacent_piece_l, @last_updated)
+    end
     row_diff = (row_position - row_dest).abs
     col_diff = (col_position - col_dest).abs
     return false if self.backward_move?(row_dest, col_dest) || self.horizontal_move?(row_dest, col_dest)
@@ -18,19 +25,6 @@ class Pawn < Piece
 
   def backward_move?(row_dest, _col_dest)
     user_id == game.white_player_id ? row_position > row_dest : row_position < row_dest
-  end
-
-  def check_en_passant(row_dest, col_dest)
-    @last_updated = Piece.where(game_id: game_id).order("updated_at desc").first
-    return if @last_updated.nil? || @last_updated.type != "Pawn" || @last_updated.previous_changes_hash.nil?
-    return if @last_updated.previous_changes_hash["moved"].nil? || @last_updated.previous_changes_hash["row_position"].nil?
-    @last_updated_row = @last_updated.previous_changes_hash["row_position"]
-    @last_updated_moved = @last_updated.previous_changes_hash["moved"][0]
-    return unless @last_updated.col_position == col_position + 1 || col_position - 1
-    return unless (@last_updated_row[0].to_i - @last_updated_row[1].to_i).abs == 2 && @last_updated_moved
-    valid_move_black = Game.find(game_id).black_player_id == user_id && row_dest == @last_updated.row_position - 1 && col_dest == @last_updated.col_position
-    valid_move_white = Game.find(game_id).black_player_id != user_id && row_dest == @last_updated.row_position + 1 && col_dest == @last_updated.col_position
-    valid_move_black || valid_move_white ? true : false
   end
 
   private
