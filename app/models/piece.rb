@@ -30,7 +30,7 @@ class Piece < ActiveRecord::Base
 
   # Returns true if piece in destination already belongs to you
   def own_piece?(row_dest, col_dest)
-    true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id) # rubocop:disable Metrics/LineLength
+    true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
   end
 
   # rubocop:disable Metrics/LineLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity

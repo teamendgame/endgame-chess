@@ -7,7 +7,7 @@ class RookTest < ActiveSupport::TestCase
     @g.populate_board!
     @rook_black = Piece.find_by(row_position: 7, col_position: 7)
     @pawn_black = Piece.find_by(row_position: 6, col_position: 7)
-    @pawn_black.update(captured: true)
+    @pawn_black.update(captured: true, row_position: nil, col_position: nil)
   end
 
   # valid moves
@@ -41,14 +41,14 @@ class RookTest < ActiveSupport::TestCase
   end
 
   test "rook invalid move vertical obstruction own piece" do
-    @pawn_black.update(captured: false)
+    @pawn_black.update(captured: false, row_position: 6, col_position: 7)
     expected = false
     actual = @rook_black.valid_move?(5, 7)
     assert_equal expected, actual
   end
 
   test "rook invalid move vertical own piece in destination" do
-    @pawn_black.update(captured: false)
+    @pawn_black.update(captured: false, row_position: 6, col_position: 7)
     expected = false
     actual = @rook_black.valid_move?(6, 7)
     assert_equal expected, actual
