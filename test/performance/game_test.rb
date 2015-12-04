@@ -9,7 +9,7 @@ class GamePerformanceTest < ActionDispatch::PerformanceTest
   # def setup
   #   @user1 = FactoryGirl.create(:user)
   #   @user2 = FactoryGirl.create(:user)
-  #   @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 1) 
+  #   @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 1)
   #   @g.populate_board!
   # end
 end
