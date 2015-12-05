@@ -52,4 +52,68 @@ class GameTest < ActiveSupport::TestCase
 
     assert_equal expected, actual
   end
+
+  test "game should be in check (bishop capture king)" do
+    @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+    @white_bishop = @game.pieces.create(type: "Bishop", col_position: 4, row_position: 5, user_id: @user1.id)
+    @white_king = @game.pieces.create(type: "King", col_position: 4, row_position: 0, user_id: @user1.id)
+    @black_king = @game.pieces.create(type: "King", col_position: 3, row_position: 0, user_id: @user2.id)
+
+    @white_bishop.move_to!(3, 6)
+
+    expected = true
+    actual = @game.determine_check
+    assert_equal expected, actual
+  end
+
+  test "game should be in check (queen capture king)" do
+    @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+    @white_queen = @game.pieces.create(type: "Queen", col_position: 3, row_position: 7, user_id: @user1.id)
+    @white_king = @game.pieces.create(type: "King", col_position: 4, row_position: 0, user_id: @user1.id)
+    @black_king = @game.pieces.create(type: "King", col_position: 3, row_position: 0, user_id: @user2.id)
+
+    @white_queen.move_to!(5, 3)
+
+    expected = true
+    actual = @game.determine_check
+    assert_equal expected, actual
+  end
+
+  test "game should be in check (queen capture king 2)" do
+    @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+    @white_queen = @game.pieces.create(type: "Queen", col_position: 2, row_position: 0, user_id: @user1.id)
+    @white_bishop = @game.pieces.create(type: "Bishop", col_position: 2, row_position: 1, user_id: @user1.id)
+    @black_king = @game.pieces.create(type: "King", col_position: 2, row_position: 3, user_id: @user2.id)
+
+    @white_bishop.move_to!(4, 3)
+
+    expected = true
+    assert_equal expected, @game.determine_check
+  end
+
+  test "game should not be in check (pawn blocking queen)" do
+    @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+    @white_queen = @game.pieces.create(type: "Queen", col_position: 3, row_position: 7, user_id: @user1.id)
+    @black_king = @game.pieces.create(type: "King", col_position: 3, row_position: 0, user_id: @user2.id)
+    @black_pawn = @game.pieces.create(type: "Pawn", col_position: 3, row_position: 1, user_id: @user2.id)
+
+    @white_queen.move_to!(5, 3)
+
+    expected = false
+    actual = @game.determine_check
+    assert_equal expected, actual
+  end
+
+  test "game should not be in check (pawn blocking bishop)" do
+    @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+    @white_bishop = @game.pieces.create(type: "Bishop", col_position: 4, row_position: 5, user_id: @user1.id)
+    @black_pawn = @game.pieces.create(type: "Pawn", col_position: 4, row_position: 1, user_id: @user2.id)
+    @black_king = @game.pieces.create(type: "King", col_position: 3, row_position: 0, user_id: @user2.id)
+
+    @white_bishop.move_to!(3, 6)
+
+    expected = false
+    actual = @game.determine_check
+    assert_equal expected, actual
+  end
 end

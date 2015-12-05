@@ -16,6 +16,24 @@ class Game < ActiveRecord::Base
     return black_player_id if turn_number.odd?
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def determine_check
+    if turn_number.even?
+      opponent_pieces = pieces.where(user_id: black_player_id)
+      king = pieces.find_by(user_id: white_player_id, type: "King")
+      opponent_pieces.each do |piece|
+        return true if piece.valid_move?(king.row_position, king.col_position)
+      end
+    else
+      opponent_pieces = pieces.where(user_id: white_player_id)
+      king = pieces.find_by(user_id: black_player_id, type: "King")
+      opponent_pieces.each do |piece|
+        return true if piece.valid_move?(king.row_position, king.col_position)
+      end
+    end
+    false
+  end
+
   private
 
   def init_pawn
