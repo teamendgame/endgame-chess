@@ -2,50 +2,18 @@ class Piece < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
 
-  # Validate move of en passant
-  # Move_to! if piece is next to a pawn and the piece is a pawn
-  # check if en passant is possible
-
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/PerceivedComplexity, Metrics/MethodLength
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
-    check_adjacent_pieces(new_row, new_col) unless @piece
+    if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
+      capture_en_passant!(new_row, new_col, @last_updated)
+    end
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
     if @piece.user_id != user_id
       @piece.update(row_position: nil, col_position: nil, captured: true)
       update(row_position: new_row, col_position: new_col, moved: true)
     else
       check_if_castling(new_row, new_col)
-    end
-  end
-
-  def check_adjacent_pieces(new_row, new_col)
-    @last_updated = Piece.where(game_id: game_id).order("updated_at desc").first
-    @adjacent_piece_r = Piece.find_by(row_position: row_position, col_position: col_position + 1) if col_position != 7
-    @adjacent_piece_l = Piece.find_by(row_position: row_position, col_position: col_position - 1) if col_position != 0
-    if type == "Pawn" && @adjacent_piece_r && @adjacent_piece_r.type == "Pawn"
-      check_en_passant(new_row, new_col, @adjacent_piece_r, @last_updated) if capture_en_passant!(new_row, new_col, @last_updated)
-    elsif type == "Pawn" && @adjacent_piece_l && @adjacent_piece_l.type == "Pawn"
-      check_en_passant(new_row, new_col, @adjacent_piece_l, @last_updated) if capture_en_passant!(new_row, new_col, @last_updated)
-    end
-  end
-
-  def check_en_passant(row_dest, col_dest, adjacent_pawn, last_updated)
-    return false if last_updated != adjacent_pawn || last_updated.previous_changes_hash.nil? || last_updated.previous_changes_hash["moved"].nil? || last_updated.previous_changes_hash["row_position"].nil?
-    @last_updated_row = eval( last_updated.previous_changes_hash["row_position"].gsub(/(\w+?)/, "'\\1'") )
-    @last_updated_moved = eval( last_updated.previous_changes_hash["moved"].gsub(/(\w+?)/, "'\\1'") )
-    return false unless (@last_updated_row[0].to_i - @last_updated_row[1].to_i).abs == 2 && @last_updated_moved
-    return true if Game.find(game_id).black_player_id == user_id && row_dest == last_updated.row_position - 1 && col_dest == last_updated.col_position
-    return true if Game.find(game_id).black_player_id != user_id && row_dest == last_updated.row_position + 1 && col_dest == last_updated.col_position
-    false
-  end
-
-  def capture_en_passant!(row_dest, col_dest, last_updated)
-    if Game.find(game_id).black_player_id == user_id && row_dest == last_updated.row_position - 1 && col_dest == last_updated.col_position
-      last_updated.update(row_position: nil, col_position: nil, captured: true)
-      update(row_position: row_dest, col_position: col_dest, moved: true)
-    elsif Game.find(game_id).black_player_id != user_id && row_dest == last_updated.row_position + 1 && col_dest == last_updated.col_position
-      last_updated.update(row_position: nil, col_position: nil, captured: true)
-      update(row_position: row_dest, col_position: col_dest, moved: true)
     end
   end
 
@@ -74,7 +42,6 @@ class Piece < ActiveRecord::Base
     true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
   end
 
-  # rubocop:disable Metrics/LineLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def obstructed?(row_dest, col_dest)
     # pass in row and col destination
     # get the current piece position
