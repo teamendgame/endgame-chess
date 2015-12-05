@@ -28,7 +28,7 @@ class PawnTest < ActiveSupport::TestCase
     assert_equal 3, @black_pawn.reload.row_position
   end
 
-  test "Blocked En Passant should capture" do
+  test "Obstructed En Passant should capture" do
     @black_pawn = @g.pieces.where(type: "Pawn").last
     @white_pawn = Pawn.find_by(row_position: 1, col_position: 6, game_id: @g.id)
     @white_pawn_2 = Pawn.find_by(row_position: 1, col_position: 4, game_id: @g.id)
@@ -40,7 +40,7 @@ class PawnTest < ActiveSupport::TestCase
     assert_equal true, @white_pawn_2.reload.captured
   end
 
-  test "Invalid En Passant" do
+  test "En Passant attempt when last updated Pawn only moved 1 square in previous turn" do
     @black_pawn = @g.pieces.where(type: "Pawn").last
     @white_pawn = Pawn.find_by(col_position: 6, game_id: @g.id)
     @black_pawn.move_to!(3, 7)
