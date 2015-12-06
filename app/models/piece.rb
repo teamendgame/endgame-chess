@@ -9,12 +9,11 @@ class Piece < ActiveRecord::Base
       capture_en_passant!(new_row, new_col, @last_updated) && return
     end
     check_if_castling(new_row, new_col) if type == "King"
-    if valid_move?(new_row, new_col) # rubocop:disable Style/GuardClause
-      update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
-      if @piece.user_id != user_id
-        @piece.update(row_position: nil, col_position: nil, captured: true)
-        update(row_position: new_row, col_position: new_col, moved: true)
-      end
+    return unless valid_move?(new_row, new_col)
+    update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
+    if @piece.user_id != user_id # rubocop:disable Style/GuardClause
+      @piece.update(row_position: nil, col_position: nil, captured: true)
+      update(row_position: new_row, col_position: new_col, moved: true)
     end
   end
 
