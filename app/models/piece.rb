@@ -33,12 +33,15 @@ class Piece < ActiveRecord::Base
     row_diff == col_diff
   end
 
+  # rubocop:disable Metrics/LineLength
   # Returns true if piece in destination already belongs to you
+  # else returns false
   def own_piece?(row_dest, col_dest)
-    true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
+    return true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
+    false
   end
 
-  # rubocop:disable Metrics/LineLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def obstructed?(row_dest, col_dest)
     # pass in row and col destination
     # get the current piece position
