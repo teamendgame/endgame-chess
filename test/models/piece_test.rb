@@ -10,7 +10,6 @@ class PieceTest < ActiveSupport::TestCase
 
   test "king is not moving into check" do
     @game = Game.create(name: "A Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
-    #@white_bishop = @game.pieces.create(type: "Bishop", col_position: 4, row_position: 5, user_id: @user1.id)
     @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id)
     @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
 
@@ -21,7 +20,6 @@ class PieceTest < ActiveSupport::TestCase
 
   test "king is moving into check" do
     @game = Game.create(name: "A Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
-    #@white_bishop = @game.pieces.create(type: "Bishop", col_position: 4, row_position: 5, user_id: @user1.id)
     @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id)
     @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
 

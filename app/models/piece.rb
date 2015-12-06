@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 class Piece < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
@@ -23,44 +24,26 @@ class Piece < ActiveRecord::Base
     # the user is white
     if user_id == game.white_player_id
       opponent_pieces = game.pieces.where(user_id: game.black_player_id)
-      # puts col_position
-      # puts row_position
       row_pos = row_position
-      col_pos = col_position 
+      col_pos = col_position
 
       # temporarily moving the piece to the new location
       update(row_position: row_dest, col_position: col_dest)
-      # self.row_position = row_dest
-      # self.col_position = col_dest
-      
       king = game.pieces.find_by(user_id: game.white_player_id, type: "King")
-      # if self.type == "King"
-      #   king.row_position = row_dest
-      #   king.col_position = col_dest
-      # end  
-
 
       opponent_pieces.each do |piece|
         if piece.valid_move?(king.row_position, king.col_position)
           # returning the piece to its previous location
           update(row_position: row_pos, col_position: col_pos)
-          # self.row_position = row_pos
-          # self.col_position = col_pos
-          puts "you can't move into check"
-          #flash[:alert] = "You can't move into check" flash[:notice] =""
           return true
         end
       end
-      # making sure we're not changing data
-      # self.row_position = row_pos
-      # self.col_position = col_pos
-
-      return false    
+      return false
     # the user is black
     else
       opponent_pieces = game.pieces.where(user_id: game.white_player_id)
       row_pos = row_position
-      col_pos = col_position 
+      col_pos = col_position
       # temporarily moving the piece to the new location
       update(row_position: row_dest, col_position: col_dest)
       king = game.pieces.find_by(user_id: game.black_player_id, type: "King")
@@ -68,11 +51,9 @@ class Piece < ActiveRecord::Base
         if piece.valid_move?(king.row_position, king.col_position)
           # returning the piece to its previous location
           update(row_position: row_pos, col_position: col_pos)
-          puts "you can't move into check"
           return true
         end
       end
-      
       return false
     end
   end
