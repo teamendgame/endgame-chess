@@ -6,7 +6,7 @@ class Piece < ActiveRecord::Base
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
     if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
-      capture_en_passant!(new_row, new_col, @last_updated)
+      capture_en_passant!(new_row, new_col, @last_updated) && return
     end
     if valid_move?(new_row, new_col)
       update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
@@ -40,8 +40,10 @@ class Piece < ActiveRecord::Base
   end
 
   # Returns true if piece in destination already belongs to you
+  # else returns false
   def own_piece?(row_dest, col_dest)
-    true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
+    return true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
+    false
   end
 
   def obstructed?(row_dest, col_dest)

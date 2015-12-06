@@ -1,15 +1,16 @@
 language: ruby
 cache: bundler
 rvm:
-  - 2.2.3 # ruby-lang.org current stable version
-  - 2.2.0 # Rails recommends 2.2 or newer.
-# before_install:
-#   - sudo apt-get update
-#   - sudo apt-get install imagemagick
+- 2.2.3
+- 2.2.0
 before_script:
-  - psql -c 'create database team_endgame_test;' -U postgres
-script: 
-  - bundle exec rake 
-  - bundle exec rake rubocop
+- psql -c 'create database team_endgame_test;' -U postgres
+script:
+- bundle exec rake
+- bundle exec rake rubocop
 services:
-  - postgresql # travic-ci default version at time of setup is 9.1
+- postgresql
+deploy:
+  provider: heroku
+  api_key:
+    secure: GhcN+R3q/DSfDUTqMVK5JZX/z0VIfAobG009INv9JmHg7Syf4bX7sZn1pK/HTADKTwJKOgyd00NZGspUUYUnnGIqRYRY6SyHB1F1aM8h1L8zZb3Ip+IW9IjOe+FrnqRog9FslkggQVWMlETfmMdl2tdM2rN0zlKMBHZSJdf1EZNuqZrVkiRoyaNcNSGHKWDn6Z3qVncR6z1TxKdTpCz7sMmyhR+i/FUonV5gQUSq6lPgK0ORC0h6U1UW9jVs1R1eyLkdxx2zXyB2psz3vfZbryQ9HGGsRO8hGkwWN1HKqaCODOIpK37linee3f0q0beqbmKEwHeUZWKtGa+CT3/08dkSMRkFXFt5Le4wHihBkmUIT4vd6G0HIZoBWSuyIxZmJmIgvQKCTAsGqAvCdZ2HN0GZJfOJRxjiTdyNoQ3Qzvhvi+Y0IP2ryI8DBgFZ8k8YyMdiSKO0QJJwu6O+cBeR2fObnN+2VuBc3tCrW8ymV/yy5puBnLX52pVvausAXzXR1bxSsoXWGj4X8kliKHm+BatvOYvmZTasj0l6fkuohGbeYMKyfTgJN1K8ykYE29rjg8ZOjO1Ek9yFiyKOYr2IPGqKlaQBq875nLX7azrrupvEiZWyjzwCVIYnFfavtnl3sU9nl7RVv3A36pX77Ucc/bB2iPvYcX+s+J+eadH2ECU=
