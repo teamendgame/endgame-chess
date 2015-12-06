@@ -38,8 +38,10 @@ class Piece < ActiveRecord::Base
   end
 
   # Returns true if piece in destination already belongs to you
+  # else returns false
   def own_piece?(row_dest, col_dest)
-    true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
+    return true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
+    false
   end
 
   def obstructed?(row_dest, col_dest)
