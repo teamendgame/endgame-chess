@@ -30,19 +30,31 @@ class Piece < ActiveRecord::Base
 
       # temporarily moving the piece to the new location
       update(row_position: row_dest, col_position: col_dest)
+      # self.row_position = row_dest
+      # self.col_position = col_dest
       
       king = game.pieces.find_by(user_id: game.white_player_id, type: "King")
-      
+      # if self.type == "King"
+      #   king.row_position = row_dest
+      #   king.col_position = col_dest
+      # end  
+
+
       opponent_pieces.each do |piece|
         if piece.valid_move?(king.row_position, king.col_position)
           # returning the piece to its previous location
           update(row_position: row_pos, col_position: col_pos)
+          # self.row_position = row_pos
+          # self.col_position = col_pos
           puts "you can't move into check"
           #flash[:alert] = "You can't move into check" flash[:notice] =""
           return true
         end
       end
-      
+      # making sure we're not changing data
+      # self.row_position = row_pos
+      # self.col_position = col_pos
+
       return false    
     # the user is black
     else
