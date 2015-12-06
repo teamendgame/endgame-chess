@@ -36,6 +36,8 @@ class Piece < ActiveRecord::Base
           # returning the piece to its previous location
           update(row_position: row_pos, col_position: col_pos)
           return true
+        else
+          next
         end
       end
       return false
@@ -52,6 +54,8 @@ class Piece < ActiveRecord::Base
           # returning the piece to its previous location
           update(row_position: row_pos, col_position: col_pos)
           return true
+        else
+          next
         end
       end
       return false
