@@ -1,5 +1,5 @@
 require 'test_helper'
-# rubocop:disable Metrics/LineLength
+# rubocop:disable Metrics/LineLength, Metrics/AbcSize
 class PiecesControllerTest < ActionController::TestCase
   def setup
     @user = FactoryGirl.create(:user)
