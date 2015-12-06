@@ -6,7 +6,7 @@ class Piece < ActiveRecord::Base
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
     if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
-      capture_en_passant!(new_row, new_col, @last_updated)
+      capture_en_passant!(new_row, new_col, @last_updated) && return
     end
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
     if @piece.user_id != user_id
