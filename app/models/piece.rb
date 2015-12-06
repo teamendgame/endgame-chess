@@ -19,6 +19,52 @@ class Piece < ActiveRecord::Base
     update(row_position: new_row, col_position: new_col, moved: true)
   end
 
+  def moving_into_check?(row_dest, col_dest)
+    # the user is white
+    if user_id == game.white_player_id
+      opponent_pieces = game.pieces.where(user_id: game.black_player_id)
+      # puts col_position
+      # puts row_position
+      row_pos = row_position
+      col_pos = col_position 
+
+      # temporarily moving the piece to the new location
+      update(row_position: row_dest, col_position: col_dest)
+      
+      king = game.pieces.find_by(user_id: game.white_player_id, type: "King")
+      
+      opponent_pieces.each do |piece|
+        if piece.valid_move?(king.row_position, king.col_position)
+          # returning the piece to its previous location
+          update(row_position: row_pos, col_position: col_pos)
+          puts "you can't move into check"
+          #flash[:alert] = "You can't move into check" flash[:notice] =""
+          return true
+        end
+      end
+      
+      return false    
+    # the user is black
+    else
+      opponent_pieces = game.pieces.where(user_id: game.white_player_id)
+      row_pos = row_position
+      col_pos = col_position 
+      # temporarily moving the piece to the new location
+      update(row_position: row_dest, col_position: col_dest)
+      king = game.pieces.find_by(user_id: game.black_player_id, type: "King")
+      opponent_pieces.each do |piece|
+        if piece.valid_move?(king.row_position, king.col_position)
+          # returning the piece to its previous location
+          update(row_position: row_pos, col_position: col_pos)
+          puts "you can't move into check"
+          return true
+        end
+      end
+      
+      return false
+    end
+  end
+
   def check_if_castling(row, col)
     @piece = Piece.find_by(row_position: row, col_position: col)
     return unless @piece && type == "King" && !moved && @piece.type == "Rook" && !@piece.moved
