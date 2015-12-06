@@ -1,5 +1,5 @@
 require 'test_helper'
-
+# rubocop:disable Metrics/ClassLength
 class PieceTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)
@@ -24,6 +24,7 @@ class PieceTest < ActiveSupport::TestCase
     assert_equal 4, @king.reload.col_position
   end
 
+  # rubocop:disable Metrics/LineLength
   test "valid pawn capture with move_to!" do
     black_pawn = Pawn.last
     white_pawn = Pawn.create(row_position: 5, col_position: 1, game_id: @g.id, user_id: @user1.id)
@@ -47,12 +48,30 @@ class PieceTest < ActiveSupport::TestCase
     assert black_pawn.row_position == 6 && black_pawn.col_position == 0
   end
 
-  test "invalid move for pawn" do 
+  test "invalid move for pawn" do
     # Pawn is at (6, 0)
     pawn = Pawn.last
     pawn.move_to!(5, 7)
     pawn.reload
     assert pawn.row_position == 6 && pawn.col_position == 0
+  end
+
+  test "valid move for king" do
+    # King is at (7, 4)
+    king = King.last
+    @g.pieces.find_by(row_position: 6, col_position: 4).destroy
+    king.move_to!(6, 4)
+    king.reload
+    assert king.row_position == 6 && king.col_position == 4
+  end
+
+  test "invalid move for king" do
+    # King is at (7, 4)
+    king = King.last
+    @g.pieces.find_by(row_position: 6, col_position: 4).destroy
+    king.move_to!(5, 4)
+    king.reload
+    assert king.row_position == 7 && king.col_position == 4
   end
 
   test "obstructed?" do
@@ -132,7 +151,7 @@ class PieceTest < ActiveSupport::TestCase
     assert_equal expected, actual
   end
 
-  test "not own piece?" do 
+  test "not own piece?" do
     @bishop_black = Piece.where(row_position: 7, col_position: 5).first
     expected = false
     actual = @bishop_black.own_piece?(1, 5)
