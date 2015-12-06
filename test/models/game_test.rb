@@ -85,7 +85,7 @@ class GameTest < ActiveSupport::TestCase
     @white_bishop = @game.pieces.create(type: "Bishop", col_position: 2, row_position: 1, user_id: @user1.id)
     @black_king = @game.pieces.create(type: "King", col_position: 2, row_position: 3, user_id: @user2.id)
 
-    @white_bishop.move_to!(4, 3)
+    @white_bishop.move_to!(3, 4)
 
     expected = true
     assert_equal expected, @game.determine_check
