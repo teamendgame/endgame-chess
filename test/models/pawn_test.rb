@@ -1,5 +1,5 @@
 require 'test_helper'
-# rubocop:disable Metrics/LineLength, Metrics/ClassLength
+# rubocop:disable Metrics/LineLength
 class PawnTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)
@@ -29,7 +29,7 @@ class PawnTest < ActiveSupport::TestCase
     @black_pawn = Pawn.create(row_position: 3, col_position: 7, game_id: @g.id, user_id: @user2.id)
     @white_pawn = Pawn.create(row_position: 3, col_position: 6, game_id: @g.id, user_id: @user1.id)
     @white_pawn_2 = Pawn.create(row_position: 2, col_position: 6, game_id: @g.id, user_id: @user1.id)
-    @black_pawn.move_to!(2, 6) 
+    @black_pawn.move_to!(2, 6)
     assert_equal 2, @black_pawn.reload.row_position
     assert_equal true, @white_pawn_2.reload.captured
   end
