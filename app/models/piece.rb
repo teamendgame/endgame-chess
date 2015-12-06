@@ -2,8 +2,12 @@ class Piece < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
 
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/PerceivedComplexity, Metrics/MethodLength
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
+    if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
+      capture_en_passant!(new_row, new_col, @last_updated)
+    end
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
     if @piece.user_id != user_id
       @piece.update(row_position: nil, col_position: nil, captured: true)
@@ -38,7 +42,6 @@ class Piece < ActiveRecord::Base
     true if game.pieces.find_by(row_position: row_dest, col_position: col_dest, user_id: user_id)
   end
 
-  # rubocop:disable Metrics/LineLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def obstructed?(row_dest, col_dest)
     # pass in row and col destination
     # get the current piece position
