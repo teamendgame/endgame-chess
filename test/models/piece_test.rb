@@ -4,16 +4,12 @@ class PieceTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
-    # rubocop:disable Metrics/LineLength
-    @piece1 = Piece.create(type: "Pawn", row_position: 4, col_position: 2, user_id: @user1.id, captured: false)
-    @piece2 = Piece.create(type: "Pawn", row_position: 5, col_position: 1, user_id: @user2.id, captured: false)
-    @piece3 = Piece.create(type: "Pawn", row_position: 5, col_position: 2, user_id: @user1.id, captured: false)
     @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
     @g.populate_board!
-    @king = King.last
   end
 
   test "unobstructed castling" do
+    @king = King.last
     Piece.find_by(row_position: 7, col_position: 6).destroy
     Piece.find_by(row_position: 7, col_position: 5).destroy
     @king.move_to!(7, 7)
@@ -23,26 +19,33 @@ class PieceTest < ActiveSupport::TestCase
   end
 
   test "obstructed castling" do
+    @king = King.last
     @king.move_to!(7, 7)
     assert_equal 4, @king.reload.col_position
   end
 
   test "capture pawn with other pawn" do
-    @piece1.move_to!(5, 1)
+    black_pawn = Pawn.last
+    white_pawn = Pawn.first
+    white_pawn.update(row_position: 5, col_position: 1)
+    black_pawn.move_to!(5, 1)
     expected = true
-    actual = @piece2.reload.captured
+    actual = white_pawn.reload.captured
     assert_equal expected, actual
-    assert @piece1.row_position == 5 && @piece1.col_position == 1
+    assert black_pawn.row_position == 5 && black_pawn.col_position == 1
   end
 
   test "move to blank cell" do
-    @piece1.move_to!(6, 2)
-    assert @piece1.row_position == 6 && @piece1.col_position == 2
+    black_pawn = Pawn.last
+    black_pawn.move_to!(5, 0)
+    assert black_pawn.row_position == 5 && black_pawn.col_position == 0
   end
 
   test "same user" do
-    @piece1.move_to!(5, 2)
-    assert @piece1.row_position == 4 && @piece1.col_position == 2
+    black_pawn = Pawn.last
+    Pawn.find_by(row_position: 6, col_position: 1).update(row_position: 5, col_position: 0)
+    black_pawn.move_to!(5, 0)
+    assert black_pawn.row_position == 6 && black_pawn.col_position == 0
   end
 
   test "obstructed?" do
