@@ -37,7 +37,6 @@ class Piece < ActiveRecord::Base
     row_diff == col_diff
   end
 
-  # rubocop:disable Metrics/LineLength
   # Returns true if piece in destination already belongs to you
   # else returns false
   def own_piece?(row_dest, col_dest)
@@ -45,7 +44,6 @@ class Piece < ActiveRecord::Base
     false
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def obstructed?(row_dest, col_dest)
     # pass in row and col destination
     # get the current piece position
