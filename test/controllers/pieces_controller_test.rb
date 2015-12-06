@@ -3,8 +3,10 @@ require 'test_helper'
 class PiecesControllerTest < ActionController::TestCase
   def setup
     @user = FactoryGirl.create(:user)
-    @g = Game.create(name: "Test", white_player_id: @user.id, black_player_id: 3, turn_number: 0)
+    @user2 = FactoryGirl.create(:user)
+    @g = Game.create(name: "Test", white_player_id: @user.id, black_player_id: @user2.id, turn_number: 0)
     @pawn = Piece.create(type: "Pawn", col_position: 1, row_position: 1, user_id: @user.id, game_id: @g.id)
+    @black_pawn = Piece.create(type: "Pawn", col_position: 1, row_position: 6, user_id: @user2.id, game_id: @g.id)
     @white_rook_queenside = Piece.create(type: "Rook", col_position: 0, row_position: 0, user_id: @user.id, game_id: @g.id)
     @white_rook_kingside = Piece.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user.id, game_id: @g.id)
   end
@@ -15,9 +17,17 @@ class PiecesControllerTest < ActionController::TestCase
   #   assert_response :success
   # end
 
+  test "Player that is not its turn should not be able to update" do
+    sign_in @user
+    sign_in @user2
+    put :update, id: @black_pawn.id, game_id: @g.id, piece: { type: @black_pawn.type, col_position: 2, row_position: 2 }
+    assert_equal 6, @black_pawn.row_position
+    assert_redirected_to game_path(@g)
+  end
+
   test "should update piece location" do
     sign_in @user
-    put :update, id: @pawn.id, piece: { type: @pawn.type, col_position: 2, row_position: 2 }
+    put :update, id: @pawn.id, game_id: @g.id, piece: { type: @pawn.type, col_position: 2, row_position: 2 }
     @pawn.reload
     @g.reload
 

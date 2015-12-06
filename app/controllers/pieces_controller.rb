@@ -1,4 +1,6 @@
 class PiecesController < ApplicationController
+  before_action :check_player_color
+
   # rubocop:disable Metrics/AbcSize
   def show
     @piece = Piece.find(params[:id])
@@ -38,6 +40,13 @@ class PiecesController < ApplicationController
   end
 
   private
+
+  def check_player_color
+    @game = Game.find(params[:game_id])
+    return if @game.whos_turn? == current_user.id
+    flash[:alert] = "Not your turn!"
+    redirect_to game_path(@game)
+  end
 
   def piece_params
     params.require(:piece).permit(:type, :row_position, :col_position)
