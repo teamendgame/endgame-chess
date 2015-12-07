@@ -19,6 +19,20 @@ class Piece < ActiveRecord::Base
     update(row_position: new_row, col_position: new_col, moved: true)
   end
 
+  def moving_into_check?(row_dest, col_dest)
+    row_pos = row_position
+    col_pos = col_position
+    # temporarily moving the piece to the new location
+    update(row_position: row_dest, col_position: col_dest)
+    in_check = game.determine_check
+    if in_check
+      update(row_position: row_pos, col_position: col_pos)
+      return true
+    else
+      return false
+    end
+  end
+
   def check_if_castling(row, col)
     @piece = Piece.find_by(row_position: row, col_position: col)
     return unless @piece && type == "King" && !moved && @piece.type == "Rook" && !@piece.moved
