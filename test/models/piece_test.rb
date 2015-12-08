@@ -80,8 +80,15 @@ class PieceTest < ActiveSupport::TestCase
     @pawn_black = Piece.where(row_position: 6, col_position: 0).first
     @pawn_black.update(captured: true)
     @rook_black = Piece.where(row_position: 7, col_position: 0).first
+    @queen1 = Piece.create(row_position: 3, col_position: 0, game_id: @g.id, user_id: @user1.id)
+    @queen2 = Piece.create(row_position: 3, col_position: 2, game_id: @g.id, user_id: @user1.id)
 
-    expected = false
+    expected = true
+    actual = @queen1.obstructed?(3,7)
+    assert_equal expected, actual
+    @queen2.update(captured: true, row_position: nil, col_position: nil)
+
+    expected = true
     actual = @rook_black.obstructed?(1, 0)
     assert_equal expected, actual
 
