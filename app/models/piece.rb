@@ -23,6 +23,22 @@ class Piece < ActiveRecord::Base
     return unless check_if_castling(new_row, new_col)
     return unless can_castle?(new_row, new_col)
     castle!(new_row, new_col)
+  end  
+
+  def moving_into_check?(row_dest, col_dest)
+    row_pos = row_position
+    col_pos = col_position
+    # temporarily moving the piece to the new location
+    update(row_position: row_dest, col_position: col_dest)
+    assign_attributes(row_position: row_dest, col_position: col_dest)
+    in_check = game.determine_check
+    if in_check
+      update(row_position: row_pos, col_position: col_pos)
+      # assign_attributes(row_position: row_pos, col_position: col_pos)
+      return true
+    else
+      return false
+    end
   end
 
   def check_if_castling(row, col)
