@@ -84,7 +84,7 @@ class PieceTest < ActiveSupport::TestCase
     @queen2 = Piece.create(row_position: 3, col_position: 2, game_id: @g.id, user_id: @user1.id)
 
     expected = true
-    actual = @queen1.obstructed?(3,7)
+    actual = @queen1.obstructed?(3, 7)
     assert_equal expected, actual
     @queen2.update(captured: true, row_position: nil, col_position: nil)
 
