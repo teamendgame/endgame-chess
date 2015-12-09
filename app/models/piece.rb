@@ -30,7 +30,7 @@ class Piece < ActiveRecord::Base
     col_pos = col_position
     # temporarily moving the piece to the new location
     update(row_position: row_dest, col_position: col_dest)
-    assign_attributes(row_position: row_dest, col_position: col_dest)
+    #assign_attributes(row_position: row_dest, col_position: col_dest)
     in_check = game.determine_check
     if in_check
       update(row_position: row_pos, col_position: col_pos)
