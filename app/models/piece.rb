@@ -56,8 +56,8 @@ class Piece < ActiveRecord::Base
       row_dest += 1
       return true unless game.pieces.find_by(row_position: [row_dest...row_pos], col_position: col_position).nil?
     end
-    return false
-  end    
+    false
+  end
 
   def horizontal_obstruction(col_dest)
     col_pos = col_position
@@ -70,8 +70,8 @@ class Piece < ActiveRecord::Base
       col_dest += 1
       return true unless game.pieces.find_by(row_position: row_position, col_position: [col_dest..col_pos]).nil?
     end
-    return false
-  end    
+    false
+  end
 
   def diagonal_obstruction(row_dest, col_dest)
     row_pos = row_position
@@ -107,20 +107,16 @@ class Piece < ActiveRecord::Base
         return true unless game.pieces.find_by(row_position: row_num, col_position: col_dest).nil?
       end
     end
-    return false
-  end  
+    false
+  end
 
   def obstructed?(row_dest, col_dest)
-    row_pos = row_position
-    col_pos = col_position
-
     return "Invalid input! Knight can't be obstructed." if type == "Knight"
- 
-    if vertical_move?(row_dest, col_dest) # this is checking vertical obstruction
+    if vertical_move?(row_dest, col_dest)
       return vertical_obstruction(row_dest)
-    elsif horizontal_move?(row_dest, col_dest) # this is checking horizontal obstruction
+    elsif horizontal_move?(row_dest, col_dest)
       return horizontal_obstruction(col_dest)
-    elsif diagonal_move?(row_dest, col_dest) # is checking diagonal obstruction
+    elsif diagonal_move?(row_dest, col_dest)
       return diagonal_obstruction(row_dest, col_dest)
     else
       return "ERROR! in obstructed?"
