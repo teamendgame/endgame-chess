@@ -41,7 +41,7 @@ class Piece < ActiveRecord::Base
     Piece.transaction do
       # temporarily moving the piece to the new location
       update(row_position: row_dest, col_position: col_dest)
-      raise "Transaction Failed" if game.determine_check
+      raise ActiveRecord::Rollback if game.determine_check
       false
     end  
   end  
