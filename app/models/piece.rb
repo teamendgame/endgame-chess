@@ -2,6 +2,8 @@ class Piece < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
 
+  #after_rollback :cant_move_into_check
+
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/MethodLength
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
@@ -26,20 +28,13 @@ class Piece < ActiveRecord::Base
   end  
 
   def moving_into_check?(row_dest, col_dest)
-    row_pos = row_position
-    col_pos = col_position
-    # temporarily moving the piece to the new location
-    update(row_position: row_dest, col_position: col_dest)
-    #assign_attributes(row_position: row_dest, col_position: col_dest)
-    in_check = game.determine_check
-    if in_check
-      update(row_position: row_pos, col_position: col_pos)
-      # assign_attributes(row_position: row_pos, col_position: col_pos)
-      return true
-    else
-      return false
-    end
-  end
+    Piece.transaction do
+      # temporarily moving the piece to the new location
+      update(row_position: row_dest, col_position: col_dest)
+      raise "Transaction Failed" if game.determine_check
+      false
+    end  
+  end  
 
   def check_if_castling(row, col)
     @piece = Piece.find_by(row_position: row, col_position: col)
@@ -138,4 +133,9 @@ class Piece < ActiveRecord::Base
     return horizontal_obstruction(col_dest) if horizontal_move?(row_dest, col_dest)
     return diagonal_obstruction(row_dest, col_dest) if diagonal_move?(row_dest, col_dest)
   end
+
+  private
+  def cant_move_into_check
+    puts "You can't move into check"
+  end 
 end
