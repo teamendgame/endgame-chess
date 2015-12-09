@@ -16,6 +16,7 @@ class PieceTest < ActiveSupport::TestCase
     expected = false
     actual = @white_king.moving_into_check?(1, 1)
     assert_equal expected, actual
+
   end
 
   test "king is moving into check" do
@@ -23,9 +24,11 @@ class PieceTest < ActiveSupport::TestCase
     @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @u1.id)
     @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @u2.id)
 
-    expected = true
-    actual = @white_king.moving_into_check?(2, 1)
-    assert_equal expected, actual
+    #expected = true
+    #actual = @white_king.moving_into_check?(2, 1)
+    @white_king.moving_into_check?(2, 1)
+    #assert_equal expected, actual
+    assert_response :error
   end
 
   test "king is moving into check2" do
