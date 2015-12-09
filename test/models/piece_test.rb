@@ -12,68 +12,23 @@ class PieceTest < ActiveSupport::TestCase
     @g1 = Game.create(name: "G", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 4)
     @white_king = @g1.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @u1.id)
     @black_pawn = @g1.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @u2.id)
-
     expected = false
     actual = @white_king.moving_into_check?(1, 1)
     assert_equal expected, actual
-
+    @white_king.reload
+    assert_equal 1, @white_king.col_position
   end
 
   test "king is moving into check" do
     @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 4)
     @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @u1.id)
     @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @u2.id)
-
-    #expected = true
-    #actual = @white_king.moving_into_check?(2, 1)
     @white_king.moving_into_check?(2, 1)
-    #assert_equal expected, actual
-    assert_response :error
+    @white_king.reload
+    assert_equal 0, @white_king.col_position
+    assert_equal 1, @white_king.row_position
   end
 
-  test "king is moving into check2" do
-    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 4)
-    @white_bishop = @game.pieces.create(type: "Bishop", row_position: 4, col_position: 5, user_id: @u1.id)
-    @white_king = @game.pieces.create(type: "King", row_position: 4, col_position: 6, user_id: @u1.id)
-    @black_queen = @game.pieces.create(type: "Queen", row_position: 2, col_position: 7, user_id: @u2.id)
-
-    expected = true
-    actual = @white_king.moving_into_check?(4, 7)
-    assert_equal expected, actual
-  end
-
-  test "bishop is moving into check" do
-    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 4)
-    @white_bishop = @game.pieces.create(type: "Bishop", row_position: 3, col_position: 6, user_id: @u1.id)
-    @white_king = @game.pieces.create(type: "King", row_position: 4, col_position: 5, user_id: @u1.id)
-    @black_queen = @game.pieces.create(type: "Queen", row_position: 2, col_position: 7, user_id: @u2.id)
-
-    expected = true
-    actual = @white_bishop.moving_into_check?(4, 7)
-    assert_equal expected, actual
-  end
-
-  test "queen is not moving into check" do
-    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 3)
-    @white_bishop = @game.pieces.create(type: "Bishop", row_position: 4, col_position: 5, user_id: @u1.id)
-    @black_king = @game.pieces.create(type: "King", row_position: 2, col_position: 3, user_id: @u2.id)
-    @black_queen = @game.pieces.create(type: "Queen", row_position: 3, col_position: 2, user_id: @u2.id)
-
-    expected = false
-    actual = @black_queen.moving_into_check?(3, 4)
-    assert_equal expected, actual
-  end
-
-  test "queen is moving into check" do
-    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 3)
-    @white_bishop = @game.pieces.create(type: "Bishop", row_position: 4, col_position: 5, user_id: @u1.id)
-    @black_king = @game.pieces.create(type: "King", row_position: 2, col_position: 3, user_id: @u2.id)
-    @black_queen = @game.pieces.create(type: "Queen", row_position: 3, col_position: 4, user_id: @u2.id)
-
-    expected = true
-    actual = @black_queen.moving_into_check?(3, 7)
-    assert_equal expected, actual
-  end
   test "unobstructed castling" do
     @king = King.last
     Piece.find_by(row_position: 7, col_position: 6).destroy
