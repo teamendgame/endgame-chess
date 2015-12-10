@@ -3,7 +3,7 @@ class RookTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
-    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
+    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 0)
     @g.populate_board!
     @rook_black = Piece.find_by(row_position: 7, col_position: 7)
     @pawn_black = Piece.find_by(row_position: 6, col_position: 7)
