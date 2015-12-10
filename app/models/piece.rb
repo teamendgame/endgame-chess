@@ -12,7 +12,7 @@ class Piece < ActiveRecord::Base
     # Checking for Valid Move
     return unless valid_move?(new_row, new_col)
     # Checking if the piece is moving into check
-    return unless !moving_into_check?(new_row, new_col)
+    # return if moving_into_check?(new_row, new_col) != false
     # If there is not a piece in the destination
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
     # Row & col were already updated in moving_into_check? method
@@ -34,8 +34,9 @@ class Piece < ActiveRecord::Base
       # temporarily moving the piece to the new location
       update(row_position: row_dest, col_position: col_dest, moved: true)
       fail ActiveRecord::Rollback if game.determine_check
-      false
+      return false
     end
+    true
   end
 
   def check_if_castling(row, col)
