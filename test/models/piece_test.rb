@@ -4,7 +4,7 @@ class PieceTest < ActiveSupport::TestCase
   def setup
     @u1 = FactoryGirl.create(:user)
     @u2 = FactoryGirl.create(:user)
-    @g = Game.create(name: "New Game", white_player_id: @u1.id, black_player_id: @u2.id)
+    @g = Game.create(name: "New Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 0)
     @g.populate_board!
   end
 
@@ -33,6 +33,7 @@ class PieceTest < ActiveSupport::TestCase
     @king = King.last
     Piece.find_by(row_position: 7, col_position: 6).destroy
     Piece.find_by(row_position: 7, col_position: 5).destroy
+    @g.update(turn_number: 1)
     @king.move_to!(7, 7)
     expected = 6
     actual = @king.reload.col_position

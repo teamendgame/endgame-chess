@@ -13,8 +13,12 @@ class Piece < ActiveRecord::Base
     castling(new_row, new_col) if type == "King"
     # Checking for Valid Move
     return unless valid_move?(new_row, new_col)
+    # Checking if the piece is moving into check
+    return unless !moving_into_check?(new_row, new_col)
     # If there is not a piece in the destination
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
+    # Row & col were already updated in moving_into_check? method
+    #update(moved: true) && return unless @piece
     # If there is a piece in the destination
     return unless @piece.user_id != user_id
     @piece.update(row_position: nil, col_position: nil, captured: true)
@@ -30,7 +34,8 @@ class Piece < ActiveRecord::Base
   def moving_into_check?(row_dest, col_dest)
     Piece.transaction do
       # temporarily moving the piece to the new location
-      update(row_position: row_dest, col_position: col_dest)
+      update(row_position: row_dest, col_position: col_dest, moved: true)
+      puts game.turn_number
       raise ActiveRecord::Rollback if game.determine_check
       false
     end  
