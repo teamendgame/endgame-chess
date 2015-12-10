@@ -27,7 +27,7 @@ class Piece < ActiveRecord::Base
     return unless check_if_castling(new_row, new_col)
     return unless can_castle?(new_row, new_col)
     castle!(new_row, new_col)
-  end  
+  end
 
   def moving_into_check?(row_dest, col_dest)
     Piece.transaction do
