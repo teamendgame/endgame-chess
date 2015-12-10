@@ -12,9 +12,11 @@ class KingTest < ActiveSupport::TestCase
     # Rook pos (7, 7)
     @king = King.last
     @rook = Rook.last
+    rook_row = @rook.row_position
+    rook_col = @rook.col_position
     Piece.find_by(row_position: 7, col_position: 6).destroy
     Piece.find_by(row_position: 7, col_position: 5).destroy
-    @king.can_castle?(@rook.row_position, @rook.col_position)
+    @king.castle!(rook_row, rook_col) if @king.can_castle?(rook_row, rook_col)
     assert_equal 6, @king.reload.col_position
     assert_equal 5, @rook.reload.col_position
   end
@@ -22,10 +24,12 @@ class KingTest < ActiveSupport::TestCase
   test "queenside castle when both pieces have not moved yet" do
     @king = King.last
     @rook = Rook.find_by(row_position: 7, col_position: 0)
+    rook_row = @rook.row_position
+    rook_col = @rook.col_position
     Piece.find_by(row_position: 7, col_position: 3).destroy
     Piece.find_by(row_position: 7, col_position: 2).destroy
     Piece.find_by(row_position: 7, col_position: 1).destroy
-    @king.can_castle?(@rook.row_position, @rook.col_position)
+    @king.castle!(rook_row, rook_col) if @king.can_castle?(rook_row, rook_col)
     assert_equal 2, @king.reload.col_position
     assert_equal 3, @rook.reload.col_position
   end
