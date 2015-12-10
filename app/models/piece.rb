@@ -7,8 +7,8 @@ class Piece < ActiveRecord::Base
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
     # Checking for En Passant
     capture_en_passant!(new_row, new_col, @last_updated) && return if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
-    # Checking for Castling
-    check_if_castling(new_row, new_col) if type == "King"
+    # Execute castling procedures if piece is King
+    castling(new_row, new_col) if type == "King"
     # Checking for Valid Move
     return unless valid_move?(new_row, new_col)
     # If there is not a piece in the destination
@@ -19,10 +19,16 @@ class Piece < ActiveRecord::Base
     update(row_position: new_row, col_position: new_col, moved: true)
   end
 
+  def castling(new_row, new_col)
+    return unless check_if_castling(new_row, new_col)
+    return unless can_castle?(new_row, new_col)
+    castle!(new_row, new_col)
+  end
+
   def check_if_castling(row, col)
     @piece = Piece.find_by(row_position: row, col_position: col)
-    return unless @piece && type == "King" && !moved && @piece.type == "Rook" && !@piece.moved
-    can_castle?(row, col)
+    return false unless @piece && type == "King" && !moved && @piece.type == "Rook" && !@piece.moved
+    true
   end
 
   def horizontal_move?(row_dest, _col_dest)
