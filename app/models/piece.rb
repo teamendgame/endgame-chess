@@ -2,8 +2,6 @@ class Piece < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
 
-  #after_rollback :cant_move_into_check
-
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/MethodLength
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
@@ -18,7 +16,7 @@ class Piece < ActiveRecord::Base
     # If there is not a piece in the destination
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
     # Row & col were already updated in moving_into_check? method
-    #update(moved: true) && return unless @piece
+    # update(moved: true) && return unless @piece
     # If there is a piece in the destination
     return unless @piece.user_id != user_id
     @piece.update(row_position: nil, col_position: nil, captured: true)
@@ -29,11 +27,10 @@ class Piece < ActiveRecord::Base
     Piece.transaction do
       # temporarily moving the piece to the new location
       update(row_position: row_dest, col_position: col_dest, moved: true)
-      puts game.turn_number
-      raise ActiveRecord::Rollback if game.determine_check
+      fail ActiveRecord::Rollback if game.determine_check
       false
-    end  
-  end  
+    end
+  end
 
   def check_if_castling(row, col)
     @piece = Piece.find_by(row_position: row, col_position: col)
@@ -130,9 +127,4 @@ class Piece < ActiveRecord::Base
       return "ERROR! in is_obstructed? method line:83"
     end
   end
-
-  private
-  def cant_move_into_check
-    puts "You can't move into check"
-  end 
 end

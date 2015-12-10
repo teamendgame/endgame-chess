@@ -1,5 +1,6 @@
 require 'test_helper'
 class RookTest < ActiveSupport::TestCase
+  # rubocop:disable Metrics/LineLength
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
