@@ -7,7 +7,7 @@ class Piece < ActiveRecord::Base
   def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
     # Checking for En Passant
-    capture_en_passant!(new_row, new_col, @last_updated) && return if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
+    return if type == "Pawn" && check_adjacent_pieces(new_row, new_col) && capture_en_passant!(new_row, new_col, @last_updated)
     # Execute castling procedures if piece is King
     return if type == "King" && castling(new_row, new_col)
     # Checking for Valid Move

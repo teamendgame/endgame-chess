@@ -1,4 +1,5 @@
 class King < Piece
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def can_castle?(rook_row, rook_col)
     rook = Rook.find_by(row_position: rook_row, col_position: rook_col)
     return false if moved || rook.moved || obstructed?(rook_row, rook_col)
@@ -13,13 +14,26 @@ class King < Piece
     rook = Rook.find_by(row_position: new_row, col_position: new_col)
     rook_col = rook.col_position
     if kingside?(rook_col)
-      update(col_position: rook_col - 1, moved: true)
-      rook.update(col_position: rook_col - 2, moved: true)
+      Piece.transaction do
+        update(col_position: rook_col - 1, moved: true)
+        rook.update(col_position: rook_col - 2, moved: true)
+        fail ActiveRecord::Rollback if game.determine_check
+        # castling succeeded
+        return true
+      end
+      # castling failed
+      return false
     else
-      update(col_position: rook_col + 2, moved: true)
-      rook.update(col_position: rook_col + 3, moved: true)
+      Piece.transaction do
+        update(col_position: rook_col + 2, moved: true)
+        rook.update(col_position: rook_col + 3, moved: true)
+        fail ActiveRecord::Rollback if game.determine_check
+        # castling succeeded
+        return true
+      end
+      # castling failed
+      return false
     end
-    true
   end
 
   def valid_move?(row_dest, col_dest)
