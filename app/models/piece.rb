@@ -119,7 +119,7 @@ class Piece < ActiveRecord::Base
   def obstructed?(row_dest, col_dest)
     return "Invalid input! Knight can't be obstructed." if type == "Knight"
     return vertical_obstruction(row_dest) if vertical_move?(row_dest, col_dest)
-    return horizontal_obstruction(col_dest)if horizontal_move?(row_dest, col_dest) 
+    return horizontal_obstruction(col_dest) if horizontal_move?(row_dest, col_dest)
     return diagonal_obstruction(row_dest, col_dest) if diagonal_move?(row_dest, col_dest)
   end
 end
