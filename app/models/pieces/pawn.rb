@@ -54,13 +54,23 @@ class Pawn < Piece
     # check player color and capture accordingly
     if Game.find(game_id).black_player_id == user_id
       if row_dest == last_updated.row_position - 1 && col_dest == last_updated.col_position
-        last_updated.update(row_position: nil, col_position: nil, captured: true)
-        update(row_position: row_dest, col_position: col_dest, moved: true)
+        Piece.transaction do
+          last_updated.update(row_position: nil, col_position: nil, captured: true)
+          update(row_position: row_dest, col_position: col_dest, moved: true)
+          fail ActiveRecord::Rollback if game.determine_check
+          return false
+        end
+        return true
       end
     else
       if row_dest == last_updated.row_position + 1 && col_dest == last_updated.col_position
-        last_updated.update(row_position: nil, col_position: nil, captured: true)
-        update(row_position: row_dest, col_position: col_dest, moved: true)
+        Piece.transaction do
+          last_updated.update(row_position: nil, col_position: nil, captured: true)
+          update(row_position: row_dest, col_position: col_dest, moved: true)
+          fail ActiveRecord::Rollback if game.determine_check
+          return false
+        end
+        return true
       end
     end
   end

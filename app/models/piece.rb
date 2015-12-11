@@ -9,7 +9,7 @@ class Piece < ActiveRecord::Base
     # Checking for En Passant
     capture_en_passant!(new_row, new_col, @last_updated) && return if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
     # Execute castling procedures if piece is King
-    return if type == "King" && castling(new_row, new_col) 
+    return if type == "King" && castling(new_row, new_col)
     # Checking for Valid Move
     return unless valid_move?(new_row, new_col)
     # Checking if the piece is moving into check
