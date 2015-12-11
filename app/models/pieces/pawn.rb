@@ -38,6 +38,8 @@ class Pawn < Piece
   def check_en_passant(row_dest, col_dest, last_updated)
     return false if last_updated.prev_changes.nil?
     return false if last_updated.prev_changes["moved"].nil? || last_updated.prev_changes["row_position"].nil?
+    # row_dest changes from 2 to zero, not clear why
+
     # Convert string array stored in prev_changes into array
     # rubocop:disable Lint/Eval
     @last_updated_row = eval(last_updated.prev_changes["row_position"].gsub(/(\w+?)/, "'\\1'"))

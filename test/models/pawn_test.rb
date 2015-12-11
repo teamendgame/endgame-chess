@@ -48,7 +48,7 @@ class PawnTest < ActiveSupport::TestCase
   #   @black_pawn = Pawn.create(row_position: 3, col_position: 7, game_id: @g.id, user_id: @user2.id)
   #   @white_pawn = Pawn.find_by(row_position: 1, col_position: 6, game_id: @g.id)
   #   @white_pawn.move_to!(3, 6)
-  #   @g.update(turn_number: 1)
+  #   #@g.update(turn_number: 1)
   #   @black_pawn.move_to!(2, 6)
   #   assert_equal 2, @black_pawn.reload.row_position
   #   assert_equal true, @white_pawn.reload.captured
