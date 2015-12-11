@@ -52,72 +52,74 @@ class Piece < ActiveRecord::Base
     false
   end
 
-  def obstructed?(row_dest, col_dest)
-    # pass in row and col destination
-    # get the current piece position
-    # work out if the move is horizontal or diagonal or vertical
-    # if is check obstruction
-    # this method is not checking destinations outside of the board
-    # because the players should not be able to select a destination outside of the board
-    # if knight return an error
+  def vertical_obstruction(row_dest)
+    row_pos = row_position
+    if row_pos < row_dest
+      # find out which is higher to create a range and return pieces within that range
+      row_pos += 1
+      return true unless game.pieces.find_by(row_position: [row_pos...row_dest], col_position: col_position).nil?
+    else
+      row_dest += 1
+      return true unless game.pieces.find_by(row_position: [row_dest...row_pos], col_position: col_position).nil?
+    end
+    false
+  end
 
+  def horizontal_obstruction(col_dest)
+    col_pos = col_position
+    if col_pos < col_dest
+      col_pos += 1
+      col_dest -= 1
+      return true unless game.pieces.find_by(row_position: row_position, col_position: [col_pos..col_dest]).nil?
+    else
+      col_pos -= 1
+      col_dest += 1
+      return true unless game.pieces.find_by(row_position: row_position, col_position: [col_dest..col_pos]).nil?
+    end
+    false
+  end
+
+  def diagonal_obstruction(row_dest, col_dest)
     row_pos = row_position
     col_pos = col_position
 
-    return "Invalid input! Knight can't be obstructed." if type == "Knight"
-
-    if col_pos == col_dest # this is checking vertical obstruction
-      if row_pos < row_dest
-        # find out which is higher to create a range and return pieces within that range
-        row_pos += 1
-        return !game.pieces.find_by(captured: false, row_position: [row_pos...row_dest], col_position: col_pos).nil?
-      else
-        row_dest += 1
-        return !game.pieces.find_by(captured: false, row_position: [row_dest...row_pos], col_position: col_pos).nil?
-      end
-    elsif row_pos == row_dest # this is checking horizontal obstruction
-      if col_pos < col_dest
+    # check each row/col combo 1 by 1
+    # row and col both increase
+    if row_pos < row_dest && col_pos < col_dest
+      row_pos += 1
+      (row_pos...row_dest).each do |row_num|
         col_pos += 1
-        col_dest -= 1
-        return !game.pieces.find_by(captured: false, row_position: row_pos, col_position: [col_pos..col_dest]).nil?
-      else
-        col_pos -= 1
+        return true unless game.pieces.find_by(row_position: row_num, col_position: col_pos).nil?
+      end
+    # row and col both decrease
+    elsif row_pos > row_dest && col_pos > col_dest
+      row_dest += 1
+      (row_dest...row_pos).each do |row_num|
         col_dest += 1
-        return !game.pieces.find_by(captured: false, row_position: row_pos, col_position: [col_dest..col_pos]).nil?
+        return true unless game.pieces.find_by(row_position: row_num, col_position: col_dest).nil?
       end
-    elsif (col_pos - col_dest).abs == (row_pos - row_dest).abs # is checking diagonal obstruction
-      # check each row/col combo 1 by 1
-      # row and col both increase
-      if row_pos < row_dest && col_pos < col_dest
-        row_pos += 1
-        (row_pos...row_dest).each do |row_num|
-          col_pos += 1
-          return !game.pieces.find_by(captured: false, row_position: row_num, col_position: col_pos).nil?
-        end
-      # row and col both decrease
-      elsif row_pos > row_dest && col_pos > col_dest
-        row_dest += 1
-        (row_dest...row_pos).each do |row_num|
-          col_dest += 1
-          return !game.pieces.find_by(captured: false, row_position: row_num, col_position: col_dest).nil?
-        end
-      # row increases col decreases
-      elsif row_pos < row_dest && col_pos > col_dest
-        row_pos += 1
-        (row_pos...row_dest).each do |row_num|
-          col_pos -= 1
-          return !game.pieces.find_by(captured: false, row_position: row_num, col_position: col_pos).nil?
-        end
-      # row decreases col increases
-      else
-        row_dest += 1
-        (row_dest...row_pos).each do |row_num|
-          col_dest -= 1
-          return !game.pieces.find_by(captured: false, row_position: row_num, col_position: col_dest).nil?
-        end
+    # row increases col decreases
+    elsif row_pos < row_dest && col_pos > col_dest
+      row_pos += 1
+      (row_pos...row_dest).each do |row_num|
+        col_pos -= 1
+        return true unless game.pieces.find_by(row_position: row_num, col_position: col_pos).nil?
       end
+    # row decreases col increases
     else
-      return "ERROR! in is_obstructed? method line:83"
+      row_dest += 1
+      (row_dest...row_pos).each do |row_num|
+        col_dest -= 1
+        return true unless game.pieces.find_by(row_position: row_num, col_position: col_dest).nil?
+      end
     end
+    false
+  end
+
+  def obstructed?(row_dest, col_dest)
+    return false if type == "Knight"
+    return vertical_obstruction(row_dest) if vertical_move?(row_dest, col_dest)
+    return horizontal_obstruction(col_dest) if horizontal_move?(row_dest, col_dest)
+    return diagonal_obstruction(row_dest, col_dest) if diagonal_move?(row_dest, col_dest)
   end
 end

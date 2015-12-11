@@ -78,10 +78,15 @@ class PieceTest < ActiveSupport::TestCase
     # test moving to a destination where there is a piece but no obstruction
     # get the black pawn, set it to captured, test rook can move to white pawn in same column
     @pawn_black = Piece.where(row_position: 6, col_position: 0).first
-    @pawn_black.update(captured: true)
     @rook_black = Piece.where(row_position: 7, col_position: 0).first
+    @queen1 = Piece.create(row_position: 3, col_position: 0, game_id: @g.id, user_id: @user1.id)
+    @queen2 = Piece.create(row_position: 3, col_position: 2, game_id: @g.id, user_id: @user1.id)
 
-    expected = false
+    expected = true
+    actual = @queen1.obstructed?(3, 7)
+    assert_equal expected, actual
+
+    expected = true
     actual = @rook_black.obstructed?(1, 0)
     assert_equal expected, actual
 
@@ -93,7 +98,7 @@ class PieceTest < ActiveSupport::TestCase
     # test is_obstructed? for a knight
     @knight_white = Piece.where(row_position: 0, col_position: 1).first
 
-    expected = "Invalid input! Knight can't be obstructed."
+    expected = false
     actual = @knight_white.obstructed?(2, 2)
     assert_equal expected, actual
 
