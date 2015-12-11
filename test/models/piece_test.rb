@@ -98,7 +98,7 @@ class PieceTest < ActiveSupport::TestCase
     # test is_obstructed? for a knight
     @knight_white = Piece.where(row_position: 0, col_position: 1).first
 
-    expected = "Invalid input! Knight can't be obstructed."
+    expected = false
     actual = @knight_white.obstructed?(2, 2)
     assert_equal expected, actual
 
