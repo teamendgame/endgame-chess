@@ -48,10 +48,23 @@ class PawnTest < ActiveSupport::TestCase
   #   @black_pawn = Pawn.create(row_position: 3, col_position: 7, game_id: @g.id, user_id: @user2.id)
   #   @white_pawn = Pawn.find_by(row_position: 1, col_position: 6, game_id: @g.id)
   #   @white_pawn.move_to!(3, 6)
+  #   @g.update(turn_number: 1)
   #   @black_pawn.move_to!(2, 6)
   #   assert_equal 2, @black_pawn.reload.row_position
   #   assert_equal true, @white_pawn.reload.captured
   # end
+
+  test "En Passant creating check" do
+    @black_pawn = Pawn.create(row_position: 3, col_position: 7, game_id: @g.id, user_id: @user2.id)
+    @white_pawn = Pawn.find_by(row_position: 1, col_position: 6, game_id: @g.id)
+    @black_king = Piece.create(type: "King", row_position: 4, col_position: 7, game_id: @g.id, user_id: @user2.id)
+    @white_queen = Piece.create(type: "Queen", row_position: 2, col_position: 7, game_id: @g.id, user_id: @user1.id)
+    @white_pawn.move_to!(3, 6)
+    @g.update(turn_number: 1)
+    @black_pawn.move_to!(2, 6)
+    assert_equal 3, @black_pawn.reload.row_position
+    assert_equal false, @white_pawn.reload.captured
+  end
 
   test "pawn valid move" do
     @pawn1 = Pawn.first
