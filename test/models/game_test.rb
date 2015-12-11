@@ -72,8 +72,6 @@ class GameTest < ActiveSupport::TestCase
     @white_king = @game.pieces.create(type: "King", col_position: 4, row_position: 0, user_id: @user1.id)
     @black_king = @game.pieces.create(type: "King", col_position: 3, row_position: 0, user_id: @user2.id)
 
-    @white_queen.move_to!(5, 3)
-
     expected = true
     actual = @game.determine_check
     assert_equal expected, actual

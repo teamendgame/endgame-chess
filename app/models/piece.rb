@@ -16,6 +16,8 @@ class Piece < ActiveRecord::Base
     return if moving_into_check?(new_row, new_col)
     # If there is not a piece in the destination
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
+    # Row & col were already updated in moving_into_check? method
+    # update(moved: true) && return unless @piece
     # If there is a piece in the destination
     return unless @piece.user_id != user_id
     @piece.update(row_position: nil, col_position: nil, captured: true)
