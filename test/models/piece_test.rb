@@ -45,6 +45,14 @@ class PieceTest < ActiveSupport::TestCase
     assert_equal 2, @white_queen.row_position
   end
 
+  test "castling causing check" do
+    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 1)
+    @black_king = @game.pieces.create(type: "King", row_position: 7, col_position: 4, user_id: @u2.id)
+    @black_rook = @game.pieces.create(type: "Rook", row_position: 7, col_position: 7, user_id: @u2.id)
+    @white_queen = @game.pieces.create(type: "Queen", row_position: 0, col_position: 6, user_id: @u1.id)
+    assert_equal 4, @black_king.reload.col_position
+  end
+
   test "unobstructed castling" do
     @king = King.last
     Piece.find_by(row_position: 7, col_position: 6).destroy
