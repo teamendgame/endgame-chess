@@ -27,6 +27,8 @@ class PiecesControllerTest < ActionController::TestCase
 
   test "should update piece location" do
     sign_in @user
+    @white_king = Piece.create(type: "King", col_position: 4, row_position: 7, user_id: @user.id, game_id: @g.id)
+
     put :update, id: @pawn.id, game_id: @g.id, piece: { type: @pawn.type, col_position: 1, row_position: 2 }
     @pawn.reload
     @g.reload

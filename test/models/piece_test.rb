@@ -36,7 +36,7 @@ class PieceTest < ActiveSupport::TestCase
     @black_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @u2.id)
     @white_queen = @game.pieces.create(type: "Queen", row_position: 7, col_position: 1, user_id: @u1.id)
     @white_king = @game.pieces.create(type: "King", row_position: 7, col_position: 7, user_id: @u1.id)
-  
+
     expected = false
     actual = @white_queen.moving_into_check?(2, 1)
     assert_equal expected, actual
