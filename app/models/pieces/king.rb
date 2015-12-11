@@ -19,6 +19,7 @@ class King < Piece
       update(col_position: rook_col + 2, moved: true)
       rook.update(col_position: rook_col + 3, moved: true)
     end
+    true
   end
 
   def valid_move?(row_dest, col_dest)
