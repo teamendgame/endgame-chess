@@ -10,7 +10,7 @@ class PiecesController < ApplicationController
   def update
     @piece = Piece.find(params[:id])
     @game = Game.find(@piece.game_id)
-    @piece.update_attributes(piece_params)
+    @piece.move_to!(piece_params[:row_position].to_i, piece_params[:col_position].to_i)
     @game.update_attributes(turn_number: @game.turn_number + 1)
     render text: 'updated!'
   end

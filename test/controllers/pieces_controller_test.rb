@@ -27,13 +27,13 @@ class PiecesControllerTest < ActionController::TestCase
 
   test "should update piece location" do
     sign_in @user
-    put :update, id: @pawn.id, game_id: @g.id, piece: { type: @pawn.type, col_position: 2, row_position: 2 }
+    put :update, id: @pawn.id, game_id: @g.id, piece: { type: @pawn.type, col_position: 1, row_position: 2 }
     @pawn.reload
     @g.reload
 
     # Test for new position of pawn
     expected_row_position = 2
-    expected_col_position = 2
+    expected_col_position = 1
     assert_equal expected_col_position, @pawn.col_position
     assert_equal expected_row_position, @pawn.row_position
 
