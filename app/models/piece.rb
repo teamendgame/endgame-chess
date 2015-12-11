@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 class Piece < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
@@ -12,9 +13,10 @@ class Piece < ActiveRecord::Base
     # Checking for Valid Move
     return unless valid_move?(new_row, new_col)
     # Checking if the piece is moving into check
-    return if moving_into_check?(new_row, new_col)
+    #return if moving_into_check?(new_row, new_col)
     # If there is not a piece in the destination
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
+      puts "here"
     # Row & col were already updated in moving_into_check? method
     # update(moved: true) && return unless @piece
     # If there is a piece in the destination

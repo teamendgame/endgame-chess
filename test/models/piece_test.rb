@@ -32,14 +32,11 @@ class PieceTest < ActiveSupport::TestCase
   end
 
   test "white queen causing check for black king" do
-    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 3)
+    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 4)
     @black_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @u2.id)
     @white_queen = @game.pieces.create(type: "Queen", row_position: 7, col_position: 1, user_id: @u1.id)
-    # @white_queen.moving_into_check?(2, 1)
-    # @white_king.reload
-    # assert_equal 0, @white_king.col_position
-    # assert_equal 7, @white_king.row_position
-
+    @white_king = @game.pieces.create(type: "King", row_position: 7, col_position: 7, user_id: @u1.id)
+  
     expected = false
     actual = @white_queen.moving_into_check?(2, 1)
     assert_equal expected, actual
@@ -119,8 +116,8 @@ class PieceTest < ActiveSupport::TestCase
     # get the black pawn, set it to captured, test rook can move to white pawn in same column
     @pawn_black = Piece.where(row_position: 6, col_position: 0).first
     @rook_black = Piece.where(row_position: 7, col_position: 0).first
-    @queen1 = Piece.create(row_position: 3, col_position: 0, game_id: @g.id, user_id: @user1.id)
-    @queen2 = Piece.create(row_position: 3, col_position: 2, game_id: @g.id, user_id: @user1.id)
+    @queen1 = Piece.create(row_position: 3, col_position: 0, game_id: @g.id, user_id: @u1.id)
+    @queen2 = Piece.create(row_position: 3, col_position: 2, game_id: @g.id, user_id: @u1.id)
 
     expected = true
     actual = @queen1.obstructed?(3, 7)
