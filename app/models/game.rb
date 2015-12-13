@@ -34,6 +34,41 @@ class Game < ActiveRecord::Base
     false
   end
 
+  def determine_checkmate
+    if turn_number.even? && determine_check
+      white_pieces = pieces.where(user_id: white_player_id)
+      white_pieces.each do |piece|
+        7.times do |row|
+          7.times do |col|
+            Piece.transaction do
+              piece.move_to!(row_position: row, col_position: col)
+              fail ActiveRecord::Rollback if !determine_check
+            end
+            return false
+          end
+        end
+      end
+      return true
+    elsif turn_number.odd? && determine_check
+      black_pieces = pieces.where(user_id: black_player_id)
+      status = true 
+      black_pieces.each do |piece|
+        7.times do |row|
+          7.times do |col|
+            if row != piece.row_position || col != piece.col_position
+              Piece.transaction do
+                piece.move_to!(row, col)
+                status = false if determine_check == false
+                fail ActiveRecord::Rollback
+              end      
+            end
+          end
+        end
+      end
+      return status
+    end
+  end
+
   private
 
   def init_pawn
