@@ -42,7 +42,7 @@ class Game < ActiveRecord::Base
     current_pieces.each do |piece|
       8.times do |row|
         8.times do |col|
-          next if piece.valid_move?(row, col)
+          next unless piece.valid_move?(row, col)
           Piece.transaction do
             piece.move_to!(row, col)
             check_status = false if determine_check == false
