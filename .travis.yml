@@ -6,6 +6,7 @@ rvm:
 before_script:
 - psql -c 'create database team_endgame_test;' -U postgres
 script:
+- bundle exec rake db:schema:load
 - bundle exec rake
 - bundle exec rake rubocop
 services:
