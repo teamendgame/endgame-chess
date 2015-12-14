@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ClassLength
 class Game < ActiveRecord::Base
   has_many :pieces, dependent: :destroy
   belongs_to :user
@@ -17,51 +16,30 @@ class Game < ActiveRecord::Base
     return black_player_id if turn_number.odd?
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def determine_check
-    if turn_number.even?
-      opponent_pieces = pieces.where(user_id: black_player_id)
-      king = pieces.find_by(user_id: white_player_id, type: "King")
-      opponent_pieces.each do |piece|
-        return true if piece.valid_move?(king.row_position, king.col_position)
-      end
-    else
-      opponent_pieces = pieces.where(user_id: white_player_id)
-      king = pieces.find_by(user_id: black_player_id, type: "King")
-      opponent_pieces.each do |piece|
-        return true if piece.valid_move?(king.row_position, king.col_position)
-      end
+    return check(white_player_id, black_player_id) if turn_number.even?
+    check(black_player_id, white_player_id)
+  end
+
+  def check(id, opponent_id)
+    opponent_pieces = pieces.where(user_id: opponent_id)
+    king = pieces.find_by(user_id: id, type: "King")
+    opponent_pieces.each do |piece|
+      return true if piece.valid_move?(king.row_position, king.col_position)
     end
     false
   end
 
   def determine_checkmate
-    return white_checkmate if turn_number.even? && determine_check
-    black_checkmate if turn_number.odd? && determine_check
+    return checkmate(white_player_id) if turn_number.even? && determine_check
+    checkmate(black_player_id) if turn_number.odd? && determine_check
   end
 
-  def black_checkmate
-    black_pieces = pieces.where(user_id: black_player_id)
+  # rubocop:disable Metrics/MethodLength
+  def checkmate(id)
+    current_pieces = pieces.where(user_id: id)
     check_status = true
-    black_pieces.each do |piece|
-      8.times do |row|
-        8.times do |col|
-          next if piece.valid_move?(row, col)
-          Piece.transaction do
-            piece.move_to!(row, col)
-            check_status = false if determine_check == false
-            fail ActiveRecord::Rollback
-          end
-        end
-      end
-    end
-    check_status
-  end
-
-  def white_checkmate
-    white_pieces = pieces.where(user_id: white_player_id)
-    check_status = true
-    white_pieces.each do |piece|
+    current_pieces.each do |piece|
       8.times do |row|
         8.times do |col|
           next if piece.valid_move?(row, col)
