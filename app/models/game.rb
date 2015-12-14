@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 class Game < ActiveRecord::Base
   has_many :pieces, dependent: :destroy
   belongs_to :user
@@ -35,38 +36,44 @@ class Game < ActiveRecord::Base
   end
 
   def determine_checkmate
-    if turn_number.even? && determine_check
-      white_pieces = pieces.where(user_id: white_player_id)
-      white_pieces.each do |piece|
-        7.times do |row|
-          7.times do |col|
-            Piece.transaction do
-              piece.move_to!(row_position: row, col_position: col)
-              fail ActiveRecord::Rollback if !determine_check
-            end
-            return false
+    return white_checkmate if turn_number.even? && determine_check
+    black_checkmate if turn_number.odd? && determine_check
+  end
+
+  def black_checkmate
+    black_pieces = pieces.where(user_id: black_player_id)
+    check_status = true
+    black_pieces.each do |piece|
+      8.times do |row|
+        8.times do |col|
+          next if piece.valid_move?(row, col)
+          Piece.transaction do
+            piece.move_to!(row, col)
+            check_status = false if determine_check == false
+            fail ActiveRecord::Rollback
           end
         end
       end
-      return true
-    elsif turn_number.odd? && determine_check
-      black_pieces = pieces.where(user_id: black_player_id)
-      status = true 
-      black_pieces.each do |piece|
-        7.times do |row|
-          7.times do |col|
-            if row != piece.row_position || col != piece.col_position
-              Piece.transaction do
-                piece.move_to!(row, col)
-                status = false if determine_check == false
-                fail ActiveRecord::Rollback
-              end      
-            end
-          end
-        end
-      end
-      return status
     end
+    check_status
+  end
+
+  def white_checkmate
+    white_pieces = pieces.where(user_id: white_player_id)
+    check_status = true
+    white_pieces.each do |piece|
+      8.times do |row|
+        8.times do |col|
+          next if piece.valid_move?(row, col)
+          Piece.transaction do
+            piece.move_to!(row, col)
+            check_status = false if determine_check == false
+            fail ActiveRecord::Rollback
+          end
+        end
+      end
+    end
+    check_status
   end
 
   private
