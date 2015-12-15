@@ -22,7 +22,7 @@ class Game < ActiveRecord::Base
   end
 
   def check(id, opponent_id)
-    opponent_pieces = pieces.where(user_id: opponent_id)
+    opponent_pieces = pieces.where(user_id: opponent_id, captured: false)
     king = pieces.find_by(user_id: id, type: "King")
     opponent_pieces.each do |piece|
       return true if piece.valid_move?(king.row_position, king.col_position)
@@ -37,7 +37,7 @@ class Game < ActiveRecord::Base
 
   # rubocop:disable Metrics/MethodLength
   def checkmate(id)
-    current_pieces = pieces.where(user_id: id)
+    current_pieces = pieces.where(user_id: id, captured: false)
     check_status = true
     current_pieces.each do |piece|
       8.times do |row|
