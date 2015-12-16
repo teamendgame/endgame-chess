@@ -1,5 +1,5 @@
 class Pawn < Piece
-  after_update :update_previous_changes
+  after_save :update_previous_changes
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/PerceivedComplexity, Metrics/MethodLength
   def valid_move?(row_dest, col_dest)
@@ -50,16 +50,17 @@ class Pawn < Piece
     end
   end
 
-  def capture_en_passant!(row_dest, col_dest, last_updated)
+  def capture_en_passant!(row_dest, col_dest)
+    @last_updated = Piece.where(game_id: game_id).order("updated_at desc").first
     # check player color and capture accordingly
     if Game.find(game_id).black_player_id == user_id
-      if row_dest == last_updated.row_position - 1 && col_dest == last_updated.col_position
-        last_updated.update(row_position: nil, col_position: nil, captured: true)
+      if row_dest == @last_updated.row_position - 1 && col_dest == @last_updated.col_position
+        @last_updated.update(row_position: nil, col_position: nil, captured: true)
         update(row_position: row_dest, col_position: col_dest, moved: true)
       end
     else
-      if row_dest == last_updated.row_position + 1 && col_dest == last_updated.col_position
-        last_updated.update(row_position: nil, col_position: nil, captured: true)
+      if row_dest == @last_updated.row_position + 1 && col_dest == @last_updated.col_position
+        @last_updated.update(row_position: nil, col_position: nil, captured: true)
         update(row_position: row_dest, col_position: col_dest, moved: true)
       end
     end
