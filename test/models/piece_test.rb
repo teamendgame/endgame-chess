@@ -1,17 +1,63 @@
 require 'test_helper'
-# rubocop:disable Metrics/ClassLength
+# rubocop:disable Metrics/ClassLength, Metrics/LineLength
 class PieceTest < ActiveSupport::TestCase
   def setup
-    @user1 = FactoryGirl.create(:user)
-    @user2 = FactoryGirl.create(:user)
-    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
+    @u1 = FactoryGirl.create(:user)
+    @u2 = FactoryGirl.create(:user)
+    @g = Game.create(name: "New Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 0)
     @g.populate_board!
+  end
+
+  test "king is not moving into check" do
+    @g1 = Game.create(name: "G", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 4)
+    @white_king = @g1.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @u1.id)
+    @black_pawn = @g1.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @u2.id)
+    expected = false
+    actual = @white_king.moving_into_check?(1, 1)
+    assert_equal expected, actual
+    @white_king.reload
+    assert_equal 1, @white_king.col_position
+  end
+
+  test "king is moving into check" do
+    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 4)
+    @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @u1.id)
+    @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @u2.id)
+    expected = true
+    actual = @white_king.moving_into_check?(2, 1)
+    assert_equal expected, actual
+    @white_king.reload
+    assert_equal 0, @white_king.col_position
+    assert_equal 1, @white_king.row_position
+  end
+
+  test "white queen causing check for black king" do
+    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 4)
+    @black_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @u2.id)
+    @white_queen = @game.pieces.create(type: "Queen", row_position: 7, col_position: 1, user_id: @u1.id)
+    @white_king = @game.pieces.create(type: "King", row_position: 7, col_position: 7, user_id: @u1.id)
+
+    expected = false
+    actual = @white_queen.moving_into_check?(2, 1)
+    assert_equal expected, actual
+    @white_queen.reload
+    assert_equal 1, @white_queen.col_position
+    assert_equal 2, @white_queen.row_position
+  end
+
+  test "castling causing check" do
+    @game = Game.create(name: "A Game", white_player_id: @u1.id, black_player_id: @u2.id, turn_number: 1)
+    @black_king = @game.pieces.create(type: "King", row_position: 7, col_position: 4, user_id: @u2.id)
+    @black_rook = @game.pieces.create(type: "Rook", row_position: 7, col_position: 7, user_id: @u2.id)
+    @white_queen = @game.pieces.create(type: "Queen", row_position: 0, col_position: 6, user_id: @u1.id)
+    assert_equal 4, @black_king.reload.col_position
   end
 
   test "unobstructed castling" do
     @king = King.last
     Piece.find_by(row_position: 7, col_position: 6).destroy
     Piece.find_by(row_position: 7, col_position: 5).destroy
+    @g.update(turn_number: 1)
     @king.move_to!(7, 7)
     expected = 6
     actual = @king.reload.col_position
@@ -24,10 +70,9 @@ class PieceTest < ActiveSupport::TestCase
     assert_equal 4, @king.reload.col_position
   end
 
-  # rubocop:disable Metrics/LineLength
   test "valid pawn capture with move_to!" do
     black_pawn = Pawn.last
-    white_pawn = Pawn.create(row_position: 5, col_position: 1, game_id: @g.id, user_id: @user1.id)
+    white_pawn = Pawn.create(row_position: 5, col_position: 1, game_id: @g.id, user_id: @u1.id)
     black_pawn.move_to!(5, 1)
     expected = true
     actual = white_pawn.reload.captured
@@ -79,8 +124,8 @@ class PieceTest < ActiveSupport::TestCase
     # get the black pawn, set it to captured, test rook can move to white pawn in same column
     @pawn_black = Piece.where(row_position: 6, col_position: 0).first
     @rook_black = Piece.where(row_position: 7, col_position: 0).first
-    @queen1 = Piece.create(row_position: 3, col_position: 0, game_id: @g.id, user_id: @user1.id)
-    @queen2 = Piece.create(row_position: 3, col_position: 2, game_id: @g.id, user_id: @user1.id)
+    @queen1 = Piece.create(row_position: 3, col_position: 0, game_id: @g.id, user_id: @u1.id)
+    @queen2 = Piece.create(row_position: 3, col_position: 2, game_id: @g.id, user_id: @u1.id)
 
     expected = true
     actual = @queen1.obstructed?(3, 7)

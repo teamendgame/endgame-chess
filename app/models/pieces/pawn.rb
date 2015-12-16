@@ -38,6 +38,8 @@ class Pawn < Piece
   def check_en_passant(row_dest, col_dest, last_updated)
     return false if last_updated.prev_changes.nil?
     return false if last_updated.prev_changes["moved"].nil? || last_updated.prev_changes["row_position"].nil?
+    # row_dest changes from 2 to zero, not clear why
+
     # Convert string array stored in prev_changes into array
     # rubocop:disable Lint/Eval
     @last_updated_row = eval(last_updated.prev_changes["row_position"].gsub(/(\w+?)/, "'\\1'"))
@@ -54,13 +56,23 @@ class Pawn < Piece
     # check player color and capture accordingly
     if Game.find(game_id).black_player_id == user_id
       if row_dest == last_updated.row_position - 1 && col_dest == last_updated.col_position
-        last_updated.update(row_position: nil, col_position: nil, captured: true)
-        update(row_position: row_dest, col_position: col_dest, moved: true)
+        Piece.transaction do
+          last_updated.update(row_position: nil, col_position: nil, captured: true)
+          update(row_position: row_dest, col_position: col_dest, moved: true)
+          fail ActiveRecord::Rollback if game.determine_check
+          return false
+        end
+        return true
       end
     else
       if row_dest == last_updated.row_position + 1 && col_dest == last_updated.col_position
-        last_updated.update(row_position: nil, col_position: nil, captured: true)
-        update(row_position: row_dest, col_position: col_dest, moved: true)
+        Piece.transaction do
+          last_updated.update(row_position: nil, col_position: nil, captured: true)
+          update(row_position: row_dest, col_position: col_dest, moved: true)
+          fail ActiveRecord::Rollback if game.determine_check
+          return false
+        end
+        return true
       end
     end
   end
