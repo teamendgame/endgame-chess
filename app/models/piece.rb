@@ -8,9 +8,11 @@ class Piece < ActiveRecord::Base
     # Checking for En Passant
     capture_en_passant!(new_row, new_col) && return if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
     # Execute castling procedures if piece is King
-    castling(new_row, new_col) if type == "King"
+    return if type == "King" && castling(new_row, new_col)
     # Checking for Valid Move
     return unless valid_move?(new_row, new_col)
+    # Checking if the piece is moving into check
+    return if moving_into_check?(new_row, new_col)
     # If there is not a piece in the destination
     update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
     # If there is a piece in the destination
@@ -19,9 +21,19 @@ class Piece < ActiveRecord::Base
     update(row_position: new_row, col_position: new_col, moved: true)
   end
 
+  def moving_into_check?(row_dest, col_dest)
+    Piece.transaction do
+      # temporarily moving the piece to the new location
+      update(row_position: row_dest, col_position: col_dest, moved: true)
+      fail ActiveRecord::Rollback if game.determine_check
+      return false
+    end
+    true
+  end
+
   def castling(new_row, new_col)
-    return unless check_if_castling(new_row, new_col)
-    return unless can_castle?(new_row, new_col)
+    return false unless check_if_castling(new_row, new_col)
+    return false unless can_castle?(new_row, new_col)
     castle!(new_row, new_col)
   end
 
