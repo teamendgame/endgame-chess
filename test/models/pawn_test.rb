@@ -45,8 +45,10 @@ class PawnTest < ActiveSupport::TestCase
   end
 
   test "Valid En Passant" do
-    @black_pawn = Pawn.create(row_position: 3, col_position: 7, game_id: @g.id, user_id: @user2.id)
-    @white_pawn = Pawn.find_by(row_position: 1, col_position: 6, game_id: @g.id)
+    @g1 = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 0)
+    @black_pawn = Pawn.create(row_position: 3, col_position: 7, game_id: @g1.id, user_id: @user2.id)
+    @white_pawn = Pawn.create(row_position: 1, col_position: 6, game_id: @g1.id, user_id: @user1.id)
+    @w_king = King.create(row_position: 0, col_position: 0, game_id: @g1.id, user_id: @user1.id)
     @white_pawn.move_to!(3, 6)
     @black_pawn.move_to!(2, 6)
     assert_equal 2, @black_pawn.reload.row_position

@@ -22,13 +22,14 @@ class Piece < ActiveRecord::Base
   end
 
   def moving_into_check?(row_dest, col_dest)
+    status = false
     Piece.transaction do
       # temporarily moving the piece to the new location
       update(row_position: row_dest, col_position: col_dest, moved: true)
-      fail ActiveRecord::Rollback if game.determine_check
-      return false
+      status = true if Game.find(game_id).determine_check
+      fail ActiveRecord::Rollback 
     end
-    true
+    status
   end
 
   def castling(new_row, new_col)
