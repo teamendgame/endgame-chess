@@ -1,5 +1,5 @@
 require 'test_helper'
-# rubocop:disable Metrics/LineLength
+# rubocop:disable Metrics/LineLength, Metrics/ClassLength
 class GameTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)
@@ -115,5 +115,32 @@ class GameTest < ActiveSupport::TestCase
     expected = false
     actual = @game.determine_check
     assert_equal expected, actual
+  end
+
+  test "game should not be in checkmate" do
+    @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+    @white_bishop = @game.pieces.create(type: "Bishop", col_position: 1, row_position: 2, user_id: @user1.id)
+    @black_pawn = @game.pieces.create(type: "Pawn", col_position: 4, row_position: 1, user_id: @user2.id)
+    @black_king = @game.pieces.create(type: "King", col_position: 3, row_position: 0, user_id: @user2.id)
+
+    expected = false
+    actual = @game.determine_checkmate
+    assert_equal expected, actual
+  end
+
+  test "game should be in checkmate" do
+    @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+    @white_queen = @game.pieces.create(type: "Queen", col_position: 5, row_position: 4, user_id: @user1.id)
+    @white_rook = @game.pieces.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user1.id)
+    @black_king = @game.pieces.create(type: "King", col_position: 7, row_position: 4, user_id: @user2.id)
+
+    expected = true
+    actual = @game.determine_checkmate
+    assert_equal expected, actual
+
+    expected_row = 4
+    expected_col = 7
+    assert_equal expected_row, @black_king.row_position
+    assert_equal expected_col, @black_king.col_position
   end
 end
