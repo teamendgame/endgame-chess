@@ -32,7 +32,8 @@ class Game < ActiveRecord::Base
 
   def determine_checkmate
     return checkmate(white_player_id) if turn_number.even? && determine_check
-    checkmate(black_player_id) if turn_number.odd? && determine_check
+    return checkmate(black_player_id) if turn_number.odd? && determine_check
+    false
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -44,7 +45,8 @@ class Game < ActiveRecord::Base
         8.times do |col|
           next unless piece.valid_move?(row, col)
           Piece.transaction do
-            piece.move_to!(row, col)
+            #piece.move_to!(row, col)
+            piece.update(row_position: row, col_position: col)
             check_status = false if determine_check == false
             fail ActiveRecord::Rollback
           end

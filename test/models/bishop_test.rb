@@ -11,7 +11,7 @@ class BishopTest < ActiveSupport::TestCase
   test "valid move for bishop" do
     # Move pawn so Bishop is not obstructed
     @pawn = @g.pieces.where(row_position: 6, col_position: 4, type: "Pawn").first
-    @pawn.move_to!(4, 4)
+    @pawn.move_to!(6, 4)
     expected = true
     actual = @black_bishop.valid_move?(5, 3)
     assert_equal expected, actual
