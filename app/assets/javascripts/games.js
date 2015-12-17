@@ -16,11 +16,23 @@ $(function() {
         data: { piece: { 
                 row_position: row, 
                 col_position: col 
-        }}, 
+        }},
         complete: function(){
           location.reload(true);
         }
       });
     }     
+  });
+
+  var pusher = new Pusher('69b758b613152645a0ba', {
+      encrypted: true
   });  
+
+  var gameId = $('.pusherInfo').data('pusherinfo');
+
+  var channel = pusher.subscribe(gameId);
+
+  channel.bind('update-piece', function(data) {
+    location.reload(true);
+  });
 });

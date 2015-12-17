@@ -13,6 +13,7 @@ class PiecesController < ApplicationController
     @piece.move_to!(piece_params[:row_position].to_i, piece_params[:col_position].to_i)
     @game.update_attributes(turn_number: @game.turn_number + 1)
     render text: 'updated!'
+    Pusher.trigger('channel-' + @game.id.to_s, 'update-piece', {foo: 'bar'})
   end
 
   def castle_kingside
@@ -42,7 +43,8 @@ class PiecesController < ApplicationController
   private
 
   def check_player_color
-    @game = Game.find(params[:game_id])
+    @piece = Piece.find(params[:id])
+    @game = Game.find(@piece.game_id)
     return if @game.whos_turn? == current_user.id
     flash[:alert] = "Not your turn!"
     redirect_to game_path(@game)
