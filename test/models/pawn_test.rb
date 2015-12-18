@@ -1,5 +1,5 @@
 require 'test_helper'
-# rubocop:disable Metrics/LineLength
+# rubocop:disable Metrics/LineLength, Metrics/ClassLength
 class PawnTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)

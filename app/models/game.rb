@@ -44,19 +44,14 @@ class Game < ActiveRecord::Base
       8.times do |row|
         8.times do |col|
           next unless piece.valid_move?(row, col)
-          #puts "[#{row},#{col}]"
-           # puts piece.inspect
           Piece.transaction do
-            try_to_move.move_to!(row, col)
-
-            #piece.update(row_position: row, col_position: col, moved: true)
+            piece.try_to_move(row, col)
             check_status = false if determine_check == false
-            fail ActiveRecord::Rollback 
+            fail ActiveRecord::Rollback
           end
         end
       end
     end
-    # puts current_pieces.inspect
     check_status
   end
 
