@@ -4,6 +4,14 @@ class Piece < ActiveRecord::Base
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/MethodLength
   def move_to!(new_row, new_col)
+    Piece.transaction do
+      try_to_move(new_row, new_col)
+      fail ActiveRecord::Rollback if game.determine_check
+    end 
+  end 
+
+  def try_to_move(new_row, new_col)
+  #def move_to!(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col)
     # Checking for En Passant
     capture_en_passant!(new_row, new_col) && return if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
@@ -11,10 +19,16 @@ class Piece < ActiveRecord::Base
     return if type == "King" && castling(new_row, new_col)
     # Checking for Valid Move
     return unless valid_move?(new_row, new_col)
+
     # Checking if the piece is moving into check
-    #return if moving_into_check?(new_row, new_col)
+# Piece.transaction do
+#     return if moving_into_check?(new_row, new_col)
+    
+# end
+
     # If there is not a piece in the destination
-    update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
+update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece 
+
     # If there is a piece in the destination
     return unless @piece.user_id != user_id
     @piece.update(row_position: nil, col_position: nil, captured: true)
@@ -26,14 +40,14 @@ class Piece < ActiveRecord::Base
     Piece.transaction do
       # temporarily moving the piece to the new location
       update(row_position: row_dest, col_position: col_dest, moved: true)
-      # status = true if Game.find(game_id).determine_check
-      # fail ActiveRecord::Rollback 
-      fail ActiveRecord::Rollback if game.determine_check
-      return false
-       
+      status = true if Game.find(game_id).determine_check
+      fail ActiveRecord::Rollback
+
+      # fail ActiveRecord::Rollback if game.determine_check
+      # return false
     end
-    # status
-    true
+    status
+    # true
   end
 
   def castling(new_row, new_col)
