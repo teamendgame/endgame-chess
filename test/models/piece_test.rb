@@ -8,6 +8,26 @@ class PieceTest < ActiveSupport::TestCase
     @g.populate_board!
   end
 
+  test "king is not moving into check" do
+    @g1 = Game.create(name: "G", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 4)
+    @white_king = @g1.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id, moved: true)
+    @black_pawn = @g1.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
+    @white_king.move_to!(1, 0)
+    @white_king.reload
+    assert_equal 1, @white_king.row_position
+    assert_equal 0, @white_king.col_position
+  end
+
+  test "king is moving into check" do
+    @game = Game.create(name: "A Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 4)
+    @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id, moved: true)
+    @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
+    actual = @white_king.move_to!(2, 1)
+    @white_king.reload
+    assert_equal 0, @white_king.col_position
+    assert_equal 1, @white_king.row_position
+  end
+
   test "unobstructed castling" do
     @king = King.last
     Piece.find_by(row_position: 7, col_position: 6).destroy

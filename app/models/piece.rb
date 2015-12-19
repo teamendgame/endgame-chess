@@ -31,6 +31,7 @@ class Piece < ActiveRecord::Base
     return false unless check_if_castling(new_row, new_col)
     return false unless can_castle?(new_row, new_col)
     castle!(new_row, new_col)
+    true
   end
 
   def check_if_castling(row, col)
