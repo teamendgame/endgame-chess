@@ -22,7 +22,7 @@ class PieceTest < ActiveSupport::TestCase
     @game = Game.create(name: "A Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 4)
     @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id, moved: true)
     @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
-    actual = @white_king.move_to!(2, 1)
+    @white_king.move_to!(2, 1)
     @white_king.reload
     assert_equal 0, @white_king.col_position
     assert_equal 1, @white_king.row_position
