@@ -1,5 +1,5 @@
 class PiecesController < ApplicationController
-  before_action :check_player_color
+  before_action :check_player_color, only: [:update]
 
   # rubocop:disable Metrics/AbcSize
   def show
@@ -7,10 +7,15 @@ class PiecesController < ApplicationController
     @game_pieces = Piece.where(game_id: @piece.game_id)
   end
 
+  # rubocop:disable Metrics/LineLength, Style/ParallelAssignment
   def update
     @piece = Piece.find(params[:id])
     @game = Game.find(@piece.game_id)
-    @piece.move_to!(piece_params[:row_position].to_i, piece_params[:col_position].to_i)
+    row, col = piece_params[:row_position].to_i, piece_params[:col_position].to_i
+    unless @piece.valid_move?(row, col)
+      return redirect_to game_path(@game), status: 303, alert: "Sorry, that's not a valid move for a #{@piece.type}"
+    end
+    @piece.move_to!(row, col)
     @game.update_attributes(turn_number: @game.turn_number + 1)
     render text: 'updated!'
     Pusher.trigger('channel-' + @game.id.to_s, 'update-piece', {foo: 'bar'})
