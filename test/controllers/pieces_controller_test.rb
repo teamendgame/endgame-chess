@@ -11,12 +11,6 @@ class PiecesControllerTest < ActionController::TestCase
     @white_rook_kingside = Piece.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user.id, game_id: @g.id)
   end
 
-  # test "should get show" do
-  #   sign_in @user
-  #   get :show, id: @piece.id
-  #   assert_response :success
-  # end
-
   test "Player should not be able to update on incorrect turn" do
     sign_in @user
     sign_in @user2
