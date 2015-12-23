@@ -54,12 +54,13 @@ class GameTest < ActiveSupport::TestCase
   end
 
   test "game should be in check (bishop capture king)" do
-    @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+    @game = Game.create(name: "Check Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 2)
     @white_bishop = @game.pieces.create(type: "Bishop", col_position: 4, row_position: 5, user_id: @user1.id)
     @white_king = @game.pieces.create(type: "King", col_position: 4, row_position: 7, user_id: @user1.id)
     @black_king = @game.pieces.create(type: "King", col_position: 3, row_position: 0, user_id: @user2.id)
 
     @white_bishop.move_to!(3, 6)
+    @game.update(turn_number: 3)
 
     expected = true
     actual = @game.determine_check
