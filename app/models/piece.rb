@@ -26,7 +26,7 @@ class Piece < ActiveRecord::Base
   end
 
   def check_if_castling(row, col)
-    @piece = Piece.find_by(row_position: row, col_position: col)
+    @piece = Piece.find_by(row_position: row, col_position: col, game_id: game_id)
     return false unless @piece && type == "King" && !moved && @piece.type == "Rook" && !@piece.moved
     true
   end
