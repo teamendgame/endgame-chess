@@ -4,7 +4,7 @@ class Piece < ActiveRecord::Base
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/MethodLength
   def move_to!(new_row, new_col)
-    @piece = Piece.find_by(row_position: new_row, col_position: new_col)
+    @piece = Piece.find_by(row_position: new_row, col_position: new_col, game_id: game_id)
     # Checking for En Passant
     capture_en_passant!(new_row, new_col) && return if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
     # Execute castling procedures if piece is King
