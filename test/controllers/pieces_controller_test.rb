@@ -17,12 +17,20 @@ class PiecesControllerTest < ActionController::TestCase
   #   assert_response :success
   # end
 
-  test "Player that is not its turn should not be able to update" do
+  test "Player should not be able to update on incorrect turn" do
     sign_in @user
     sign_in @user2
-    put :update, id: @black_pawn.id, game_id: @g.id, piece: { type: @black_pawn.type, col_position: 2, row_position: 2 }
+    put :update, id: @black_pawn.id, piece: { type: @black_pawn.type, col_position: 2, row_position: 2 }
     assert_equal 6, @black_pawn.row_position
     assert_redirected_to game_path(@g)
+  end
+
+  test "Flash message should appear if player chooses invalid move" do
+    sign_in @user
+    put :update, id: @pawn.id, piece: { type: @pawn.type, col_position: 1, row_position: 4 }
+
+    assert_redirected_to game_path(@g.id)
+    assert_not flash[:alert].nil?
   end
 
   test "should update piece location" do
@@ -67,6 +75,17 @@ class PiecesControllerTest < ActionController::TestCase
   test "should have flash error when white player tries to castle queenside" do
     sign_in @user
     @white_king_moved = Piece.create(type: "King", col_position: 4, row_position: 0, user_id: @user.id, game_id: @g.id, moved: true)
+
+    get :castle_queenside, game_id: @g.id
+
+    assert_not flash[:alert].nil?
+    assert_redirected_to game_path(@g.id)
+  end
+
+  test "should have flash error when white player tries to castle queenside with obstruction" do
+    sign_in @user
+    @white_king = Piece.create(type: "King", col_position: 4, row_position: 0, user_id: @user.id, game_id: @g.id)
+    @white_bishop = Piece.create(type: "Bishop", col_position: 2, row_position: 0, user_id: @user.id, game_id: @g.id)
 
     get :castle_queenside, game_id: @g.id
 
