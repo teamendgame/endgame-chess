@@ -7,18 +7,16 @@ class Piece < ActiveRecord::Base
   def move_to!(new_row, new_col)
     Piece.transaction do
       moved = try_to_move(new_row, new_col)
-      if game.determine_check
-        moved = false
-        fail ActiveRecord::Rollback
-      end  
+      check_status  = game.determine_check
+      return moved if !check_status
+      fail ActiveRecord::Rollback
     end
-    moved
+    false
   end
 
   def try_to_move(new_row, new_col)
     @piece = Piece.find_by(row_position: new_row, col_position: new_col, game_id: game_id)
     # Checking for En Passant
-    #capture_en_passant!(new_row, new_col) && return true if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
     if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
       capture_en_passant!(new_row, new_col)
       return true
@@ -29,11 +27,12 @@ class Piece < ActiveRecord::Base
     return false unless valid_move?(new_row, new_col)
     # If there is not a piece in the destination
 
-    #update(row_position: new_row, col_position: new_col, moved: true) && return true unless @piece
+    #if @piece == nil
     unless @piece
       update(row_position: new_row, col_position: new_col, moved: true)
       return true
-    end 
+    end
+    puts @piece.inspect
     # If there is a piece in the destination
     return false unless @piece.user_id != user_id
     @piece.update(row_position: nil, col_position: nil, captured: true)
