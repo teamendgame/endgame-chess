@@ -16,42 +16,78 @@ class Game < ActiveRecord::Base
     return black_player_id if turn_number.odd?
   end
 
-  def determine_check
-    return check(white_player_id, black_player_id) if turn_number.even?
-    check(black_player_id, white_player_id)
+  def determine_check(king=nil)
+    return check(white_player_id, black_player_id, king) if turn_number.even?
+    check(black_player_id, white_player_id, king)
   end
 
-  def check(id, opponent_id)
+  def check(users_id, opponent_id, king_piece)
     opponent_pieces = pieces.where(user_id: opponent_id, captured: false)
-    king = pieces.find_by(user_id: id, type: "King")
+    king = king_piece || pieces.find_by(user_id: users_id, type: "King")
     opponent_pieces.each do |piece|
-      return true if piece.valid_move?(king.row_position, king.col_position)
+      if piece.valid_move?(king.row_position, king.col_position)
+        @attacker = piece
+        return true 
+      end
     end
     false
   end
 
   def determine_checkmate
     return checkmate(white_player_id) if turn_number.even? && determine_check
-    checkmate(black_player_id) if turn_number.odd? && determine_check
+    return checkmate(black_player_id) if turn_number.odd? && determine_check
+    false 
   end
 
   # rubocop:disable Metrics/MethodLength
   def checkmate(id)
     current_pieces = pieces.where(user_id: id, captured: false)
-    check_status = true
+    status = true
     current_pieces.each do |piece|
       8.times do |row|
         8.times do |col|
-          next unless piece.valid_move?(row, col)
-          Piece.transaction do
-            piece.move_to!(row, col)
-            check_status = false if determine_check == false
-            fail ActiveRecord::Rollback
+          if piece.valid_move?(row, col)
+            status = false unless three_checks(piece, row, col)
           end
         end
       end
     end
-    check_status
+    status
+  end
+
+  def three_checks(piece, row, col)
+    status = true
+    orig_row, orig_col = piece.row_position, piece.col_position
+    Piece.transaction do
+      piece.move_to!(row, col)
+      status = false if determine_check == false
+      fail ActiveRecord::Rollback if piece.row_position != orig_row || piece.col_position != orig_col
+    end
+    status
+  end
+
+  def can_capture(id)
+    current_pieces = pieces.where(user_id: id, captured: false)
+    current_pieces.each do |piece|
+      return true if piece.valid_move?(@attacker.row_position, @attacker.col_position)
+    end
+    false
+  end
+
+  def save_king(id)
+    king = pieces.find_by(type: "King", user_id: id)
+    orig_row, orig_col = king.row_position, king.col_position
+    8.times do |row|
+      8.times do |col|
+        king.assign_attributes(row_position: row, col_position: col)
+        return true unless determine_check(king)
+        king.assign_attributes(row_position: orig_row, col_position: orig_col) 
+      end
+    end
+    false
+  end
+
+  def can_obstruct(id)
   end
 
   private
