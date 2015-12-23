@@ -1,6 +1,6 @@
 class King < Piece
   def can_castle?(rook_row, rook_col)
-    rook = Rook.find_by(row_position: rook_row, col_position: rook_col)
+    rook = Rook.find_by(row_position: rook_row, col_position: rook_col, game_id: game_id)
     return false if moved || rook.moved || obstructed?(rook_row, rook_col)
     true
   end
@@ -10,7 +10,7 @@ class King < Piece
   end
 
   def castle!(new_row, new_col)
-    rook = Rook.find_by(row_position: new_row, col_position: new_col)
+    rook = Rook.find_by(row_position: new_row, col_position: new_col, game_id: game_id)
     rook_col = rook.col_position
     if kingside?(rook_col)
       update(col_position: rook_col - 1, moved: true)
