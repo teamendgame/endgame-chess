@@ -117,7 +117,7 @@ class GameTest < ActiveSupport::TestCase
     assert_equal expected, actual
   end
 
-  test "new game should not be in checkmate" do 
+  test "new game should not be in checkmate" do
     expected = false
     actual = @g.determine_checkmate
     assert_equal expected, actual
@@ -136,72 +136,72 @@ class GameTest < ActiveSupport::TestCase
 
   test "game should be in checkmate" do
     @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
-    @white_queen = @game.pieces.create(type: "Queen", col_position: 5, row_position: 4, user_id: @user1.id)
-    @white_rook = @game.pieces.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user1.id)
-    @black_king = @game.pieces.create(type: "King", col_position: 7, row_position: 4, user_id: @user2.id)
+    @game.pieces.create(type: "Queen", col_position: 5, row_position: 4, user_id: @user1.id)
+    @game.pieces.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user1.id)
+    @game.pieces.create(type: "King", col_position: 7, row_position: 4, user_id: @user2.id)
 
     expected = true
     actual = @game.determine_checkmate
     assert_equal expected, actual
   end
 
-  test "anastasia's mate" do 
+  test "anastasia's mate" do
     @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
-    white_knight = @game.pieces.create(type: "Knight", col_position: 4, row_position: 1, user_id: @user1.id)
-    white_rook = @game.pieces.create(type: "Rook", col_position: 7, row_position: 3, user_id: @user1.id)
-    black_pawn = @game.pieces.create(type: "Pawn", col_position: 6, row_position: 1, user_id: @user2.id)
-    black_king = @game.pieces.create(type: "King", col_position: 7, row_position: 1, user_id: @user2.id)
+    @game.pieces.create(type: "Knight", col_position: 4, row_position: 1, user_id: @user1.id)
+    @game.pieces.create(type: "Rook", col_position: 7, row_position: 3, user_id: @user1.id)
+    @game.pieces.create(type: "Pawn", col_position: 6, row_position: 1, user_id: @user2.id)
+    @game.pieces.create(type: "King", col_position: 7, row_position: 1, user_id: @user2.id)
 
     expected = true
     actual = @game.determine_checkmate
     assert_equal expected, actual
   end
 
-  test "arabian mate" do 
+  test "arabian mate" do
     @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 2)
-    black_knight = @game.pieces.create(type: "Knight", col_position: 5, row_position: 2, user_id: @user2.id)
-    black_rook = @game.pieces.create(type: "Rook", col_position: 7, row_position: 1, user_id: @user2.id)
-    white_king = @game.pieces.create(type: "King", col_position: 7, row_position: 0, user_id: @user1.id)
+    @game.pieces.create(type: "Knight", col_position: 5, row_position: 2, user_id: @user2.id)
+    @game.pieces.create(type: "Rook", col_position: 7, row_position: 1, user_id: @user2.id)
+    @game.pieces.create(type: "King", col_position: 7, row_position: 0, user_id: @user1.id)
 
     expected = true
     actual = @game.determine_checkmate
     assert_equal expected, actual
   end
 
-  test "black rank mate" do 
+  test "black rank mate" do
     @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
-    white_rook = @game.pieces.create(type: "Rook", col_position: 3, row_position: 7, user_id: @user1.id)
-    black_pawn1 = @game.pieces.create(type: "Pawn", col_position: 7, row_position: 6, user_id: @user2.id)
-    black_pawn2 = @game.pieces.create(type: "Pawn", col_position: 6, row_position: 6, user_id: @user2.id)
-    black_king = @game.pieces.create(type: "King", col_position: 7, row_position: 7, user_id: @user2.id)
+    @game.pieces.create(type: "Rook", col_position: 3, row_position: 7, user_id: @user1.id)
+    @game.pieces.create(type: "Pawn", col_position: 7, row_position: 6, user_id: @user2.id)
+    @game.pieces.create(type: "Pawn", col_position: 6, row_position: 6, user_id: @user2.id)
+    @game.pieces.create(type: "King", col_position: 7, row_position: 7, user_id: @user2.id)
 
     expected = true
     actual = @game.determine_checkmate
     assert_equal expected, actual
-  end 
+  end
 
-  test "corner mate" do 
+  test "corner mate" do
     @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
-    white_rook = @game.pieces.create(type: "Rook", col_position: 6, row_position: 0, user_id: @user1.id)
-    white_knight = @game.pieces.create(type: "Knight", col_position: 5, row_position: 6, user_id: @user1.id)
-    black_pawn = @game.pieces.create(type: "Pawn", col_position: 7, row_position: 6, user_id: @user2.id)
-    black_king = @game.pieces.create(type: "King", col_position: 7, row_position: 7, user_id: @user2.id)
+    @game.pieces.create(type: "Rook", col_position: 6, row_position: 0, user_id: @user1.id)
+    @game.pieces.create(type: "Knight", col_position: 5, row_position: 6, user_id: @user1.id)
+    @game.pieces.create(type: "Pawn", col_position: 7, row_position: 6, user_id: @user2.id)
+    @game.pieces.create(type: "King", col_position: 7, row_position: 7, user_id: @user2.id)
 
     expected = true
     actual = @game.determine_checkmate
     assert_equal expected, actual
-  end 
+  end
 
-  test "dovetail mate" do 
+  test "dovetail mate" do
     @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
-    white_queen = @game.pieces.create(type: "Queen", col_position: 2, row_position: 5, user_id: @user1.id)
-    white_pawn = @game.pieces.create(type: "Pawn", col_position: 3, row_position: 4, user_id: @user1.id)
-    black_pawn = @game.pieces.create(type: "Pawn", col_position: 0, row_position: 6, user_id: @user2.id)
-    black_rook = @game.pieces.create(type: "Rook", col_position: 1, row_position: 7, user_id: @user2.id)
-    black_king = @game.pieces.create(type: "King", col_position: 1, row_position: 6, user_id: @user2.id)
+    @game.pieces.create(type: "Queen", col_position: 2, row_position: 5, user_id: @user1.id)
+    @game.pieces.create(type: "Pawn", col_position: 3, row_position: 4, user_id: @user1.id)
+    @game.pieces.create(type: "Pawn", col_position: 0, row_position: 6, user_id: @user2.id)
+    @game.pieces.create(type: "Rook", col_position: 1, row_position: 7, user_id: @user2.id)
+    @game.pieces.create(type: "King", col_position: 1, row_position: 6, user_id: @user2.id)
 
     expected = true
     actual = @game.determine_checkmate
     assert_equal expected, actual
-  end 
+  end
 end
