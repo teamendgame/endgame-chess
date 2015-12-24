@@ -15,7 +15,7 @@ class Piece < ActiveRecord::Base
   end
 
   def try_to_move(new_row, new_col)
-    @piece = Piece.find_by(row_position: new_row, col_position: new_col, game_id: game_id)
+    piece = Piece.find_by(row_position: new_row, col_position: new_col, game_id: game_id)
     # Checking for En Passant
     if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
       capture_en_passant!(new_row, new_col)
@@ -26,16 +26,13 @@ class Piece < ActiveRecord::Base
     # Checking for Valid Move
     return false unless valid_move?(new_row, new_col)
     # If there is not a piece in the destination
-
-    #if @piece == nil
-    unless @piece
+    unless piece
       update(row_position: new_row, col_position: new_col, moved: true)
       return true
     end
-    puts @piece.inspect
     # If there is a piece in the destination
-    return false unless @piece.user_id != user_id
-    @piece.update(row_position: nil, col_position: nil, captured: true)
+    return false unless piece.user_id != user_id
+    piece.update(row_position: nil, col_position: nil, captured: true)
     update(row_position: new_row, col_position: new_col, moved: true)
     true
   end
@@ -48,8 +45,8 @@ class Piece < ActiveRecord::Base
   end
 
   def check_if_castling(row, col)
-    @piece = Piece.find_by(row_position: row, col_position: col)
-    return false unless @piece && type == "King" && !moved && @piece.type == "Rook" && !@piece.moved
+    piece = Piece.find_by(row_position: row, col_position: col, game_id: game_id)
+    return false unless piece && type == "King" && !moved && piece.type == "Rook" && !piece.moved
     true
   end
 

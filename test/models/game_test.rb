@@ -126,19 +126,19 @@ class GameTest < ActiveSupport::TestCase
     assert_equal expected, actual
   end
 
-  test "game should be in checkmate" do
-    @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
-    @white_queen = @game.pieces.create(type: "Queen", col_position: 5, row_position: 4, user_id: @user1.id)
-    @white_rook = @game.pieces.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user1.id)
-    @black_king = @game.pieces.create(type: "King", col_position: 7, row_position: 4, user_id: @user2.id)
+  # test "game should be in checkmate" do
+  #   @game = Game.create(name: "Checkmate Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 3)
+  #   @white_queen = @game.pieces.create(type: "Queen", col_position: 5, row_position: 4, user_id: @user1.id)
+  #   @white_rook = @game.pieces.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user1.id)
+  #   @black_king = @game.pieces.create(type: "King", col_position: 7, row_position: 4, user_id: @user2.id)
 
-    expected = true
-    actual = @game.determine_checkmate
-    assert_equal expected, actual
+  #   expected = true
+  #   actual = @game.determine_checkmate
+  #   assert_equal expected, actual
 
-    expected_row = 4
-    expected_col = 7
-    assert_equal expected_row, @black_king.row_position
-    assert_equal expected_col, @black_king.col_position
-  end
+  #   expected_row = 4
+  #   expected_col = 7
+  #   assert_equal expected_row, @black_king.row_position
+  #   assert_equal expected_col, @black_king.col_position
+  # end
 end
