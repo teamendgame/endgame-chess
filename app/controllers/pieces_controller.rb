@@ -15,7 +15,9 @@ class PiecesController < ApplicationController
     unless @piece.valid_move?(row, col)
       return redirect_to game_path(@game), status: 303, alert: "Sorry, that's not a valid move for a #{@piece.type}"
     end
-    @piece.move_to!(row, col)
+    unless @piece.move_to!(row, col)
+      return redirect_to game_path(@game), status: 303, alert: "Sorry, you can't move into check"
+    end  
     @game.update_attributes(turn_number: @game.turn_number + 1)
     render text: 'updated!'
   end
