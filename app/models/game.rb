@@ -36,21 +36,17 @@ class Game < ActiveRecord::Base
     false
   end
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/ParallelAssignment, Metrics/LineLength
+  # rubocop:disable Style/ParallelAssignment, Metrics/MethodLength
   def checkmate(id)
     current_pieces = pieces.where(user_id: id, captured: false)
     status = true
     current_pieces.each do |piece|
       8.times do |row|
         8.times do |col|
+          next unless piece.valid_move?(row, col)
           orig_row, orig_col = piece.row_position, piece.col_position
-          if piece.valid_move?(row, col)
-            Piece.transaction do
-              piece.move_to!(row, col)
-              status = false unless determine_check
-              fail ActiveRecord::Rollback if piece.row_position != orig_row || piece.col_position != orig_col
-            end
-          end
+          status = false unless checkmate_check(piece, row, col)
+          # If transaction moves piece, move it back to original position
           piece.update_attributes(row_position: orig_row, col_position: orig_col)
         end
       end
@@ -96,5 +92,15 @@ class Game < ActiveRecord::Base
   def init_king
     pieces.create(type: "King", col_position: 4, row_position: 0, user_id: white_player_id)
     pieces.create(type: "King", col_position: 4, row_position: 7, user_id: black_player_id)
+  end
+
+  def checkmate_check(piece, row, col)
+    status = true
+    Piece.transaction do
+      piece.move_to!(row, col)
+      status = false unless determine_check
+      fail ActiveRecord::Rollback
+    end
+    status
   end
 end
