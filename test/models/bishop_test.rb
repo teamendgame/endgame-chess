@@ -1,9 +1,10 @@
 require 'test_helper'
 class BishopTest < ActiveSupport::TestCase
+  # rubocop:disable Metrics/LineLength
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
-    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
+    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 0)
     @g.populate_board!
     @black_bishop = @g.pieces.where(row_position: 7, col_position: 5, type: "Bishop").first
   end
