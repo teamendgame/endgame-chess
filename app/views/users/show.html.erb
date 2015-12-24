@@ -1,0 +1,14 @@
+<h1 class="text-center"><%= @user.name %></h1>
+
+<h2 class="text-center">Games Won: <%= games_won? %></h2>
+<h2 class="text-center">Games Lost: <%= games_lost? %></h2>
+<h2 class="text-center">Games Draw: <%= games_draw? %></h2>
+
+<hr />
+
+<h2 class="text-center">Active Games:</h2>
+  <ul>
+  <% games_unfinished?.each do |game| %>
+    <li><%= link_to game.name, game_path(game.id) %></li>
+  <% end %>
+  </ul>
