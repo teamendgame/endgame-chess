@@ -1,33 +1,52 @@
+# rubocop:disable Metrics/ClassLength
 class Piece < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/MethodLength
   def move_to!(new_row, new_col)
-    @piece = Piece.find_by(row_position: new_row, col_position: new_col, game_id: game_id)
+    Piece.transaction do
+      moved = try_to_move(new_row, new_col)
+      check_status = game.determine_check
+      return moved unless check_status
+      fail ActiveRecord::Rollback
+    end
+    false
+  end
+
+  def try_to_move(new_row, new_col)
+    piece = Piece.find_by(row_position: new_row, col_position: new_col, game_id: game_id)
     # Checking for En Passant
-    capture_en_passant!(new_row, new_col) && return if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
+    if type == "Pawn" && check_adjacent_pieces(new_row, new_col)
+      capture_en_passant!(new_row, new_col)
+      return true
+    end
     # Execute castling procedures if piece is King
-    castling(new_row, new_col) if type == "King"
+    return true if type == "King" && castling(new_row, new_col)
     # Checking for Valid Move
-    return unless valid_move?(new_row, new_col)
+    return false unless valid_move?(new_row, new_col)
     # If there is not a piece in the destination
-    update(row_position: new_row, col_position: new_col, moved: true) && return unless @piece
+    unless piece
+      update(row_position: new_row, col_position: new_col, moved: true)
+      return true
+    end
     # If there is a piece in the destination
-    return unless @piece.user_id != user_id
-    @piece.update(row_position: nil, col_position: nil, captured: true)
+    return false unless piece.user_id != user_id
+    piece.update(row_position: nil, col_position: nil, captured: true)
     update(row_position: new_row, col_position: new_col, moved: true)
+    true
   end
 
   def castling(new_row, new_col)
-    return unless check_if_castling(new_row, new_col)
-    return unless can_castle?(new_row, new_col)
+    return false unless check_if_castling(new_row, new_col)
+    return false unless can_castle?(new_row, new_col)
     castle!(new_row, new_col)
+    true
   end
 
   def check_if_castling(row, col)
-    @piece = Piece.find_by(row_position: row, col_position: col, game_id: game_id)
-    return false unless @piece && type == "King" && !moved && @piece.type == "Rook" && !@piece.moved
+    piece = Piece.find_by(row_position: row, col_position: col, game_id: game_id)
+    return false unless piece && type == "King" && !moved && piece.type == "Rook" && !piece.moved
     true
   end
 
