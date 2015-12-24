@@ -21,9 +21,9 @@ class PiecesControllerTest < ActionController::TestCase
     @game = Game.create(name: "A Game", white_player_id: @user.id, black_player_id: @user2.id, turn_number: 0)
     @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user.id, moved: true)
     @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
-    
+
     sign_in @user
-    put :update, id: @white_king.id, piece: { type: @white_king.type, col_position: 2, row_position: 1}
+    put :update, id: @white_king.id, piece: { type: @white_king.type, col_position: 2, row_position: 1 }
 
     assert_redirected_to game_path(@game.id)
     assert_not flash[:alert].nil?

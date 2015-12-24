@@ -1,7 +1,7 @@
 class PiecesController < ApplicationController
   before_action :check_player_color, only: [:update]
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def show
     @piece = Piece.find(params[:id])
     @game_pieces = Piece.where(game_id: @piece.game_id)
@@ -17,7 +17,7 @@ class PiecesController < ApplicationController
     end
     unless @piece.move_to!(row, col)
       return redirect_to game_path(@game), status: 303, alert: "Sorry, you can't move into check"
-    end  
+    end
     @game.update_attributes(turn_number: @game.turn_number + 1)
     render text: 'updated!'
   end

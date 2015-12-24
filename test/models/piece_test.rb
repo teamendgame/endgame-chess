@@ -12,7 +12,7 @@ class PieceTest < ActiveSupport::TestCase
     @g1 = Game.create(name: "G", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 4)
     @white_king = @g1.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id, moved: true)
     @black_pawn = @g1.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
-    
+
     moved = @white_king.move_to!(1, 1)
     assert_equal true, moved
     @white_king.reload
@@ -24,7 +24,7 @@ class PieceTest < ActiveSupport::TestCase
     @game = Game.create(name: "A Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 4)
     @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id, moved: true)
     @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
-    
+
     moved = @white_king.move_to!(2, 1)
     assert_equal false, moved
     @white_king.reload
