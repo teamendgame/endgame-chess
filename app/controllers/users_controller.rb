@@ -8,12 +8,13 @@ class UsersController < ApplicationController
 
   private
 
+  # rubocop:disable Performance/Count
   def games_won?
     @games.select { |game| game.winning_player_id == @user.id }.count
   end
 
   def games_lost?
-    @games.select do |game| 
+    @games.select do |game|
       game.winning_player_id != @user.id && !game.winning_player_id.nil?
     end.count
   end
