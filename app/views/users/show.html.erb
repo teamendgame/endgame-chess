@@ -1,9 +1,30 @@
 <h1 class="text-center"><%= @user.name %></h1>
-
-<h2 class="text-center">Games Won: <%= games_won? %></h2>
-<h2 class="text-center">Games Lost: <%= games_lost? %></h2>
-<h2 class="text-center">Games Draw: <%= games_draw? %></h2>
-
+<br />
+<div class="center-block" id="scorecard">
+  <header id="header">
+    <h2 class="text-center">Your Scorecard:</h2>
+  </header>
+  <section id="body">
+    <ul id="scores">
+      <li>
+        <div class="view">
+          Wins: <span class="pull-right"><%= games_won? %></span>
+        </div>
+      </li>
+      <li>
+        <div class="view">
+          Losses: <span class="pull-right"><%= games_lost? %></span>
+        </div>
+      </li>
+      <li>
+        <div class="view">
+          Draws: <span class="pull-right"><%= games_draw? %></span>
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>
+<br />
 <hr />
 
 <h2 class="text-center">Active Games:</h2>
