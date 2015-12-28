@@ -1,13 +1,7 @@
 class PiecesController < ApplicationController
   before_action :check_player_color, only: [:update]
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def show
-    @piece = Piece.find(params[:id])
-    @game_pieces = Piece.where(game_id: @piece.game_id)
-  end
-
-  # rubocop:disable Metrics/LineLength, Style/ParallelAssignment
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/LineLength, Style/ParallelAssignment
   def update
     @piece = Piece.find(params[:id])
     @game = Game.find(@piece.game_id)
