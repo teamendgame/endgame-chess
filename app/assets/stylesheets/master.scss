@@ -1,0 +1,76 @@
+html {
+	position: relative;
+    min-height: 100%;
+}
+
+body {
+	line-height: 1.4em;
+	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+	font-size: 15px;
+	margin-bottom: 35px;
+}
+
+.divider-style {
+	border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}
+
+.booyah-box {
+	-moz-box-shadow: 1px 1px 2px 0 #d0d0d0;
+	-webkit-box-shadow: 1px 1px 2px 0 #d0d0d0;
+	box-shadow: 1px 1px 2px 0 #d0d0d0;
+	background: #fff;
+	border: 1px solid #ccc;
+	border-color: #e4e4e4 #bebebd #bebebd #e4e4e4;
+	padding: 10px;
+	margin-top: 10px;
+}
+
+.navbar {
+	margin-bottom: 0px;
+	border-radius: 0px;
+	background-color: $color-primary-1;
+	border: none;
+}
+
+.navbar-default .navbar-brand {
+	font-family: 'Quicksand', sans-serif;
+	color: #3D3D3D;
+	&:hover {
+		color: $color-primary-4;
+	}
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: #3D3D3D;
+	&:hover {
+		color: $color-primary-4;
+		text-decoration: underline;
+	}
+}
+
+.alert {
+	border-radius: 0px;
+}
+
+#sign-up {
+	padding: 10px;
+	margin-top: 3px;
+	color: #FFF;
+	background-color: #337ab7;
+	&:hover {
+		background-color: #2e6da4;
+		text-decoration: none;
+	}
+}
+
+.footer {
+	padding: 5px 0px 5px 0px;
+	position: absolute;
+  	bottom: 0;
+  	height: 30px;
+  	width: 100%;
+  	border-top: 1px solid #e6e6e6;
+}
