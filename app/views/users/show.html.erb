@@ -1,8 +1,8 @@
-<h1 class="text-center"><%= @user.name %></h1>
+<h1 class="text-center title"><%= @user.name %></h1>
 <br />
 <div class="center-block" id="scorecard">
   <header id="header">
-    <h2 class="text-center">Your Scorecard:</h2>
+    <h2 class="text-center title">Your Scorecard:</h2>
   </header>
   <section id="body">
     <ul id="scores">
@@ -27,9 +27,9 @@
 <br />
 <hr />
 
-<h2 class="text-center">Active Games:</h2>
+<h2 class="text-center title">Active Games:</h2>
   <ul>
   <% games_unfinished?.each do |game| %>
-    <li><%= link_to game.name, game_path(game.id) %></li>
+    <li class="active"><%= link_to game.name, game_path(game.id) %></li>
   <% end %>
   </ul>
