@@ -28,7 +28,6 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
   color:#000;
   display:block;
   font-size:60px;
-  height:80px;
   position:relative;
   text-decoration:none;
   text-shadow:0 1px #fff;
@@ -37,8 +36,4 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
 
 .piece {
   @extend a;
-}
-
-.red {
-  color: red;
 }
