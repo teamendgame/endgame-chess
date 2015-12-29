@@ -8,7 +8,7 @@
 }
 
 #body {
-    font-family: Monaco;
+    font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
 	border-top: 1px solid #e6e6e6;
 	box-shadow: 0 1px 1px rgba(0,0,0,0.2),0 8px 0 -3px #f6f6f6,0 9px 1px -3px rgba(0,0,0,0.2),0 16px 0 -6px #f6f6f6,0 17px 2px -6px rgba(0,0,0,0.2);
 }
@@ -28,13 +28,23 @@
 	padding: 15px 60px 15px 15px;
 }
 
-.active>a {
-    font-family: Monaco;
+.active > a {
     font-size: 17px;
 }
 
 
 .title {
-    font-family: Garamond;
 	color: #5C1804;
+}
+
+td {
+  //background:#fff;
+  height:45px;
+  text-align:center;
+  vertical-align:middle;
+  width:45px;
+}
+
+.clear {
+    clear: both;
 }

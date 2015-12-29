@@ -28,8 +28,31 @@
 <hr />
 
 <h2 class="text-center title">Active Games:</h2>
-  <ul>
+<br />
+  <!-- <ul>
   <% games_unfinished?.each do |game| %>
     <li class="active"><%= link_to game.name, game_path(game.id) %></li>
   <% end %>
-  </ul>
+  </ul> -->
+  <!-- <table>
+    <% games_unfinished?.each do |game| %>
+      <tr>
+         <td class="active"><%= link_to game.name, game_path(game.id) %></td>
+      
+    <% end %>
+  </table>  
+ -->
+
+<% games_unfinished?.each do |game| %>
+  <div class="col-xs-12 col-sm-2">
+    <table>
+      <tr><td></td><td></td><td></td></tr>
+      <tr><td></td><td><%= link_to game.name, game_path(game.id) %></td><td></td></tr>
+      <tr><td></td><td></td><td></td></tr>
+    </table>
+    <div></div>
+  </div> 
+
+<% end %>
+
+
