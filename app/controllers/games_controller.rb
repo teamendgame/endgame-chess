@@ -14,7 +14,7 @@ class GamesController < ApplicationController
   end
 
   def search 
-    @results = search_query(params[:email])
+    @results = search_query(params[:email]).page(params[:page])
   end
 
   def new
