@@ -1,6 +1,8 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
 
+  # rubocop:disable Metrics/LineLength
+
   def index
     return unless user_signed_in?
     @games = Game.where(black_player_id: nil).where.not(white_player_id: current_user.id).page(params[:page])
@@ -9,11 +11,10 @@ class GamesController < ApplicationController
 
   def my_games
     return unless user_signed_in?
-    # rubocop:disable Metrics/LineLength
     @my_games = Game.where('white_player_id = ? or black_player_id = ?', current_user.id, current_user.id).where(winning_player_id: nil).order(:created_at)
   end
 
-  def search 
+  def search
     @results = search_query(params[:email]).page(params[:page])
   end
 
