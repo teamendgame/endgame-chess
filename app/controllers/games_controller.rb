@@ -3,7 +3,7 @@ class GamesController < ApplicationController
 
   def index
     return unless user_signed_in?
-    @games = Game.where(black_player_id: nil).where.not(white_player_id: current_user.id)
+    @games = Game.where(black_player_id: nil).where.not(white_player_id: current_user.id).page(params[:page])
     @my_games = my_games
   end
 
