@@ -28,17 +28,12 @@
 	padding: 15px 60px 15px 15px;
 }
 
-.active > a {
-    font-size: 17px;
-}
-
-
 .title {
 	color: #5C1804;
 }
 
 td {
-  //background:#fff;
+  font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   height:45px;
   text-align:center;
   vertical-align:middle;
@@ -47,4 +42,15 @@ td {
 
 .clear {
     clear: both;
+}
+
+.small-board { 
+  width:auto;
+  border: 2px solid black;
+  margin: auto;
+  box-shadow: 2px 2px 3px 1px black;
+}
+
+.separate {
+	padding: 10px 0px;
 }

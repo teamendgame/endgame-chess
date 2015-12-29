@@ -30,13 +30,12 @@
 <h2 class="text-center title">Active Games:</h2>
 <br /> 
 <% games_unfinished?.each do |game| %>
-  <div class="col-xs-12 col-sm-2">
-    <table>
+  <div class="separate col-xs-12 col-sm-3">
+    <table class="small-board">
       <tr><td></td><td></td><td></td></tr>
-      <tr><td></td><td><%= link_to game.name, game_path(game.id) %></td><td></td></tr>
+      <tr><td></td><td><b><%= link_to game.name, game_path(game.id) %></b></td><td></td></tr>
       <tr><td></td><td></td><td></td></tr>
     </table>
-    <div></div>
   </div> 
 <% end %>
 
