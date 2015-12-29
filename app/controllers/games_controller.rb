@@ -13,6 +13,10 @@ class GamesController < ApplicationController
     @my_games = Game.where('white_player_id = ? or black_player_id = ?', current_user.id, current_user.id).where(winning_player_id: nil).order(:created_at)
   end
 
+  def search 
+    @results = search_query(params[:email])
+  end
+
   def new
     @game = Game.new
   end
@@ -52,5 +56,10 @@ class GamesController < ApplicationController
 
   def game_params
     params.require(:game).permit(:name, :white_player_id, :black_player_id, :turn_number)
+  end
+
+  def search_query(params)
+    user = User.find_by(email: params)
+    Game.where(white_player_id: user.id, black_player_id: nil).order(:created_at)
   end
 end
