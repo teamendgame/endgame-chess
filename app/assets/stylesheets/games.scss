@@ -37,3 +37,35 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
 .piece {
   @extend a;
 }
+
+.my_games {
+  list-style-type: none;
+}
+
+.flex-container-games {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin-bottom: 5px;
+  @include media-query($mobile) {
+    flex-flow: row wrap;
+  }
+}
+
+.flex-child {
+
+}
+
+#turn {
+  flex: 0 0 100px;
+  border: 1px solid #e6e6e6;
+  background-color: $color-secondary-1-2;
+}
+
+.game-name {
+  font-size: 20px;
+}
+
+.turn-no {
+  font-size: 25px;
+}
