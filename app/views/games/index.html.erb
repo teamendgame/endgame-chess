@@ -9,7 +9,7 @@
           <div class="flex-container-games">
             <% if !game.black_player_id.nil? %>
               <div class="flex-child text-center" id="turn">Turn <br />
-              <span class="turn-no"><%= game.turn_number %></span>
+                <span class="turn-no"><%= game.turn_number %></span>
               </div>
               <div class="flex-child"> 
                 <span class="game-name"><strong><%= link_to game.name, game_path(game) %></strong></span> <br />
@@ -17,7 +17,7 @@
               </div>
             <% else %>
               <div class="flex-child text-center" id="turn">Turn <br />
-              <span class="turn-no"> - </span>
+                <span class="turn-no"> - </span>
               </div>
               <div class="flex-child"> 
                 <span class="game-name"><strong><%= game.name %></strong></span> <br />
@@ -42,14 +42,21 @@
   <% end %>
 
   <% @games.each do |game| %>
-    <h2 class="text-center">
-  	<%= game.name %>
-    </h2>
-    <br />
-    <%= simple_form_for game, :method => :put do |f| %>
-      <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-      <%= f.submit 'Join Game', :class => 'btn btn-success center-block' %>
-    <% end %>
+    <div class="flex-container-games">
+      <div class="flex-child text-center" id="turn">Turn <br />
+        <span class="turn-no"> - </span>
+      </div>
+      <div class="flex-child"> 
+        <span class="game-name"><strong><%= game.name %></strong></span> <br />
+        <span>Waiting for Second Player</span> | <span><em>Started on <%= game.created_at.strftime("%A, %B %e, %Y") %></em></span>
+      </div>
+      <div class="flex-child" id="join">
+        <%= simple_form_for game, :method => :put do |f| %>
+          <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
+          <%= f.submit 'Join Game', :class => 'btn btn-success center-block' %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 </div>
 <br />

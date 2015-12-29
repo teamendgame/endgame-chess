@@ -1,6 +1,39 @@
 // Place all the styles related to the games controller here.
 // They will automatically be included in application.css.
 
+/* Games Index Page */
+
+.flex-container-games {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin-bottom: 5px;
+  @include media-query($mobile) {
+    flex-flow: row wrap;
+  }
+}
+
+#turn {
+  flex: 0 0 100px;
+  border: 1px solid #e6e6e6;
+  background-color: $color-secondary-1-2;
+}
+
+#join {
+  flex: 0 0 100px;
+  align-self: center;
+}
+
+.game-name {
+  font-size: 20px;
+}
+
+.turn-no {
+  font-size: 25px;
+}
+
+/* Games Show Page */
+
 .board { 
   width:auto;
   border: 2px solid black;
@@ -40,32 +73,4 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
 
 .my_games {
   list-style-type: none;
-}
-
-.flex-container-games {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  margin-bottom: 5px;
-  @include media-query($mobile) {
-    flex-flow: row wrap;
-  }
-}
-
-.flex-child {
-
-}
-
-#turn {
-  flex: 0 0 100px;
-  border: 1px solid #e6e6e6;
-  background-color: $color-secondary-1-2;
-}
-
-.game-name {
-  font-size: 20px;
-}
-
-.turn-no {
-  font-size: 25px;
 }
