@@ -2,6 +2,7 @@
 <br/>
 <h2 class="text-center"><%= turn %></h2>
 <h3 class="text-center red"><%= in_check %></h3>
+<h3 class="text-center red"><%= in_stalemate %></h3>
 <br/>
 <h3 class="text-center"><%= white_player %></h3>
 <% if @game.white_player_id == current_user.id %>

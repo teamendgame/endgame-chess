@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
+  around_action :stalemate?, only: :show
 
   def index
     return unless user_signed_in?
@@ -49,6 +50,11 @@ class GamesController < ApplicationController
   end
 
   private
+
+  def stalemate?
+    @game = Game.find(params[:id])
+    flash[:alert] = "Game is in Stalemate. Game Over" if @game.determine_stalemate
+  end
 
   def game_params
     params.require(:game).permit(:name, :white_player_id, :black_player_id, :turn_number)
