@@ -43,9 +43,9 @@ class Game < ActiveRecord::Base
     current_pieces.each do |piece|
       8.times do |row|
         8.times do |col|
-          next unless piece.valid_move?(row, col)
+          next unless piece.reload.valid_move?(row, col)
           Piece.transaction do
-            piece.try_to_move(row, col)
+            piece.reload.try_to_move(row, col)
             check_status = false if determine_check == false
             fail ActiveRecord::Rollback
           end
@@ -53,6 +53,12 @@ class Game < ActiveRecord::Base
       end
     end
     check_status
+  end
+
+  def determine_stalemate
+    return checkmate(white_player_id) if turn_number.even?
+    return checkmate(black_player_id) if turn_number.odd?
+    false
   end
 
   private
