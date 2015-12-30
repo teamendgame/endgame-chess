@@ -64,6 +64,7 @@ class Pawn < Piece
         update(row_position: row_dest, col_position: col_dest, moved: true)
       end
     end
+    true
   end
 
   def backward_move?(row_dest, _col_dest)
