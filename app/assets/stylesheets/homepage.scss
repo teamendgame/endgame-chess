@@ -1,3 +1,59 @@
 // Place all the styles related to the homepage controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.jumbotron {
+	background: url("endgame-lg.jpg") no-repeat center center;
+	background-color: white;
+	height: 650px;
+	@include media-query($mobile) {
+		height: 500px;
+		background: url("endgame-sm.jpg") no-repeat center center;
+	}
+}
+
+.call-to-action {
+	@include media-query($mobile) {
+		background: rgba(255,255,255,0.5);
+		text-align: center;
+	}
+}
+
+.flex-container {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	@include media-query($mobile) {
+		flex-flow: row wrap;
+	}
+}
+
+.flex-child {
+	padding: 5px;
+	flex: 1 1 auto;
+}
+
+.sign {
+	margin-bottom: 15px;
+	font-size: 21px;
+}
+
+.team {
+	border-radius: 50%;
+	border: 1px solid #e6e6e6;
+}
+
+.panel-title {
+	font-size: 20px;
+}
+
+#headingOne {
+	background-color: $color-secondary-1-2;
+}
+
+#headingTwo {
+	background-color: $color-secondary-1-2;
+}
+
+#headingThree {
+	background-color: $color-secondary-1-2;
+}
