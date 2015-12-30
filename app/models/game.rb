@@ -36,18 +36,15 @@ class Game < ActiveRecord::Base
     false
   end
 
-  # rubocop:disable Style/ParallelAssignment, Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength
   def checkmate(id)
     current_pieces = pieces.where(user_id: id, captured: false)
     status = true
     current_pieces.each do |piece|
       8.times do |row|
         8.times do |col|
-          next unless piece.valid_move?(row, col)
-          orig_row, orig_col = piece.row_position, piece.col_position
+          next unless piece.reload.valid_move?(row, col)
           status = false unless checkmate_check(piece, row, col)
-          # If transaction moves piece, move it back to original position
-          piece.update_attributes(row_position: orig_row, col_position: orig_col)
         end
       end
     end
