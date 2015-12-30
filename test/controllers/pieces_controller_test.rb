@@ -11,6 +11,18 @@ class PiecesControllerTest < ActionController::TestCase
     @white_rook_kingside = Piece.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user.id, game_id: @g.id)
   end
 
+  test "Flash message should appear if player moves into check" do
+    @game = Game.create(name: "A Game", white_player_id: @user.id, black_player_id: @user2.id, turn_number: 0)
+    @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user.id, moved: true)
+    @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
+
+    sign_in @user
+    put :update, id: @white_king.id, piece: { type: @white_king.type, col_position: 2, row_position: 1 }
+
+    assert_redirected_to game_path(@game.id)
+    assert_not flash[:alert].nil?
+  end
+
   test "Player should not be able to update on incorrect turn" do
     sign_in @user
     sign_in @user2
@@ -29,6 +41,7 @@ class PiecesControllerTest < ActionController::TestCase
 
   test "should update piece location" do
     sign_in @user
+    @white_king = Piece.create(type: "King", col_position: 4, row_position: 7, user_id: @user.id, game_id: @g.id)
     put :update, id: @pawn.id, game_id: @g.id, piece: { type: @pawn.type, col_position: 1, row_position: 2 }
     @pawn.reload
     @g.reload

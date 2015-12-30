@@ -1,11 +1,35 @@
 require 'test_helper'
-# rubocop:disable Metrics/ClassLength
+# rubocop:disable Metrics/ClassLength, Metrics/LineLength
 class PieceTest < ActiveSupport::TestCase
   def setup
     @user1 = FactoryGirl.create(:user)
     @user2 = FactoryGirl.create(:user)
-    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id)
+    @g = Game.create(name: "New Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 0)
     @g.populate_board!
+  end
+
+  test "king is not moving into check" do
+    @g1 = Game.create(name: "G", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 4)
+    @white_king = @g1.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id, moved: true)
+    @black_pawn = @g1.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
+
+    moved = @white_king.move_to!(1, 1)
+    assert_equal true, moved
+    @white_king.reload
+    assert_equal 1, @white_king.row_position
+    assert_equal 1, @white_king.col_position
+  end
+
+  test "king is moving into check" do
+    @game = Game.create(name: "A Game", white_player_id: @user1.id, black_player_id: @user2.id, turn_number: 4)
+    @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user1.id, moved: true)
+    @black_pawn = @game.pieces.create(type: "Pawn", row_position: 3, col_position: 0, user_id: @user2.id)
+
+    moved = @white_king.move_to!(2, 1)
+    assert_equal false, moved
+    @white_king.reload
+    assert_equal 0, @white_king.col_position
+    assert_equal 1, @white_king.row_position
   end
 
   test "unobstructed castling" do
@@ -24,7 +48,6 @@ class PieceTest < ActiveSupport::TestCase
     assert_equal 4, @king.reload.col_position
   end
 
-  # rubocop:disable Metrics/LineLength
   test "valid pawn capture with move_to!" do
     black_pawn = Pawn.last
     white_pawn = Pawn.create(row_position: 5, col_position: 1, game_id: @g.id, user_id: @user1.id)
@@ -38,6 +61,7 @@ class PieceTest < ActiveSupport::TestCase
   test "valid move to blank square" do
     black_pawn = Pawn.last
     black_pawn.move_to!(5, 0)
+    black_pawn.reload
     assert black_pawn.row_position == 5 && black_pawn.col_position == 0
   end
 
@@ -60,6 +84,7 @@ class PieceTest < ActiveSupport::TestCase
     # King is at (7, 4)
     king = King.last
     @g.pieces.find_by(row_position: 6, col_position: 4).destroy
+
     king.move_to!(6, 4)
     king.reload
     assert king.row_position == 6 && king.col_position == 4

@@ -1,1 +1,152 @@
-<h1>Homepage</h1>
+<div class="jumbotron">
+  <div class="call-to-action">
+    <h1>Endgame</h1>
+    <p>A full-featured Ruby on Rails Chess App</p>
+    <%= link_to 'Sign Up Today', new_user_registration_path, class: "btn btn-primary sign" %> 
+    <p>or</p> 
+    <%= link_to 'Sign In', new_user_session_path, class: "sign" %>
+  </div>
+</div>
+
+<div>
+  <h1>Open Source, Standards Driven, Full Service</h1>
+  <p>Endgame Chess is our version of the capstone project for <a href="www.thefirehoseproject">The Firehose Project</a>, an intensive 15 week programming bootcamp. Every part, from the Ruby business logic that determines if the game is in checkmate to the Javascript that allows you to drag-and-drop the pieces, was built from the ground up using industry best practices and industry leading services.</p>
+</div>
+
+<hr class="divider-style" /> 
+
+<div>
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h2 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Open Source <span class="glyphicon glyphicon-menu-down pull-right" aria-hidden="true"></span>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <p>Endgame Chess is a proud member open source community. You can view all of our code on <a href="https://github.com/teamendgame/endgame-chess">GitHub</a>. Additionally, Endgame Chess is built using open source tools.</p>
+          <div class="flex-container">
+            <div class="flex-child">
+              <%= image_tag("ruby.png", size: "50x50") %>
+              <h2>Ruby</h2>
+              <p>All of our business logic is written in Ruby</p>
+            </div>
+
+            <div class="flex-child">
+              <%= image_tag("rails.png", size: "39x50") %>
+              <h2>Rails</h2>
+              <p>Rails is the foundation of Endgame Chess, bringing so many useful tools and conventions to make building it from scratch fast</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingTwo">
+        <h2 class="panel-title">
+          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Standards Driven <span class="glyphicon glyphicon-menu-down pull-right" aria-hidden="true"></span>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body">
+          <p>Our team followed standard Agile and SCRUM methodologies, having a weekly virtual stand up to plan the week's sprints. We developed a solid test suite using Test Driven Design and used Rubocop to enforce best-practices in code style.</p>
+          <div class="flex-container">
+            <div class="flex-child">
+              <%= image_tag("trello.png", size: "50x50") %>
+              <h2>Trello</h2>
+              <p>We used Trello as an Agile board to keep track of the progress of all of our tickets</p>
+            </div>
+
+            <div class="flex-child">
+              <%= image_tag("slack.png", size: "50x50") %>
+              <h2>Slack</h2>
+              <p>Slack kept our team in constant communication</p>
+            </div>
+
+            <div class="flex-child">
+              <%= image_tag("rubocop.png", size: "50x50") %>
+              <h2>Rubocop</h2>
+              <p>Rubocop analyzed our code for style and best-practices</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingThree">
+        <h2 class="panel-title">
+          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Full Service <span class="glyphicon glyphicon-menu-down pull-right" aria-hidden="true"></span>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body">
+          <p>We were dedicated to finding the right tool for the job.  Each of these services are best-in-class, allowing us to focus on developing Endgame Chess.</p>  
+          <div class="flex-container">
+            <div class="flex-child">
+              <%= image_tag("heroku.png", size: "50x53") %>
+              <h2>Heroku</h2>
+              <p>Heroku's Cloud Application Platform hosts the production version of Endgame Chess</p>
+            </div>
+
+            <div class="flex-child">
+              <%= image_tag("octocat.jpg", size: "60x50") %>
+              <h2>GitHub</h2>
+              <p>GitHub was used extensively to display new work with pull requests, allow for comments during code review, and track issues as they came up</p>
+            </div>
+
+            <div class="flex-child">
+              <%= image_tag("travis.jpg", size: "50x50") %>
+              <h2>Travis CI</h2>
+              <p>Travis CI runs our Continuous Integration and our Continuous Deployment</p>
+            </div>
+
+            <div class="flex-child">
+              <%= image_tag("pusher.png", size: "36x50") %>
+              <h2>Pusher</h2>
+              <p>Pusher uses Websockets to allow us to have real-time updates for pieces for both players</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider-style" /> 
+
+<div>
+  <h1>The Team</h1>
+  <div class="flex-container">
+    <div class="flex-child text-center">
+       <%= image_tag("adam.jpg", size: "100x100", class: "team") %>
+      <p>Adam D (<a href="https://github.com/addstar34">@addstar34</a>)</p>
+    </div>
+
+    <div class="flex-child text-center">
+      <%= image_tag("aziz.jpg", size: "100x100", class: "team") %>
+      <p>Aziz Sharipov (<a href="https://github.com/gagaception">@gagaception</a>)</p>
+    </div>
+
+    <div class="flex-child text-center">
+      <%= image_tag("jonathan.jpg", size: "100x100", class: "team") %>
+      <p>Jonathan Pike (<a href="https://github.com/jonathanpike">@jonathanpike</a>)</p>
+    </div>
+
+    <div class="flex-child text-center">
+      <%= image_tag("ronny.jpg", size: "100x100", class: "team") %>
+      <p>Ronny Almog (<a href="https://github.com/ronny2205">@ronny2205</a>)</p>
+    </div>
+
+    <div class="flex-child text-center">
+      <%= image_tag("take.jpg", size: "100x100", class: "team") %>
+      <p>Takehiro Mouri (<a href="https://github.com/takehiromouri">@takehiromouri</a>)</p>
+    </div>
+  </div>
+</div>
