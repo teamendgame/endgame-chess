@@ -3,6 +3,7 @@ require 'test_helper'
 class GamesControllerTest < ActionController::TestCase
   def setup
     @user = FactoryGirl.create(:user)
+    @user2 = FactoryGirl.create(:user)
     @g = Game.create(name: "Test", white_player_id: @user.id, turn_number: 0)
   end
 
@@ -34,5 +35,11 @@ class GamesControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to root_path
+  end
+
+  test "should get search page" do
+    sign_in @user2
+    get :search, email: @user.email
+    assert_response :success
   end
 end

@@ -1,31 +1,77 @@
 <div class="booyah-box col-xs-10 col-xs-offset-1">
+  <%= form_tag("/search", method: "get") do %>
+  <div class="input-group">
+    <%= text_field_tag(:email, nil, placeholder: "example@email.com", class: "form-control") %>
+    <span class="input-group-btn">
+        <%= submit_tag("Search", class: "btn btn-primary") %>
+    </span>
+  </div>
+  <% end %>  
+
   <% if @my_games.present? %>
-    <h3>My games</h3>
-    <ul>
-    <% @my_games.each do |game|%>
-      <li><%= both_players_present?(game) %></li>
-    <% end %>
-    </ul>
+    <div>
+      <h1 class="text-center">My Games</h1>
+        <ul>
+        <% @my_games.each do |game| %>
+          <li class="my_games">          
+            <div class="flex-container-games">
+              <% if !game.black_player_id.nil? %>
+                <div class="flex-child text-center" id="turn">Turn <br />
+                  <span class="turn-no"><%= game.turn_number %></span>
+                </div>
+                <div class="flex-child"> 
+                  <span class="game-name"><strong><%= link_to game.name, game_path(game) %></strong></span> <br />
+                  <span><%= my_turn?(game) %></span> | <span><em>Started on <%= game.created_at.strftime("%A, %B %e, %Y") %></em></span>
+                </div>
+              <% else %>
+                <div class="flex-child text-center" id="turn">Turn <br />
+                  <span class="turn-no"> - </span>
+                </div>
+                <div class="flex-child"> 
+                  <span class="game-name"><strong><%= game.name %></strong></span> <br />
+                  <span>Waiting for Second Player</span> | <span><em>Started on <%= game.created_at.strftime("%A, %B %e, %Y") %></em></span>
+                </div>
+              <% end %>
+            </div>          
+          </li>
+        <% end %>
+        </ul>
+    </div>
   <% end %>
 
-  <% if @games.present? %>
-  	<h1 class="text-center">Available Games</h1>
-  <% else %>
-    <h1 class="text-center">No Available Games</h1>
-    <br />
-    <%=link_to 'Create game?', new_game_path, :class => 'btn btn-success center-block' %>
-  <% end %>
   <hr />
-  <% @games.each do |game| %>
-    <h2 class="text-center">
-  	<%= game.name %>
-    </h2>
-    <br />
-    <%= simple_form_for game, :method => :put do |f| %>
-      <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-      <%= f.submit 'Join Game', :class => 'btn btn-success center-block' %>
+
+  <div>
+    <% if @games.present? %>
+    	<h1 class="text-center">Available Games</h1>
+    <% else %>
+      <h1 class="text-center">No Available Games</h1>
+      <br />
+      <%=link_to 'Create game?', new_game_path, :class => 'btn btn-success center-block' %>
     <% end %>
-  <% end %>
-  <br />
-  <br />
+
+    <% @games.each do |game| %>
+      <div class="flex-container-games">
+        <div class="flex-child text-center" id="turn">Turn <br />
+          <span class="turn-no"> - </span>
+        </div>
+        <div class="flex-child"> 
+          <span class="game-name"><strong><%= game.name %></strong></span> <br />
+          <span>Waiting for Second Player</span> | <span><em>Started on <%= game.created_at.strftime("%A, %B %e, %Y") %></em></span>
+        </div>
+        <div class="flex-child" id="join">
+          <%= simple_form_for game, :method => :put do |f| %>
+            <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
+            <%= f.submit 'Join Game', :class => 'btn btn-success center-block' %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="text-center">
+      <%= paginate @games %>
+    </div>
+  </div>
 </div>
+<br />
+<br />

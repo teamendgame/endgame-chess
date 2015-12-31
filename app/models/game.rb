@@ -21,9 +21,9 @@ class Game < ActiveRecord::Base
     check(black_player_id, white_player_id)
   end
 
-  def check(id, opponent_id)
+  def check(users_id, opponent_id)
     opponent_pieces = pieces.where(user_id: opponent_id, captured: false)
-    king = pieces.find_by(user_id: id, type: "King")
+    king = pieces.find_by(user_id: users_id, type: "King")
     opponent_pieces.each do |piece|
       return true if piece.valid_move?(king.row_position, king.col_position)
     end
@@ -39,20 +39,16 @@ class Game < ActiveRecord::Base
   # rubocop:disable Metrics/MethodLength
   def checkmate(id)
     current_pieces = pieces.where(user_id: id, captured: false)
-    check_status = true
+    status = true
     current_pieces.each do |piece|
       8.times do |row|
         8.times do |col|
-          next unless piece.valid_move?(row, col)
-          Piece.transaction do
-            piece.try_to_move(row, col)
-            check_status = false if determine_check == false
-            fail ActiveRecord::Rollback
-          end
+          next unless piece.reload.valid_move?(row, col)
+          status = false unless checkmate_check(piece, row, col)
         end
       end
     end
-    check_status
+    status
   end
 
   private
@@ -93,5 +89,15 @@ class Game < ActiveRecord::Base
   def init_king
     pieces.create(type: "King", col_position: 4, row_position: 0, user_id: white_player_id)
     pieces.create(type: "King", col_position: 4, row_position: 7, user_id: black_player_id)
+  end
+
+  def checkmate_check(piece, row, col)
+    status = true
+    Piece.transaction do
+      piece.move_to!(row, col)
+      status = false unless determine_check
+      fail ActiveRecord::Rollback
+    end
+    status
   end
 end

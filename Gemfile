@@ -43,6 +43,9 @@ gem 'puma'
 # Use Jquery-ui
 gem 'jquery-ui-rails'
 
+# Use Kaminari for Pagination
+gem 'kaminari'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
