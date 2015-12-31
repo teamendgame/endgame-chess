@@ -46,6 +46,9 @@ gem 'jquery-ui-rails'
 # Use Pusher for Realtime Communication
 gem 'pusher'
 
+# Use Kaminari for Pagination
+gem 'kaminari'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
