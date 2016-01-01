@@ -31,15 +31,6 @@ class GamesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should destroy game" do
-    sign_in @user
-    assert_difference('Game.count', -1) do
-      delete :destroy, id: @g.id
-    end
-
-    assert_redirected_to root_path
-  end
-
   test "should get search page" do
     sign_in @user2
     get :search, email: @user.email

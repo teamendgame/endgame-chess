@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
-  before_action :own_game?, only: [:show, :edit, :update]
-  before_action :new_game?, only: [:show, :edit, :update]
+  before_action :own_game?, only: [:show]
+  before_action :new_game?, only: [:show]
 
   # rubocop:disable Metrics/LineLength
 
@@ -29,25 +29,12 @@ class GamesController < ApplicationController
     @pieces = @game.pieces.all
   end
 
-  def edit
-    @game = Game.find(params[:id])
-  end
-
   def update
     @game = Game.find(params[:id])
-    if @game.update(game_params)
-      @game.populate_board!
-      redirect_to games_path
-    else
-      render 'edit'
-    end
-  end
+    return unless @game.update(game_params)
 
-  def destroy
-    @game = Game.find(params[:id])
-    @game.destroy
-    flash[:notice] = "Game Deleted"
-    redirect_to root_path
+    @game.populate_board!
+    redirect_to games_path
   end
 
   private
