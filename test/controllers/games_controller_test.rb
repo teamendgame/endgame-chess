@@ -27,7 +27,7 @@ class GamesControllerTest < ActionController::TestCase
 
   test "should get show page" do
     sign_in @user
-    get :show, id: @g.id
+    get :show, id: @g2.id
     assert_response :success
   end
 
@@ -55,10 +55,12 @@ class GamesControllerTest < ActionController::TestCase
     assert_equal "Sorry, you're not a player in that game", flash[:alert]
   end
 
-  test "user should be able to access show page if second player has not joined" do
+  test "user shouldn't be able to access show page if second player has not joined" do
     sign_in @user3
     get :show, id: @g.id
 
-    assert_response :success
+    assert_redirected_to games_path
+
+    assert_equal "Sorry, you have to join the game first", flash[:alert]
   end
 end
