@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
+  before_action :own_game?, only: [:show, :edit, :update]
 
   # rubocop:disable Metrics/LineLength
 
@@ -62,5 +63,16 @@ class GamesController < ApplicationController
   def search_query(params)
     user = User.find_by(email: params)
     Game.where(white_player_id: user.id, black_player_id: nil).order(:created_at)
+  end
+
+  # rubocop:disable Metrics/AbcSize
+
+  def own_game?
+    game = Game.find(params[:id])
+    return unless game.black_player_id
+    return unless game.white_player_id != current_user.id || game.black_player_id != current_user.id
+
+    flash[:alert] = "Sorry, you're not a player in that game"
+    redirect_to games_path
   end
 end
