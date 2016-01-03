@@ -57,7 +57,7 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
   background-color: #5C1804;
 }
 
-.board a {
+.piece {
   color:#000;
   display:block;
   font-size:60px;
@@ -65,10 +65,11 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
   text-decoration:none;
   text-shadow:0 1px #fff;
   width:80px;
+  height:30px;
 }
 
-.piece {
-  @extend a;
+.red {
+  color: red;
 }
 
 .my_games {
