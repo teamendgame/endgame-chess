@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
+  around_action :checkmate?, only: [:show]
 
   # rubocop:disable Metrics/LineLength
 
@@ -62,5 +63,18 @@ class GamesController < ApplicationController
   def search_query(params)
     user = User.find_by(email: params)
     Game.where(white_player_id: user.id, black_player_id: nil).order(:created_at)
+  end
+
+  def checkmate?
+    game = Game.find(params[:id])
+    return unless game.determine_checkmate
+
+    if game.turn_number.even?
+      flash[:alert] = "White player is in checkmate.  Game Over."
+      game.update_attributes(winning_player_id: game.black_player_id, turn_number: nil)
+    else
+      flash[:alert] = "Black player is in checkmate.  Game Over."
+      game.update_attributes(winning_player_id: game.white_player_id, turn_number: nil)
+    end
   end
 end

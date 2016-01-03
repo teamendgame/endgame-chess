@@ -42,4 +42,19 @@ class GamesControllerTest < ActionController::TestCase
     get :search, email: @user.email
     assert_response :success
   end
+
+  test "game is in checkmate" do 
+    # Set up game
+    @game = Game.create(name: "Checkmate Game", white_player_id: @user.id, black_player_id: @user2.id, turn_number: 2)
+    @game.pieces.create(type: "Knight", col_position: 5, row_position: 2, user_id: @user2.id)
+    @game.pieces.create(type: "Rook", col_position: 7, row_position: 1, user_id: @user2.id)
+    @game.pieces.create(type: "King", col_position: 7, row_position: 0, user_id: @user.id)
+
+    sign_in @user
+    get :show, id: @game.id
+
+    assert_equal "White player is in checkmate.  Game Over.", flash[:alert]
+    assert_equal @user2.id, @game.reload.winning_player_id
+    assert_equal nil, @game.reload.turn_number
+  end
 end
