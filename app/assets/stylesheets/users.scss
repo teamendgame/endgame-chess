@@ -65,6 +65,14 @@ td {
   font-size: 20px;
 }
 
-.tooltip-inner {
-    background-color:red;
+.tooltip-inner > table {
+    background-color: blue;
+}
+
+.tooltip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-top-color: #fff;
+  border-width: 5px 5px 0;
 }
