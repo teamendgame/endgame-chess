@@ -1,3 +1,9 @@
+<script>
+  $(function () {
+    $("[rel='tooltip']").tooltip();
+  });
+</script>  
+
 <div class="booyah-box col-xs-10 col-xs-offset-1">
   <h1 class="text-center title"><%= @user.name %></h1>
   <br />
@@ -37,7 +43,7 @@
       </div>
       <table class="small-board">
         <tr><td></td><td></td><td></td></tr>
-        <tr><td></td><td data-toggle="tooltip" <%= which_color?(game) %>><%= which_king?(game) %></td><td></td></tr>
+        <tr><td></td><td><%= which_king?(game) %></td><td></td></tr>
         <tr><td></td><td></td><td></td></tr>
       </table>
     </div> 
