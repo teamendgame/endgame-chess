@@ -3,7 +3,7 @@
 // $('.jquery-ui-tooltip').tooltip();
 //$('.bootstrap-tooltip').bsTooltip();
 
-$.noConflict()
+//$.noConflict()
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
