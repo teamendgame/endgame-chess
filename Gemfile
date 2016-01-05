@@ -17,6 +17,9 @@ gem 'coffee-rails', '~> 4.1.0'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
+# Use Jquery-ui
+gem 'jquery-ui-rails'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -39,9 +42,6 @@ gem 'figaro'
 
 # Use Puma for Application server
 gem 'puma'
-
-# Use Jquery-ui
-gem 'jquery-ui-rails'
 
 # Use Kaminari for Pagination
 gem 'kaminari'

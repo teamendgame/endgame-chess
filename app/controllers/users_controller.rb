@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
+  before_action :authenticate_user!
   helper_method :games_won?, :games_lost?, :games_draw?, :games_unfinished?
 
   def show
     @user = User.find(params[:id])
     @games = Game.where('black_player_id = ? OR white_player_id = ?', @user.id, @user.id)
+    render text: 'Not Allowed' unless @user == current_user
   end
 
   private
