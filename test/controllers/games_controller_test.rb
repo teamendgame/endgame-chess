@@ -37,7 +37,8 @@ class GamesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "game is in checkmate" do 
+  # rubocop:disable Metrics/LineLength
+  test "game is in checkmate" do
     # Set up game
     @game = Game.create(name: "Checkmate Game", white_player_id: @user.id, black_player_id: @user2.id, turn_number: 2)
     @game.pieces.create(type: "Knight", col_position: 5, row_position: 2, user_id: @user2.id)
@@ -47,9 +48,11 @@ class GamesControllerTest < ActionController::TestCase
     sign_in @user
     get :show, id: @game.id
 
-    assert_equal "White player is in checkmate.  Game Over.", flash[:alert]
+    assert_equal "White player is in checkmate.  Black player wins!", flash[:game_status]
     assert_equal @user2.id, @game.reload.winning_player_id
     assert_equal nil, @game.reload.turn_number
+
+    assert_redirected_to games_path
   end
 
   test "user shouldn't be able to access game show page" do

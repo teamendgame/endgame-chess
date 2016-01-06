@@ -12,11 +12,13 @@ class Game < ActiveRecord::Base
   end
 
   def whos_turn?
+    return nil if turn_number.nil?
     return white_player_id if turn_number.even?
     return black_player_id if turn_number.odd?
   end
 
   def determine_check
+    return false if turn_number.nil?
     return check(white_player_id, black_player_id) if turn_number.even?
     check(black_player_id, white_player_id)
   end
@@ -31,6 +33,7 @@ class Game < ActiveRecord::Base
   end
 
   def determine_checkmate
+    return true if turn_number.nil?
     return checkmate(white_player_id) if turn_number.even? && determine_check
     return checkmate(black_player_id) if turn_number.odd? && determine_check
     false
