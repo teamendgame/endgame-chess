@@ -75,3 +75,14 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
 .my_games {
   list-style-type: none;
 }
+
+.turn {
+  background: #FFF48F;
+  text-align:center;
+  display: block;
+  height:40px;
+  padding: 10px;
+  position: relative;
+    width: 100%;
+  
+}
