@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_action :own_game?, only: [:show]
   before_action :new_game?, only: [:show]
   before_action :checkmate?, only: [:show]
-  
+
   # rubocop:disable Metrics/LineLength
 
   def index
