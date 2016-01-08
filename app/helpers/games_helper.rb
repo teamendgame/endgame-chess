@@ -40,7 +40,7 @@ module GamesHelper
   def white_player
     w_player = User.find(@game.white_player_id).name
     return "White Player: You" if current_user.id == @game.white_player_id
-    "White Player: #{w_player}"  
+    "White Player: #{w_player}"
   end
 
   def turn
