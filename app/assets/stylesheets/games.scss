@@ -77,12 +77,13 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
 }
 
 .turn {
-  background: #FFF48F;
-  text-align:center;
-  display: block;
-  //height: 40px;
-  padding: 10px;
-  position:absolute;
-  left: 0;
-  right: 0;
+ // background: #FFF48F;
+ // text-align:center;
+ // display: block;
+ // padding: 10px;
+//  position:absolute;
+//  left: 0;
+//  right: 0;
+  color: #5bc0de;
+  font-size: 20px;
 }
