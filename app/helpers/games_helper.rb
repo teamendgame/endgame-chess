@@ -54,7 +54,7 @@ module GamesHelper
   end
 
   def in_check
-    return "White: Check" if @game.determine_check && @game.whos_turn? == @game.white_player_id
-    return "Black: Check" if @game.determine_check && @game.whos_turn? == @game.black_player_id
+    return "White player: Check" if @game.determine_check && @game.whos_turn? == @game.white_player_id
+    return "Black player: Check" if @game.determine_check && @game.whos_turn? == @game.black_player_id
   end
 end
