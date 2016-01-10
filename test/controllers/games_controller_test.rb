@@ -45,7 +45,7 @@ class GamesControllerTest < ActionController::TestCase
 
     sign_in @user
     get :show, id: @game.id
-
+    # rubocop:disable AmbiguousOperator
     assert_equal -1, @game.reload.winning_player_id
   end
 
