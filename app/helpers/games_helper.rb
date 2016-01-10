@@ -59,4 +59,9 @@ module GamesHelper
     return "White: Check" if @game.determine_check && @game.whos_turn? == @game.white_player_id
     return "Black: Check" if @game.determine_check && @game.whos_turn? == @game.black_player_id
   end
+
+  def winning_player
+    return true unless @game.winning_player_id.nil?
+    false
+  end
 end

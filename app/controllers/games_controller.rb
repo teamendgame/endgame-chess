@@ -3,6 +3,7 @@ class GamesController < ApplicationController
   around_action :stalemate?, only: :show
   before_action :own_game?, only: [:show]
   before_action :new_game?, only: [:show]
+  before_action :checkmate?, only: [:show]
 
   # rubocop:disable Metrics/LineLength
 
@@ -10,6 +11,7 @@ class GamesController < ApplicationController
     return unless user_signed_in?
     @games = Game.where(black_player_id: nil).where.not(white_player_id: current_user.id).page(params[:page])
     @my_games = my_games
+    flash.keep(:game_status)
   end
 
   def search
@@ -83,5 +85,18 @@ class GamesController < ApplicationController
 
     flash[:alert] = "Sorry, you have to join the game first"
     redirect_to games_path
+  end
+
+  # Check if game is in checkmate
+  # If so, present message indicating winner
+  def checkmate?
+    game = Game.find(params[:id])
+    return unless game.determine_checkmate
+
+    if game.turn_number.even?
+      game.update_attributes(winning_player_id: game.black_player_id)
+    elsif game.turn_number.odd?
+      game.update_attributes(winning_player_id: game.white_player_id)
+    end
   end
 end
