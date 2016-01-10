@@ -40,8 +40,12 @@
       <div class="modal-content">
         <div class="modal-body">
           <% unless @game.winning_player_id.nil? %>
-            <h1 class="text-center"><%= User.find(@game.winning_player_id).name %> wins!</h1>
-            <h3 class="text-center">You both played valiantly.</h3>
+            <% if @game.winning_player_id == -1 %>
+              <h1 class="text-center">Tie Game!</h1>
+            <% else %>
+              <h1 class="text-center"><%= User.find(@game.winning_player_id).name %> wins!</h1>
+              <h3 class="text-center">You both played valiantly.</h3>
+            <% end %>
           <% end %>
           <br />
           <div class="text-center">

@@ -1,9 +1,8 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
-  around_action :stalemate?, only: :show
   before_action :own_game?, only: [:show]
   before_action :new_game?, only: [:show]
-  before_action :checkmate?, only: [:show]
+  before_action :check_status, only: [:show]
 
   # rubocop:disable Metrics/LineLength
 
@@ -41,11 +40,6 @@ class GamesController < ApplicationController
   end
 
   private
-
-  def stalemate?
-    @game = Game.find(params[:id])
-    flash[:alert] = "Game is in Stalemate. Game Over" if @game.determine_stalemate
-  end
 
   def game_params
     params.require(:game).permit(:name, :white_player_id, :black_player_id, :turn_number)
@@ -87,16 +81,33 @@ class GamesController < ApplicationController
     redirect_to games_path
   end
 
-  # Check if game is in checkmate
-  # If so, present message indicating winner
-  def checkmate?
+  def check_status
     game = Game.find(params[:id])
-    return unless game.determine_checkmate
-
-    if game.turn_number.even?
-      game.update_attributes(winning_player_id: game.black_player_id)
-    elsif game.turn_number.odd?
-      game.update_attributes(winning_player_id: game.white_player_id)
+    if game.determine_stalemate
+      flash[:alert] = "Game is Tied!  Game Over."
+      game.update(winning_player_id: -1)
+    elsif game.determine_checkmate
+      if game.turn_number.even?
+        game.update(winning_player_id: game.black_player_id)
+      elsif game.turn_number.odd?
+        game.update(winning_player_id: game.white_player_id)
+      end
     end
   end
+
+  # Check if game is in checkmate
+  # If so, present message indicating winner
+  # def checkmate?
+  #   game = Game.find(params[:id])
+  #   return unless game.determine_checkmate
+
+    
+  # end
+
+  # def stalemate?
+  #   @game = Game.find(params[:id])
+  #   return unless @game.determine_stalemate
+  #   flash[:alert] = "Game is Tied!  Game Over."
+  #   @game.update(winning_player_id: -1, turn_number: nil)
+  # end
 end

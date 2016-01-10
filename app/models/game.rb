@@ -52,8 +52,8 @@ class Game < ActiveRecord::Base
   end
 
   def determine_stalemate
-    return checkmate(white_player_id) if turn_number.even?
-    return checkmate(black_player_id) if turn_number.odd?
+    return checkmate(white_player_id) if turn_number.even? && !determine_check
+    return checkmate(black_player_id) if turn_number.odd? && !determine_check
     false
   end
 
