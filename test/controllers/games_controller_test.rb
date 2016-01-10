@@ -37,6 +37,19 @@ class GamesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "winning player should be updated" do
+    # Set up game
+    @game = Game.create(name: "Checkmate Game", white_player_id: @user.id, black_player_id: @user2.id, turn_number: 2)
+    @game.pieces.create(type: "Knight", col_position: 5, row_position: 2, user_id: @user2.id)
+    @game.pieces.create(type: "Rook", col_position: 7, row_position: 1, user_id: @user2.id)
+    @game.pieces.create(type: "King", col_position: 7, row_position: 0, user_id: @user.id)
+
+    sign_in @user
+    get :show, id: @game.id
+
+    assert_equal @user2.id, @game.reload.winning_player_id
+  end
+
   test "user shouldn't be able to access game show page" do
     sign_in @user3
     get :show, id: @g2.id

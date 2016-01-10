@@ -22,3 +22,9 @@ $(function() {
     }     
   });  
 });
+
+$(function() {
+  if ($('#data').data('key1')) {
+    $('#winModal').modal('show');
+  };
+});
