@@ -14,6 +14,7 @@ class PiecesController < ApplicationController
     end
     @game.update_attributes(turn_number: @game.turn_number + 1)
     render text: 'updated!'
+    Pusher.trigger("channel-#{@game.id}", 'update-piece', foo: 'bar')
   end
 
   def castle_kingside
