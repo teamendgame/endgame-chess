@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     get :castle_queenside, to: 'pieces#castle_queenside'
   end
   resources :pieces, only: [:update]
+  get :search, to: 'games#search'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

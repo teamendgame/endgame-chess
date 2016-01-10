@@ -4,12 +4,14 @@
 #scorecard {
 	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2),0 25px 50px 0 rgba(0,0,0,0.1);
 	max-width: 550px;
-	border: 1px solid #e6e6e6;
+	border: 1px solid #5C1804;
+	background-color: #BFC2B2;
+	color: #5C1804;
 }
 
 #body {
-	border-top: 1px solid #e6e6e6;
-	box-shadow: 0 1px 1px rgba(0,0,0,0.2),0 8px 0 -3px #f6f6f6,0 9px 1px -3px rgba(0,0,0,0.2),0 16px 0 -6px #f6f6f6,0 17px 2px -6px rgba(0,0,0,0.2);
+	border-top: 1px solid #5C1804;
+	box-shadow: 0 1px 1px #5C1804,0 8px 0 -3px #BFC2B2,0 9px 1px -3px #5C1804,0 16px 0 -6px #BFC2B2,0 17px 2px -6px #5C1804;
 }
 
 #scores {
@@ -18,11 +20,47 @@
 	list-style: none;
 	line-height: 1.4em;
 	li {
-		border-bottom: 1px solid #ededed;
+		border-bottom: 1px solid #5C1804;
 		font-size: 24px;
 	}
 }
 
 .view {
 	padding: 15px 60px 15px 15px;
+}
+
+.title {
+	color: #5C1804;
+}
+
+td {
+  height:45px;
+  text-align:center;
+  vertical-align:middle;
+  width:45px;
+}
+
+.small-board { 
+  width:auto;
+  border: 2px solid black;
+  margin: auto;
+  box-shadow: 2px 2px 3px 1px black;
+}
+
+.separate {
+	padding: 10px 0px;
+}
+
+.king {
+  color:#000;
+  display:block;
+  font-size:45px;
+  position:relative;
+  text-shadow:0 1px #fff;
+  width:45px;
+  padding-bottom: 7px;
+}
+
+.game-name {
+  font-size: 20px;
 }

@@ -43,12 +43,12 @@ module GamesHelper
 
   def turn
     return "White Player's Turn" if @game.whos_turn? == @game.white_player_id
-    return "Black Player's Turn" if @game.whos_turn? == @game.black_player_id
+    "Black Player's Turn" if @game.whos_turn? == @game.black_player_id
   end
 
-  def both_players_present?(game)
-    return link_to game.name, game_path(game) unless game.black_player_id.nil?
-    game.name + " - Waiting for second player"
+  def my_turn?(game)
+    return "<strong>Its your turn!</strong>".html_safe if current_user.id == game.whos_turn?
+    "Its your opponent's turn"
   end
 
   def in_stalemate

@@ -2,12 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .jumbotron {
-	background: url("endgame-lg.jpg") no-repeat center center;
+	background: image-url("endgame-lg.jpg") no-repeat center center;
 	background-color: white;
 	height: 650px;
 	@include media-query($mobile) {
 		height: 500px;
-		background: url("endgame-sm.jpg") no-repeat center center;
+		background: image-url("endgame-sm.jpg") no-repeat center center;
 	}
 }
 
