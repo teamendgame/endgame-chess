@@ -1,13 +1,23 @@
 <% if @game.determine_check %>
-  <div class = "check">	
+  <div class = "flash-msg">	
     <%= in_check %>
   </div> 
   <br/>
 <% end %>  
+
+
+<% if @game.determine_stalemate %>
+  <div class = "flash-msg">	
+    <%= in_stalemate %>
+  </div> 
+  <br/>
+<% end %> 
+
+
 <br />
 <div class ="col-xs-3"></div>
 <div class="booyah-box col-xs-4">
-  <h1 class="text-center"><%= @game.name %></h1>
+  <h1 class="text-center pusherInfo" data-pusherinfo=<%= "channel-#{@game.id}" %> ><%= @game.name %></h1>
   <div class="flex-child text-center col-xs-2" id="turn">Turn <br />
     <span class="turn-no"><%= @game.turn_number %></span>
   </div>
@@ -21,14 +31,6 @@
 <div>
   <h3 class="text-center"><%= white_player %></h3>
 </div>  
-
-<h1 class="text-center pusherInfo" data-pusherinfo=<%= "channel-#{@game.id}" %> ><%= @game.name %></h1>
-<br/>
-<h2 class="text-center"><%= turn %></h2>
-<h3 class="text-center red"><%= in_check %></h3>
-<h3 class="text-center red"><%= in_stalemate %></h3>
-<br/>
-<h3 class="text-center"><%= white_player %></h3>
 
 <% if @game.white_player_id == current_user.id %>
 	<div class = "row">
