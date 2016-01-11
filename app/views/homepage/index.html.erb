@@ -1,16 +1,117 @@
 <div class="jumbotron">
   <div class="call-to-action">
     <h1>Endgame</h1>
-    <p>A full-featured Ruby on Rails Chess App</p>
-    <%= link_to 'Sign Up Today', new_user_registration_path, class: "btn btn-primary sign" %> 
+    <h1>Chess</h1>
+    <p>“Openings teach you openings.</p>
+    <p>Endgames teach you chess!”</p>
+    <p><em>Stephan Gerzadowicz, Chess Master</em></p>
+    <br />
+    <%= link_to 'Sign Up and Play for Free', new_user_registration_path, class: "btn btn-primary sign" %> 
     <p>or</p> 
     <%= link_to 'Sign In', new_user_session_path, class: "sign" %>
   </div>
 </div>
 
-<div>
-  <h1>Open Source, Standards Driven, Full Service</h1>
-  <p>Endgame Chess is our version of the capstone project for <a href="www.thefirehoseproject">The Firehose Project</a>, an intensive 15 week programming bootcamp. Every part, from the Ruby business logic that determines if the game is in checkmate to the Javascript that allows you to drag-and-drop the pieces, was built from the ground up using industry best practices and industry leading services.</p>
+<div class="head-description">
+  <p>Endgame Chess is our version of the capstone project for <a href="www.thefirehoseproject">The Firehose Project</a>, an intensive 15 week programming bootcamp. We are Team Endgame, 5 junior developers with different backgrounds working remotely to build the best chess app we can.  With the support of our mentor, Travis Johnston, we followed Agile Methodology with weekly stand-ups to plan our sprints, kept our code in check using Git, and made sure everything worked with an extensive test suite. Some highlights include:</p>
+  <ul class="highlights"> 
+    <li><strong>Check and Mate Detection</strong> <span class="view-source" id="check-source">(view source)</span></li>
+    <div id="check-panel">
+      <pre><code class="language-ruby">
+        # Check Detection
+        def check(users_id, opponent_id)
+          opponent_pieces = pieces.where(user_id: opponent_id, captured: false)
+          king = pieces.find_by(user_id: users_id, type: "King")
+          opponent_pieces.each do |piece|
+            return true if piece.valid_move?(king.row_position, king.col_position)
+          end
+          false
+        end
+
+        # Checkmate Detection
+        def checkmate(id)
+          current_pieces = pieces.where(user_id: id, captured: false)
+          status = true
+          current_pieces.each do |piece|
+            8.times do |row|
+              8.times do |col|
+                next unless piece.reload.valid_move?(row, col)
+                status = false unless checkmate_check(piece, row, col)
+              end
+            end
+          end
+          status
+        end
+
+        # Transaction for Checkmate Detection
+        def checkmate_check(piece, row, col)
+          status = true
+          Piece.transaction do
+            piece.move_to!(row, col)
+            status = false unless determine_check
+            fail ActiveRecord::Rollback
+          end
+          status
+        end
+      </code></pre>
+    </div>
+      <ul>
+        <li>State is important in chess.  To determine the state of the game, we loop through each of your opponent’s pieces each turn and test them against your King.  If one of those pieces has a valid move, the game is in Check. Check is never the result of user error (except for in strategy) -- you can’t purposely move into Check.</li>
+        <li>You’ll want to get out of Check as soon as possible, since Checkmate means game over.  In order to determine Checkmate, we loop through each of your pieces and see whether they can a) avoid b) block or c) capture the opponent piece that has your King in check. These checks are run in database transaction to ensure that none of the movements the game tries are saved (inadvertently helping you out).</li>
+      </ul>
+    <li><strong>Drag and Drop Movement</strong> <span class="view-source" id="drag-drop">(view source)</span></li>
+    <div id="drag-panel">
+      <pre><code class="language-javascript">
+        // Drag and drop using jQuery draggable and droppable
+        $('.move_mode').draggable({ containment: '.board'});
+        $( '.piece' ).droppable({
+          drop: function( event, ui ) {
+            $(ui.draggable).detach().css({top: 0,left: 0});
+            $(this).replaceWith(ui.draggable);
+            var draggableId = ui.draggable.attr("id");
+            var droppableId = $(this).attr("pos");
+            var updateUrl = "/pieces/" + draggableId
+            var row = droppableId[0];
+            var col = droppableId[1];
+
+            // Update piece via AJAX  
+            $.ajax({
+              type: 'PUT',
+              url: updateUrl,
+              dataType: 'json',
+              data: { piece: { 
+                      row_position: row, 
+                      col_position: col 
+              }},
+              complete: function(){
+                location.reload(true);
+              }
+            });
+          }     
+        });
+
+        // Pusher for Real-Time Connection
+        var pusher = new Pusher(ENV['pusher_key'], {
+            encrypted: true
+        });  
+
+        var gameId = $('.pusherInfo').data('pusherinfo');
+
+        var channel = pusher.subscribe(gameId);
+
+        channel.bind('update-piece', function(data) {
+          location.reload(true);
+        });
+      </code></pre>
+    </div>
+      <ul>
+        <li>Through the magic of jQuery, pieces are simply picked up and put down where you want them to go.  An AJAX request handles updating the database and a Websockets connection with Pusher handles refreshing the page for both you and your opponent.  Not too shabby.</li>
+      </ul>
+  </ul>
+</div>
+
+<div> 
+   <h1>Open Source, Standards Driven, Full Service</h1>
 </div>
 
 <hr class="divider-style" /> 

@@ -43,9 +43,6 @@ gem 'figaro'
 # Use Puma for Application server
 gem 'puma'
 
-# Use Jquery-ui
-gem 'jquery-ui-rails'
-
 # Use Pusher for Realtime Communication
 gem 'pusher'
 

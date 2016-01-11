@@ -57,3 +57,24 @@
 #headingThree {
 	background-color: $color-secondary-1-2;
 }
+
+.head-description {
+	font-size: 18px;
+}
+
+.view-source {
+	border-bottom: 1px black dotted;
+	font-size: 14px;
+}
+
+#check-panel {
+	display: none;
+}
+
+#drag-panel {
+	display: none;
+}
+
+.highlights {
+	list-style: none;
+}
