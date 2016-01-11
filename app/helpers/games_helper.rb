@@ -51,6 +51,10 @@ module GamesHelper
     "Its your opponent's turn"
   end
 
+  def in_stalemate
+    return "Stalemate" if @game.determine_stalemate
+  end
+
   def in_check
     return "White: Check" if @game.determine_check && @game.whos_turn? == @game.white_player_id
     return "Black: Check" if @game.determine_check && @game.whos_turn? == @game.black_player_id
