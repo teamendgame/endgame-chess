@@ -6,8 +6,8 @@ class Piece < ActiveRecord::Base
   def move_to!(new_row, new_col)
     Piece.transaction do
       moved = try_to_move(new_row, new_col)
-      check_status = game.determine_check
-      return moved unless check_status
+      in_check = game.determine_check
+      return moved unless in_check
       fail ActiveRecord::Rollback
     end
     false

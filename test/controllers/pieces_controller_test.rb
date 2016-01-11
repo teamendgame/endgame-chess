@@ -11,12 +11,6 @@ class PiecesControllerTest < ActionController::TestCase
     @white_rook_kingside = Piece.create(type: "Rook", col_position: 7, row_position: 0, user_id: @user.id, game_id: @g.id)
   end
 
-  # test "should get show" do
-  #   sign_in @user
-  #   get :show, id: @piece.id
-  #   assert_response :success
-  # end
-
   test "Flash message should appear if player moves into check" do
     @game = Game.create(name: "A Game", white_player_id: @user.id, black_player_id: @user2.id, turn_number: 0)
     @white_king = @game.pieces.create(type: "King", row_position: 1, col_position: 0, user_id: @user.id, moved: true)
