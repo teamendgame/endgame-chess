@@ -81,9 +81,6 @@ class GamesController < ApplicationController
   end
 
   def check_status
-    game = Game.find(params[:id])
-    ## max amount of players for checkmate is 16
-    return if game.pieces.count > 16
     stalemate?
     checkmate?
   end
