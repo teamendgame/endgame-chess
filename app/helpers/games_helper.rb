@@ -32,13 +32,15 @@ module GamesHelper
   end
 
   def black_player
+    b_player = User.find(@game.black_player_id).name
     return "Black Player: You" if current_user.id == @game.black_player_id
-    "Black Player: Your Opponent"
+    "Black Player: #{b_player}"
   end
 
   def white_player
+    w_player = User.find(@game.white_player_id).name
     return "White Player: You" if current_user.id == @game.white_player_id
-    "White Player: Your Opponent"
+    "White Player: #{w_player}"
   end
 
   def turn
@@ -56,8 +58,8 @@ module GamesHelper
   end
 
   def in_check
-    return "White: Check" if @game.determine_check && @game.whos_turn? == @game.white_player_id
-    return "Black: Check" if @game.determine_check && @game.whos_turn? == @game.black_player_id
+    return "White player: Check" if @game.determine_check && @game.whos_turn? == @game.white_player_id
+    return "Black player: Check" if @game.determine_check && @game.whos_turn? == @game.black_player_id
   end
 
   def winning_player

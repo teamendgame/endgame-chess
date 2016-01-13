@@ -17,6 +17,7 @@
   flex: 0 0 100px;
   border: 1px solid #e6e6e6;
   background-color: $color-secondary-1-2;
+  align-self: center;
 }
 
 #join {
@@ -43,10 +44,10 @@
 
 .board td {
   background:#fff;
-  height:80px;
+  height:60px;
   text-align:center;
   vertical-align:middle;
-  width:80px;
+  width:60px;
 }
 
 tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
@@ -60,20 +61,33 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
 .piece {
   color:#000;
   display:block;
-  font-size:60px;
+  font-size:45px;
   position:relative;
   text-decoration:none;
   text-shadow:0 1px #fff;
-  width:80px;
+  width:60px;
   height:30px;
-}
-
-.red {
-  color: red;
 }
 
 .my_games {
   list-style-type: none;
+}
+
+.flash-msg {
+  font-size: 18px;
+  font-weight: bold;
+  background: #FFF48F;
+  text-align:center;
+  display: block;
+  padding: 10px;
+  position:absolute;
+  left: 0;
+  right: 0;
+}
+
+.turn {
+  color: #5bc0de;
+  font-size: 20px;
 }
 
 /* Win Modal Styling */
@@ -98,3 +112,4 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even) {
     margin: 0 auto;
     pointer-events: all;
 }
+
