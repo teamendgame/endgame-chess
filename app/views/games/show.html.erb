@@ -1,20 +1,3 @@
-<% if @game.determine_check %>
-  <div class = "flash-msg"> 
-    <%= in_check %>
-  </div> 
-  <br/>
-<% end %>  
-
-
-<% if @game.determine_stalemate %>
-  <div class = "flash-msg"> 
-    <%= in_stalemate %>
-  </div> 
-  <br/>
-<% end %> 
-
-
-<br />
 <div class ="col-xs-3"></div>
 <div class="booyah-box col-xs-4">
   <h1 class="text-center pusherInfo" data-pusherinfo=<%= "channel-#{@game.id}" %> ><%= @game.name %></h1>
@@ -47,7 +30,8 @@
   <% 8.times do |row| %>
     <%= '<tr>'.html_safe %>
     <% 8.times do |col| %>
-      <%= '<td>'.html_safe + piece_present?(@pieces, @game, row, col) + '</td>'.html_safe %>
+      <% piece_result = @game.pieces.find { |p| p["col_position"] == col && p["row_position"] == row } %>
+      <%= '<td>'.html_safe + piece_present?(piece_result, @game, row, col) + '</td>'.html_safe %>
     <% end %> 
   <% end %>
 </table>
