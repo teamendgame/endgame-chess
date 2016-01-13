@@ -1,6 +1,6 @@
 module GamesHelper
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/LineLength
-  def piece_present?(pieces, game, row_pos, col_pos)
+  def piece_present?(piece, game, row_pos, col_pos)
     white_pieces = {
       'Pawn'   => '&#9817;',
       'Rook'   => '&#9814;',
@@ -19,15 +19,14 @@ module GamesHelper
       'King' => '&#9818;'
     }
 
-    @piece = pieces.find_by(row_position: row_pos, col_position: col_pos)
-    if @piece && @piece.user_id == game.white_player_id
-      return content_tag(:span, white_pieces[@piece.type].html_safe, class: %w(piece move_mode), pos: "#{row_pos}#{col_pos}", id: "#{@piece.id}") if current_user.id == game.white_player_id && game.whos_turn? == game.white_player_id
-      return content_tag(:span, white_pieces[@piece.type].html_safe, class: ["piece"], pos: "#{row_pos}#{col_pos}", id: "#{@piece.id}")
-    elsif @piece && @piece.user_id == @game.black_player_id
-      return content_tag(:span, black_pieces[@piece.type].html_safe, class: %w(piece move_mode), pos: "#{row_pos}#{col_pos}", id: "#{@piece.id}") if current_user.id == game.black_player_id && game.whos_turn? == game.black_player_id
-      return content_tag(:span, black_pieces[@piece.type].html_safe, class: ["piece"], pos: "#{row_pos}#{col_pos}", id: "#{@piece.id}")
-    else
-      return tag(:span, class: ["piece"], pos: "#{row_pos}#{col_pos}")
+    return tag(:span, class: ["piece"], pos: "#{row_pos}#{col_pos}") if piece.nil?
+
+    if piece && piece.user_id == game.white_player_id
+      return content_tag(:span, white_pieces[piece.type].html_safe, class: %w(piece move_mode), pos: "#{row_pos}#{col_pos}", id: "#{piece.id}") if current_user.id == game.white_player_id && game.whos_turn? == game.white_player_id
+      return content_tag(:span, white_pieces[piece.type].html_safe, class: ["piece"], pos: "#{row_pos}#{col_pos}", id: "#{piece.id}")
+    elsif piece && piece.user_id == game.black_player_id
+      return content_tag(:span, black_pieces[piece.type].html_safe, class: %w(piece move_mode), pos: "#{row_pos}#{col_pos}", id: "#{piece.id}") if current_user.id == game.black_player_id && game.whos_turn? == game.black_player_id
+      return content_tag(:span, black_pieces[piece.type].html_safe, class: ["piece"], pos: "#{row_pos}#{col_pos}", id: "#{piece.id}")
     end
   end
 
@@ -51,15 +50,6 @@ module GamesHelper
   def my_turn?(game)
     return "<strong>Its your turn!</strong>".html_safe if current_user.id == game.whos_turn?
     "Its your opponent's turn"
-  end
-
-  def in_stalemate
-    return "Stalemate" if @game.determine_stalemate
-  end
-
-  def in_check
-    return "White player: Check" if @game.determine_check && @game.whos_turn? == @game.white_player_id
-    return "Black player: Check" if @game.determine_check && @game.whos_turn? == @game.black_player_id
   end
 
   def winning_player
