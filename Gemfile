@@ -82,3 +82,9 @@ group :development do
   gem 'spring'
 end
 
+group :production do
+  gem 'rails_stdout_logging'
+  
+  gem 'rails_12factor'
+end
+
