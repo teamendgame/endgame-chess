@@ -18,12 +18,14 @@
 <div class ="col-xs-3"></div>
 <div class="booyah-box col-xs-4">
   <h1 class="text-center pusherInfo" data-pusherinfo=<%= "channel-#{@game.id}" %> ><%= @game.name %></h1>
-  <div class="flex-child text-center col-xs-2" id="turn">Turn <br />
-    <span class="turn-no"><%= @game.turn_number %></span>
-  </div>
-  <div class="flex-child col-xs-9 col-xs-offset-1"> 
-    <span class="turn"><strong><%= turn %></strong></span> <br />
-    <span><em>Started on <%= @game.created_at.strftime("%A, %B %e, %Y") %></em></span>
+  <div class="flex-container">
+    <div class="flex-child text-center" id="turn">Turn <br />
+      <span class="turn-no"><%= @game.turn_number %></span>
+    </div>
+    <div class="flex-child"> 
+      <span class="turn"><strong><%= turn %></strong></span> <br />
+      <span><em>Started on <%= @game.created_at.strftime("%A, %B %e, %Y") %></em></span>
+    </div>
   </div>
 </div>
 
