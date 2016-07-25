@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
+  before_action :current_game, only: [:show, :update]
   before_action :own_game?, only: [:show]
   before_action :new_game?, only: [:show]
   before_action :check_status, only: [:show]
@@ -27,11 +28,10 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.find(params[:id])
+    @pieces = @game.pieces
   end
 
   def update
-    @game = Game.find(params[:id])
     return unless @game.update(game_params)
 
     @game.populate_board!
@@ -62,9 +62,8 @@ class GamesController < ApplicationController
   # Prevent access to games_controller#show if player
   # is not a part of that game
   def own_game?
-    game = Game.find(params[:id])
-    return unless game.black_player_id
-    return if game.white_player_id == current_user.id || game.black_player_id == current_user.id
+    return unless @game.black_player_id
+    return if @game.white_player_id == current_user.id || @game.black_player_id == current_user.id
 
     flash[:alert] = "Sorry, you're not a player in that game"
     redirect_to games_path
@@ -73,8 +72,7 @@ class GamesController < ApplicationController
   # Prevent access to games_controller#show if game
   # only has 1 player
   def new_game?
-    game = Game.find(params[:id])
-    return if game.black_player_id
+    return if @game.black_player_id
 
     flash[:alert] = "Sorry, you have to join the game first"
     redirect_to games_path
@@ -88,20 +86,22 @@ class GamesController < ApplicationController
   # Check if game is in checkmate
   # If so, present message indicating winner
   def checkmate?
-    game = Game.find(params[:id])
-    return unless game.determine_checkmate
+    return unless @game.determine_checkmate
 
-    if game.turn_number.even?
-      game.update(winning_player_id: game.black_player_id)
+    if @game.turn_number.even?
+      @game.update(winning_player_id: @game.black_player_id)
     elsif game.turn_number.odd?
-      game.update(winning_player_id: game.white_player_id)
+      @game.update(winning_player_id: @game.white_player_id)
     end
   end
 
   def stalemate?
-    @game = Game.find(params[:id])
     return unless @game.determine_stalemate
 
     @game.update(winning_player_id: (-1))
   end
+  
+  def current_game 
+    @game = Game.find(params[:id])
+  end 
 end
